@@ -1,4 +1,4 @@
-<mat-spinner *ngIf="isLoading"></mat-spinner>
+<!-- <mat-spinner *ngIf="isLoading"></mat-spinner>
 <mat-accordion multi="true" *ngIf="posts.length > 0 && !isLoading">
   <mat-expansion-panel *ngFor="let post of posts">
     <mat-expansion-panel-header>
@@ -16,4 +16,34 @@
 </mat-accordion>
 <mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
   *ngIf="posts.length > 0"></mat-paginator>
-<p class="info-text mat-body-1" *ngIf="posts.length <= 0 && !isLoading">No posts added yet!</p>
+<p class="info-text mat-body-1" *ngIf="posts.length <= 0 && !isLoading">No posts added yet!</p> -->
+
+<div class="top-container">
+  <div style="margin: 20px;" *ngFor="let post of posts" >
+    <mat-card class="example-card">
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>{{post.title}}</mat-card-title>
+        <mat-card-subtitle>{{post.content}}</mat-card-subtitle>
+      </mat-card-header>
+          
+      <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+      <a [routerLink]="['post-detail']" [queryParams]="{id:post.id,content:post.content,creator:post.creator,imagePath:post.imagePath,title:post.title}"><img mat-card-image src={{post.imagePath}} alt="Photo of a Shiba Inu"></a>
+      
+      <mat-card-content>
+        <p>
+          The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+          bred for hunting.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button (click)="addToCart(post)">Add to Cart</button>
+        <button mat-button>Order</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+<mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
+  *ngIf="posts.length > 0"></mat-paginator>
+

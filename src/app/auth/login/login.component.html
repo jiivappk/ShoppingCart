@@ -11,4 +11,8 @@
     </mat-form-field>
     <button mat-raised-button color="accent" type="submit" *ngIf="!isLoading">Login</button>
   </form>
+  <hr>
+  <button mat-raised-button color="accent" type="button" (click)="signInWithGoogle()">Login with Google</button>
+  <hr>
+  <button mat-raised-button color="accent" type="button" (click)="signInWithFB()">Login with Facebook</button>
 </mat-card>

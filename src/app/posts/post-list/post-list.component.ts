@@ -4,7 +4,11 @@ import { Subscription } from "rxjs";
 
 import { Post } from "../post.model";
 import { PostsService } from "../posts.service";
+import { CartService } from "../cart.service";
 import { AuthService } from "../../auth/auth.service";
+import { LoginComponent } from "../../auth/login/login.component";
+
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: "app-post-list",
@@ -29,7 +33,9 @@ export class PostListComponent implements OnInit, OnDestroy {
   private authStatusSub: Subscription;
 
   constructor(
+    private dialog: MatDialog,
     public postsService: PostsService,
+    public cartService: CartService,
     private authService: AuthService
   ) {}
 
@@ -43,6 +49,7 @@ export class PostListComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.totalPosts = postData.postCount;
         this.posts = postData.posts;
+        console.log(this.posts)
       });
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.authStatusSub = this.authService
@@ -58,6 +65,28 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.currentPage = pageData.pageIndex + 1;
     this.postsPerPage = pageData.pageSize;
     this.postsService.getPosts(this.postsPerPage, this.currentPage);
+  }
+
+  addToCart(post:any){
+    let userId = localStorage.getItem("userId");
+    if(userId == null){
+      console.log("User id is null");
+      this.dialog.open(LoginComponent, {data: {message: "Login Component"}});
+    }
+    else{
+      let cartItem = {
+        userId: userId,
+        postId: post.id,
+        content: post.content,
+        creator: post.creator,
+        imagePath: post.imagePath,
+        title: post.title,
+      }
+      console.log("Add to cart is cartItem", cartItem)
+      console.log("Add to cart userId",userId)
+      let result = this.cartService.addCartItems(cartItem)
+      console.log(result)
+    }
   }
 
   onDelete(postId: string) {

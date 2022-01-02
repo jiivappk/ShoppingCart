@@ -2,6 +2,7 @@ const Post = require("../models/post");
 
 exports.createPost = (req, res, next) => {
   const url = req.protocol + "://" + req.get("host");
+  console.log("Create post is called",url)
   const post = new Post({
     title: req.body.title,
     content: req.body.content,
@@ -56,6 +57,7 @@ exports.updatePost = (req, res, next) => {
 
 exports.getPosts = (req, res, next) => {
   const pageSize = +req.query.pagesize;
+  console.log("Post controller getposts is called!!!!!!!!!!!!!!!!!!")
   const currentPage = +req.query.page;
   const postQuery = Post.find();
   let fetchedPosts;

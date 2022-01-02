@@ -5,6 +5,10 @@
   <span class="spacer"></span>
   <ul>
     <li *ngIf="userIsAuthenticated">
+      <!-- <a mat-button routerLink="/cart" routerLinkActive="mat-accent">Cart</a> -->
+      <mat-icon matBadge="{{totalCartItems}}" matBadgeColor="warn" routerLink="/cart" routerLinkActive="mat-accent">shopping_cart</mat-icon>
+    </li>
+    <li *ngIf="userIsAuthenticated">
       <a mat-button routerLink="/create" routerLinkActive="mat-accent">New Post</a>
     </li>
     <li *ngIf="!userIsAuthenticated">
