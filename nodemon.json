@@ -1,6 +1,10 @@
 {
   "env": {
     "MONGO_ATLAS_PW": "QuBqs0T45GDKPlIG",
-    "JWT_KEY": "secret_this_should_be_longer"
+    "JWT_KEY": "secret_this_should_be_longer",
+    "JWT_RESET_PASSWORD": "this_is_to_reset_password",
+    "SMTP_USER": "jeevananthann97@gmail.com",
+    "SMTP_PASSWORD": "ZAdFSE8BwV7p2TOn",
+    "CLIENT_URL": "http://localhost:4200/"
   }
 }
