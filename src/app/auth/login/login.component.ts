@@ -28,20 +28,38 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       }
     );
-
-    this.socialAuthService.authState.subscribe((user) => {
-      this.socialUser = user;
-      this.loggedIn = (user != null);
-      console.log("socialUser",this.socialUser);
-    });
   }
 
   signInWithGoogle(): void {
     this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
+    this.socialAuthService.authState.subscribe((user) => {
+      this.socialUser = user;
+      this.loggedIn = (user != null);
+      console.log("socialUser",this.socialUser);
+      if(this.socialUser.provider == "GOOGLE"){
+        this.authService.googleLogin(this.socialUser.idToken);
+      }
+      else if(this.socialUser.provider == "FACEBOOK"){
+        this.authService.facebookLogin(this.socialUser.authToken, this.socialUser.id);
+      }
+
+    });
   }
 
   signInWithFB(): void {
     this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
+    this.socialAuthService.authState.subscribe((user) => {
+      this.socialUser = user;
+      this.loggedIn = (user != null);
+      console.log("socialUser",this.socialUser);
+      if(this.socialUser.provider == "GOOGLE"){
+        this.authService.googleLogin(this.socialUser.idToken);
+      }
+      else if(this.socialUser.provider == "FACEBOOK"){
+        this.authService.facebookLogin(this.socialUser.authToken, this.socialUser.id);
+      }
+
+    });
   }
 
   signOut(): void {

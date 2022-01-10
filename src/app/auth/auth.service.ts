@@ -34,7 +34,7 @@ export class AuthService {
     return this.authStatusListener.asObservable();
   }
 
-  createUser(email: string, password: string) {
+  signIn(email: string, password: string) {
     const authData: AuthData = { email: email, password: password };
     this.http.post(BACKEND_URL + "/signup", authData).subscribe(
       () => {
@@ -46,6 +46,84 @@ export class AuthService {
     );
   }
 
+  createUser(token:string) {
+    console.log("From createUser Auth service")
+    const authData:any = { token: token };
+    this.http.post(BACKEND_URL + "/createUser", authData).subscribe(
+      (response) => {
+        this.router.navigate(["/auth/login"]);
+        console.log("User is created",response)
+      },
+      error => {
+        console.log("User cannot be created",error);
+        this.authStatusListener.next(false);
+      }
+    );
+  }
+
+  googleLogin(token: string) {
+    const authData = { idToken: token};
+    console.log("AuthData from googleLogin service",authData);
+    this.http
+      .post<{ token: string; expiresIn: number; userId: string }>(
+        BACKEND_URL + "/googleLogin",
+        authData
+      )
+      .subscribe(response => {
+        console.log("Response when logged in:",response)
+        const token = response.token;
+        this.token = token;
+        if (token) {
+          const expiresInDuration = response.expiresIn;
+          this.setAuthTimer(expiresInDuration);
+          this.isAuthenticated = true;
+          this.userId = response.userId;
+          this.authStatusListener.next(true);
+          const now = new Date();
+          const expirationDate = new Date(
+            now.getTime() + expiresInDuration * 1000
+          );
+          console.log(expirationDate);
+          this.saveAuthData(token, expirationDate, this.userId);
+          this.router.navigate(["/"]);
+        }
+      },
+      error => {
+        this.authStatusListener.next(false);
+      })
+  }
+
+  facebookLogin(token, id){
+    const authData = { accessToken: token, userID: id};
+    console.log("AuthData from facebookLogin service",authData);
+    this.http
+      .post<{ token: string; expiresIn: number; userId: string }>(
+        BACKEND_URL + "/facebookLogin",
+        authData
+      )
+      .subscribe(response => {
+        console.log("Response when logged in:",response)
+        const token = response.token;
+        this.token = token;
+        if (token) {
+          const expiresInDuration = response.expiresIn;
+          this.setAuthTimer(expiresInDuration);
+          this.isAuthenticated = true;
+          this.userId = response.userId;
+          this.authStatusListener.next(true);
+          const now = new Date();
+          const expirationDate = new Date(
+            now.getTime() + expiresInDuration * 1000
+          );
+          console.log(expirationDate);
+          this.saveAuthData(token, expirationDate, this.userId);
+          this.router.navigate(["/"]);
+        }
+      },
+      error => {
+        this.authStatusListener.next(false);
+      })
+  }
   login(email: string, password: string) {
     const authData: AuthData = { email: email, password: password };
     this.http
@@ -136,5 +214,26 @@ export class AuthService {
       expirationDate: new Date(expirationDate),
       userId: userId
     };
+  }
+
+ forgotPassword(email:string){
+    const authData: any = { email: email};
+    return this.http
+      .put<{ email: string; expiresIn: number; userId: string }>(
+        BACKEND_URL + "/forgot-password",
+        authData
+      )
+  }
+
+  resetPassword(resetLink: string, newPassword: string){
+    const authData: any = { resetLink: resetLink, newPassword: newPassword};
+    this.http
+      .put<{ email: string; expiresIn: number; userId: string }>(
+        BACKEND_URL + "/reset-password",
+        authData
+      )
+      .subscribe((result)=>{
+        console.log(result)
+      })
   }
 }
