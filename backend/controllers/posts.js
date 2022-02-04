@@ -56,11 +56,21 @@ exports.updatePost = (req, res, next) => {
 };
 
 exports.getPosts = (req, res, next) => {
-  const pageSize = +req.query.pagesize;
-  console.log("Post controller getposts is called!!!!!!!!!!!!!!!!!!")
-  const currentPage = +req.query.page;
-  const postQuery = Post.find();
   let fetchedPosts;
+  let postQuery;
+  const pageSize = +req.query.pagesize;
+  const currentPage = +req.query.page;
+  const title = req.query.title;
+  console.log("Post controller getposts is called!!!!!!!!!!!!!!!!!!")
+  console.log("Title",title);
+  console.log("PageSize",pageSize);
+  console.log("currentPage",currentPage);
+  if(title!=undefined){
+    postQuery = Post.find({title: { $regex: /^Car/ } })
+  }
+  else{
+    postQuery = Post.find();
+  }
   if (pageSize && currentPage) {
     postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
   }
@@ -95,6 +105,38 @@ exports.getPost = (req, res, next) => {
     .catch(error => {
       res.status(500).json({
         message: "Fetching post failed!"
+      });
+    });
+};
+
+exports.searchPost = (req, res, next) => {
+  const pageSize = +req.query.pagesize;
+  console.log("Post controller getposts is called!!!!!!!!!!!!!!!!!!")
+  const currentPage = +req.query.page;
+  const title = req.query.title;
+  console.log("Title of the search",title);
+  console.log("PageSize",pageSize);
+  console.log("CurrentPage",currentPage);
+  const postQuery = Post.find({title: { $regex: /^Car/ } })
+  if (pageSize && currentPage) {
+    postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
+  }
+  postQuery
+    .then(documents => {
+      fetchedPosts = documents;
+      
+      return postQuery.count();
+    })
+    .then(count => {
+      res.status(200).json({
+        message: "Posts fetched successfully!",
+        posts: fetchedPosts,
+        maxPosts: count
+      });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Fetching posts failed!"
       });
     });
 };

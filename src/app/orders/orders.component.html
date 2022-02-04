@@ -1,1 +1,111 @@
+<!-- <mat-spinner *ngIf="isLoading"></mat-spinner>
+<mat-accordion multi="true" *ngIf="pageContent.length > 0 && !isLoading">
+  <mat-expansion-panel *ngFor="let post of pageContent">
+    <mat-expansion-panel-header>
+      {{ postTitle }}
+    </mat-expansion-panel-header>
+    <div class="post-image">
+      <img [src]="postImagePath" [alt]="post.title">
+    </div>
+    <p>{{ postContent }}</p>
+    <mat-action-row *ngIf="userIsAuthenticated && userId === postCreator">
+      <a mat-button color="primary" [routerLink]="['/edit', postId]">EDIT</a>
+      <button mat-button color="warn" (click)="onDelete(postId)">DELETE</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+<mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
+  *ngIf="pageContent.length > 0"></mat-paginator>
+<p class="info-text mat-body-1" *ngIf="posts.length <= 0 && !isLoading">No posts added yet!</p> -->
+
+
+<!-- <mat-spinner *ngIf="isLoading"></mat-spinner> -->
+<mat-accordion multi="true" *ngIf="pageContent.length > 0 && !isLoading">
+  <mat-expansion-panel #matExpansionPanel *ngFor="let post of pageContent; first as isFirst" [expanded]="isFirst">
+    <mat-expansion-panel-header>
+        {{post}}
+    </mat-expansion-panel-header>
+    <div *ngIf="post === 'Delivery Address'">
+        <!-- <form [formGroup]="form" (submit)="onSavePost(matExpansionPanel)" *ngIf="!isLoading"> -->
+        <form [formGroup]="form" *ngIf="!isLoading">
+            <label>Full Name</label>
+            <mat-form-field>
+              <input matInput type="text" formControlName="fullName" placeholder="Enter your full name">
+              <mat-error *ngIf="form.get('fullName').invalid">Please enter your full name.</mat-error>
+            </mat-form-field>
+
+            <div class="row">
+
+                <div class="item" style="margin-right: 50px">
+                    <label>Mobile Number</label>
+                    <mat-form-field>
+                        <input matInput type="text" formControlName="mobile" placeholder="Enter your mobile number">
+                        <mat-error *ngIf="form.get('mobile').invalid">Please enter your mobile number.</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="item">
+                    <label>Pin Code</label>
+                    <mat-form-field>
+                        <input matInput type="text" formControlName="pinCode" placeholder="Enter your pinCode">
+                        <mat-error *ngIf="form.get('pinCode').invalid">Please enter your pin code.</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            
+            <label>Flat, House no., Building, Company, Appartment</label>
+            <mat-form-field>
+                <input matInput type="text" formControlName="flatNo" placeholder="Enter your flat number">
+                <mat-error *ngIf="form.get('flatNo').invalid">Please enter your flat number.</mat-error>
+            </mat-form-field>
+
+            <label>Area, Street, Sector, Village</label>
+            <mat-form-field>
+                <input matInput type="text" formControlName="area" placeholder="Enter your Area">
+                <mat-error *ngIf="form.get('area').invalid">Please enter your area.</mat-error>
+            </mat-form-field>
+
+            <label>Landmark</label>
+            <mat-form-field>
+                <input matInput type="text" formControlName="landMark" placeholder="E.g. near water tank">
+                <mat-error *ngIf="form.get('landMark').invalid">Please enter a Landmark.</mat-error>
+            </mat-form-field>
+
+            <div class="row">
+                <div class="item" style="margin-right: 50px">
+                    <label>Town/City</label>
+                    <mat-form-field>
+                        <input matInput type="text" formControlName="town" placeholder="Enter your town">
+                        <mat-error *ngIf="form.get('town').invalid">Please enter your town.</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="item">
+                    <label>State</label>
+                    <mat-form-field>
+                        <mat-select formControlName="state" placeholder="Select your town">
+                          <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </div>
+            </div>
+
+            <button mat-raised-button color="accent" type="submit">Use this address</button>
+          </form>
+    </div>
+    <div *ngIf="post === 'Make Payment'">
+        <p>Choose a payment</p>
+        <form [formGroup]="form" (submit)="onSaveOrder(matExpansionPanel)" *ngIf="!isLoading">
+          <button mat-raised-button color="accent" type="submit">Use this address</button>
+        </form>
+    </div>
+    <div *ngIf="post === 'Oredred Details'">
+        <p>Order Completed</p>
+        <img [src]="postImagePath" [alt]="postTitle">
+    </div>
+    <mat-action-row *ngIf="userIsAuthenticated && userId === postCreator">
+      <a mat-button color="primary" [routerLink]="['/edit', postId]">EDIT</a>
+      <button mat-button color="warn" (click)="onDelete(postId)">DELETE</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+
 

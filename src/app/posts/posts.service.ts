@@ -13,7 +13,7 @@ const BACKEND_URL = environment.apiUrl + "/posts/";
 export class PostsService {
   private posts: Post[] = [];
   private postsUpdated = new Subject<{ posts: Post[]; postCount: number }>();
-
+  
   constructor(private http: HttpClient, private router: Router) {}
 
   getPosts(postsPerPage: number, currentPage: number) {
@@ -59,6 +59,47 @@ export class PostsService {
       imagePath: string;
       creator: string;
     }>(BACKEND_URL + id);
+  }
+
+  searchPost(title: string,postsPerPage: number, currentPage: number) {
+    console.log("Search Post Api is called", title, postsPerPage, currentPage)
+    const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}&title=${title}`;
+    // return this.http.get<{
+    //   _id: string;
+    //   title: string;
+    //   content: string;
+    //   imagePath: string;
+    //   creator: string;
+    // }>(BACKEND_URL + queryParams);
+
+    this.http
+      .get<{ message: string; posts: any; maxPosts: number }>(
+        BACKEND_URL + queryParams
+      )
+      .pipe(
+        map(postData => {
+          return {
+            posts: postData.posts.map(post => {
+              return {
+                title: post.title,
+                content: post.content,
+                id: post._id,
+                imagePath: post.imagePath,
+                creator: post.creator
+              };
+            }),
+            maxPosts: postData.maxPosts
+          };
+        })
+      )
+      .subscribe(transformedPostData => {
+        this.posts = transformedPostData.posts;
+        this.postsUpdated.next({
+          posts: [...this.posts],
+          postCount: transformedPostData.maxPosts
+        });
+        console.log("Search Results",this.posts)
+      });
   }
 
   addPost(title: string, content: string, image: File) {

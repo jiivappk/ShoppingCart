@@ -4,12 +4,24 @@
   </span>
   <span class="spacer"></span>
   <ul>
+    <li>
+      <!-- <a mat-button routerLink="/cart" routerLinkActive="mat-accent">Cart</a> -->
+      <form (submit)="onSearch(searchValue)" class="search-tab">
+        <input type="text" #searchValue placeholder="Search.." name="search">
+        <mat-icon class="search-icon" matSuffix>search</mat-icon>
+        <input type="submit" value="Submit">
+      </form>
+      <button (click)="onSearch('Car')">Search</button>
+    </li>
     <li *ngIf="userIsAuthenticated">
       <!-- <a mat-button routerLink="/cart" routerLinkActive="mat-accent">Cart</a> -->
       <mat-icon matBadge="{{totalCartItems}}" matBadgeColor="warn" routerLink="/cart" routerLinkActive="mat-accent">shopping_cart</mat-icon>
     </li>
     <li *ngIf="userIsAuthenticated">
       <a mat-button routerLink="/create" routerLinkActive="mat-accent">New Post</a>
+    </li>
+    <li *ngIf="userIsAuthenticated">
+      <a mat-button routerLink="/order-list" routerLinkActive="mat-accent">My Orders</a>
     </li>
     <li *ngIf="!userIsAuthenticated">
       <a mat-button routerLink="/auth/login" routerLinkActive="mat-accent">Login</a>

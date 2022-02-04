@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from "rxjs";
 
 import { Post } from "../post.model";
@@ -12,16 +12,12 @@ import { LoginComponent } from "../../auth/login/login.component";
 import { MatDialog } from "@angular/material/dialog";
 
 @Component({
-  selector: "app-post-list",
-  templateUrl: "./post-list.component.html",
-  styleUrls: ["./post-list.component.css"]
+  selector: 'app-search-post',
+  templateUrl: './search-post.component.html',
+  styleUrls: ['./search-post.component.css']
 })
-export class PostListComponent implements OnInit, OnDestroy {
-  // posts = [
-  //   { title: "First Post", content: "This is the first post's content" },
-  //   { title: "Second Post", content: "This is the second post's content" },
-  //   { title: "Third Post", content: "This is the third post's content" }
-  // ];
+export class SearchPostComponent implements OnInit {
+
   posts: Post[] = [];
   isLoading = false;
   totalPosts = 0;
@@ -30,20 +26,28 @@ export class PostListComponent implements OnInit, OnDestroy {
   pageSizeOptions = [1, 2, 5, 10];
   userIsAuthenticated = false;
   userId: string;
+  searchValue: string;
   private postsSub: Subscription;
   private authStatusSub: Subscription;
 
   constructor(
     private dialog: MatDialog,
     private router: Router,
+    private route:ActivatedRoute,
     public postsService: PostsService,
     public cartService: CartService,
     private authService: AuthService
   ) {}
 
   ngOnInit() {
+
+    this.route.queryParams.subscribe((params)=>{
+      this.searchValue = params['searchValue']
+      console.log("SearchValue from Search-post",params['searchValue']);
+    })
+
     this.isLoading = true;
-    this.postsService.getPosts(this.postsPerPage, this.currentPage);
+    this.postsService.searchPost(this.searchValue, this.postsPerPage, this.currentPage);
     this.userId = this.authService.getUserId();
     this.postsSub = this.postsService
       .getPostUpdateListener()
@@ -67,7 +71,7 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.currentPage = pageData.pageIndex + 1;
     this.postsPerPage = pageData.pageSize;
-    this.postsService.getPosts(this.postsPerPage, this.currentPage);
+    this.postsService.searchPost(this.searchValue,this.postsPerPage, this.currentPage);
   }
 
   order(post:any){
@@ -109,4 +113,5 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.postsSub.unsubscribe();
     this.authStatusSub.unsubscribe();
   }
+
 }

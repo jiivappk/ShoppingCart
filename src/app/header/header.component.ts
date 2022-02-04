@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
+import { Router } from '@angular/router';
 
 import { AuthService } from "../auth/auth.service";
 import { CartService } from "../posts/cart.service";
+import { PostsService } from "../posts/posts.service";
 import { Cart } from "../posts/cart.model"
 
 @Component({
@@ -11,11 +13,13 @@ import { Cart } from "../posts/cart.model"
   styleUrls: ["./header.component.css"]
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  postsPerPage = 2;
+  currentPage = 1;
   userIsAuthenticated = false;
   private authListenerSubs: Subscription;
   private cartItemsSub: Subscription;
   private totalCartItems: number;
-  constructor(private authService: AuthService, public cartService: CartService,) {}
+  constructor(private authService: AuthService, public cartService: CartService, public postService:PostsService, public router:Router) {}
 
   ngOnInit() {
     this.userIsAuthenticated = this.authService.getIsAuth();
@@ -35,6 +39,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onLogout() {
     this.authService.logout();
+  }
+
+  onSearch(value){
+    console.log("OnSEarch is called",value)
+    this.router.navigate(["search"],{queryParams:{searchValue:value}})
   }
 
   ngOnDestroy() {

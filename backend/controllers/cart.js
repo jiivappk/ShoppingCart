@@ -1,4 +1,3 @@
-const { runInThisContext } = require("vm");
 const Cart = require("../models/cart");
 
 exports.createCartItem = (req, res, next) => {
@@ -37,34 +36,6 @@ exports.createCartItem = (req, res, next) => {
     });
 };
 
-// exports.updatePost = (req, res, next) => {
-//   let imagePath = req.body.imagePath;
-//   if (req.file) {
-//     const url = req.protocol + "://" + req.get("host");
-//     imagePath = url + "/images/" + req.file.filename;
-//   }
-//   const post = new Post({
-//     _id: req.body.id,
-//     title: req.body.title,
-//     content: req.body.content,
-//     imagePath: imagePath,
-//     creator: req.userData.userId
-//   });
-//   Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post)
-//     .then(result => {
-//       if (result.n > 0) {
-//         res.status(200).json({ message: "Update successful!" });
-//       } else {
-//         res.status(401).json({ message: "Not authorized!" });
-//       }
-//     })
-//     .catch(error => {
-//       res.status(500).json({
-//         message: "Couldn't udpate post!"
-//       });
-//     });
-// };
-
 exports.getCartItems = (req, res, next) => {
   const pageSize = +req.query.pagesize;
   const currentPage = +req.query.page;
@@ -91,22 +62,6 @@ exports.getCartItems = (req, res, next) => {
       });
     });
 };
-
-// exports.getPost = (req, res, next) => {
-//   Post.findById(req.params.id)
-//     .then(post => {
-//       if (post) {
-//         res.status(200).json(post);
-//       } else {
-//         res.status(404).json({ message: "Post not found!" });
-//       }
-//     })
-//     .catch(error => {
-//       res.status(500).json({
-//         message: "Fetching post failed!"
-//       });
-//     });
-// };
 
 exports.deleteCartItem = (req, res, next) => {
   Cart.deleteOne({ _id: req.params.id, userId: req.userData.userId })

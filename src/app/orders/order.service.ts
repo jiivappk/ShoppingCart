@@ -26,58 +26,63 @@ export class OrderService {
     this.http.post<{ message: string; orderItem: any; maxOrderItems: number }>(BACKEND_URL,orderItem)
     .pipe(
       map(orderData => {
-        console.log("CartItem from Backend",orderData)
+        console.log("OrderItem from Backend",orderData)
         return {
-          cartItem:{
-            id: orderData.orderItem._id,
+          orderItem:{
+            orderId: orderData.orderItem.orderId,
             content: orderData.orderItem.content,
             creator: orderData.orderItem.creator,
             imagePath: orderData.orderItem.imagePath,
             postId: orderData.orderItem.postId,
             title: orderData.orderItem.title,
             userId: orderData.orderItem.userId,
-            orderStatus: orderData.orderItem.orderStatusItem
+            address: orderData.orderItem.address,
+            orderStatus: orderData.orderItem.orderStatus
           },
           maxOrderItems: orderData.maxOrderItems
         };
       })
     )
     .subscribe(transformedOrderData => {
-      this.updatedOrderItem = transformedOrderData.cartItem;
-      console.log("Cart Items updated",this.updatedOrderItem);
+      this.updatedOrderItem = transformedOrderData.orderItem;
+      console.log("Order Items updated",this.updatedOrderItem);
       this.orderUpdated.next({
         orderItems:this.orderItems,
         orderItemsCount: transformedOrderData.maxOrderItems
       });
-      return "Cart Item Added Successfuly";
+      return "Order Placed Successfuly";
     });
   }
 
-  getCartItems(postsPerPage: number, currentPage: number){
+  getOrderItems(postsPerPage: number, currentPage: number){
     const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
-    this.http.get<{ message: string; cartItems: any; maxCartItems: number }>(BACKEND_URL + queryParams)  
+    this.http.get<{ message: string; orderItems: any; maxOrderItems: number }>(BACKEND_URL + queryParams)  
     .pipe(
-      map(cartData => {
+      map(orderData => {
         return {
-          cartItems: cartData.cartItems.map(cartItem => {
+          orderItems: orderData.orderItems.map(orderItem => {
             return {
-              title: cartItem.title,
-              content: cartItem.content,
-              id: cartItem._id,
-              imagePath: cartItem.imagePath,
-              creator: cartItem.creator
+              orderId:orderItem.orderId,
+              address: orderItem.address,
+              orderStatus: orderItem.orderStatus,
+              content:orderItem.content,
+              creator:orderItem.creator,
+              imagePath:orderItem.imagePath,
+              postId:orderItem.postId,
+              title:orderItem.title,
+              userId:orderItem.userId,
             };
           }),
-          maxCartItems: cartData.maxCartItems
+          maxOrderItems: orderData.maxOrderItems
         };
       })
     )
     .subscribe(transformedOrderData => {
-      this.orderItems = transformedOrderData.cartItems;
-      this.maxOrderItems = transformedOrderData.maxCartItems;
+      this.orderItems = transformedOrderData.orderItems;
+      this.maxOrderItems = transformedOrderData.maxOrderItems;
       this.orderUpdated.next({
         orderItems:this.orderItems,
-        orderItemsCount: transformedOrderData.maxCartItems
+        orderItemsCount: transformedOrderData.maxOrderItems
       });
     });
     return {
@@ -87,7 +92,7 @@ export class OrderService {
     };
   }
 
-  deleteCartItems(orderItemId: string) {
+  deleteOrderItems(orderItemId: string) {
     return this.http.delete(BACKEND_URL + orderItemId);
   }
 

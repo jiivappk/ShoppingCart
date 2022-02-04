@@ -11,6 +11,7 @@ const BACKEND_URL = environment.apiUrl + "/cart/";
 
 @Injectable({ providedIn: "root" })
 export class CartService {
+
   private cartItems: Cart[] = [];
   public updatedCartItem:Cart;
   public maxCartItems:number;

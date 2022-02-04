@@ -25,7 +25,7 @@
   }
   
   .example-card {
-    /* max-width: 200px; */
+    max-width: 200px;
     /* max-height: 100px; */
   }
   
@@ -37,7 +37,6 @@
   
   .top-container{
     display: flex;
-    flex-direction: column;
     flex-wrap: wrap;
   }
   
@@ -55,16 +54,16 @@
   mat-card-subtitle{
     width: 150px;
     white-space: nowrap;
-    /* overflow: hidden !important; */
-    /* text-overflow: ellipsis; */
+    overflow: hidden !important;
+    text-overflow: ellipsis;
     margin-bottom: 25px;
   }
   
   mat-card-content{
         display: block;
         margin-bottom: 16px;
-        /* width: 200px; */
+        width: 200px;
         overflow: hidden;
         text-overflow: ellipsis;
-        /* height: 118px;  */
+        height: 118px; 
   }

@@ -1,0 +1,16 @@
+mat-form-field,
+textarea {
+  width: 100%;
+}
+
+mat-spinner {
+  margin: auto;
+}
+
+.row{
+    display: flex;
+}
+
+.item{
+    flex-grow: 1;
+}

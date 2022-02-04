@@ -30,50 +30,35 @@ export class PostDetailsComponent implements OnInit {
       console.log("posttitle",params['title']);
     })
 
-     this.imageObject= [
+    this.imageObject= [
       {
-        image: "http://localhost:3000/images/image-1638082620002.jpg",
-        thumbImage: "http://localhost:3000/images/image-1638082620002.jpg",
+        image: "http://localhost:3000/images/Front_View.jpg",
+        thumbImage: "http://localhost:3000/images/Front_View.jpg",
         title: 'Slider Image 1',
         alt: 'Image Alt 1',
       }, 
       {
-        image: "http://localhost:3000/images/second-image-1638082938433.png",
-        thumbImage: "http://localhost:3000/images/second-image-1638082938433.png",
+        image: "http://localhost:3000/images/Left_View.jpg",
+        thumbImage: "http://localhost:3000/images/Left_View.jpg",
         title: 'Slider Image 1',
         alt: 'Image Alt 1',
       }, 
       {
-        image: "http://localhost:3000/images/third-image-1638720529708.png",
-        thumbImage: "http://localhost:3000/images/third-image-1638720529708.png",
+        image: "http://localhost:3000/images/Right_View.jpg",
+        thumbImage: "http://localhost:3000/images/Right_View.jpg",
         title: 'Slider Image 1',
         alt: 'Image Alt 1',
       }, 
       {
-        image: 'https://via.placeholder.com/600.png/345',
-        thumbImage: 'https://via.placeholder.com/1200.png/345',
+        image: 'http://localhost:3000/images/Special_View.jpg',
+        thumbImage: 'http://localhost:3000/images/Special_View.jpg',
         title: 'Slider Image 1',
         alt: 'Image Alt 1',
       }, {
-        image: 'https://via.placeholder.com/600.png/643',
-        thumbImage: 'https://via.placeholder.com/1200.png/643',
+        image: 'http://localhost:3000/images/Top_View.jpg',
+        thumbImage: 'http://localhost:3000/images/Top_View.jpg',
         title: 'Slider Image 2',
         alt: 'Image Alt 2'
-      }, {
-        image: 'https://via.placeholder.com/600.png/8w4',
-        thumbImage: 'https://via.placeholder.com/1200.png/8w4',
-        title: 'Slider Image 3',
-        alt: 'Image Alt 3'
-      }, {
-        image: 'https://via.placeholder.com/600.png/347',
-        thumbImage: 'https://via.placeholder.com/1200.png/347',
-        title: 'Slider Image 4',
-        alt: 'Image Alt 4'
-      }, {
-        image: 'https://via.placeholder.com/600.png/953',
-        thumbImage: 'https://via.placeholder.com/1200.png/953',
-        title: 'Slider Image 5',
-        alt: 'Image Alt 5'
       }
    ];
 

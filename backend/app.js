@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const postsRoutes = require("./routes/posts");
+const orderRoutes = require("./routes/orders")
 const cartRoutes = require("./routes/cart");
 const userRoutes = require("./routes/user");
 var cors = require('cors')
@@ -66,6 +67,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/images", express.static(path.join("backend/images")));
 
 app.use("/api/posts", postsRoutes);
+app.use("/api/orders", orderRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/user", userRoutes);
 
