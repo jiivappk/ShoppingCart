@@ -78,6 +78,7 @@ export class PostsService {
       )
       .pipe(
         map(postData => {
+          console.log("Post Data from Backend",postData);
           return {
             posts: postData.posts.map(post => {
               return {
@@ -98,7 +99,6 @@ export class PostsService {
           posts: [...this.posts],
           postCount: transformedPostData.maxPosts
         });
-        console.log("Search Results",this.posts)
       });
   }
 

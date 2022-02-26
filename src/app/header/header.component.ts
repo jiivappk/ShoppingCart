@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
-import { Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 import { AuthService } from "../auth/auth.service";
 import { CartService } from "../posts/cart.service";
@@ -19,9 +20,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private authListenerSubs: Subscription;
   private cartItemsSub: Subscription;
   private totalCartItems: number;
-  constructor(private authService: AuthService, public cartService: CartService, public postService:PostsService, public router:Router) {}
+  searchItem: string;
+  constructor( private authService: AuthService, 
+               public cartService: CartService,
+               public postService:PostsService,
+               public router:Router,
+               private route:ActivatedRoute,
+               ) {}
 
   ngOnInit() {
+    this.router.events
+    .pipe( filter(event => event instanceof NavigationEnd) )    
+    .subscribe(event=> 
+     {          
+        console.log("Event from header",event["url"]);
+        if(event["url"] == '/'){
+          this.searchItem = "";
+        }
+     });
+    
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.authListenerSubs = this.authService
       .getAuthStatusListener()
@@ -41,9 +58,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authService.logout();
   }
 
-  onSearch(value){
-    console.log("OnSEarch is called",value)
-    this.router.navigate(["search"],{queryParams:{searchValue:value}})
+  onSearch(){
+    console.log("OnSEarch is called",this.searchItem)
+    this.router.navigate(["search"],{queryParams:{searchValue:this.searchItem}})
   }
 
   ngOnDestroy() {

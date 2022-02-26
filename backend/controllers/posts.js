@@ -65,33 +65,58 @@ exports.getPosts = (req, res, next) => {
   console.log("Title",title);
   console.log("PageSize",pageSize);
   console.log("currentPage",currentPage);
+  
   if(title!=undefined){
-    postQuery = Post.find({title: { $regex: /^Car/ } })
+    postQuery = Post.find({title: { $regex: new RegExp(title) } })
+    
+    if (pageSize && currentPage) {
+      postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
+    }
+    postQuery
+      .then(documents => {
+        fetchedPosts = documents;
+        return Post.aggregate([{$match: {title: {$regex: new RegExp(title)}}}, { $count: "count"}])
+      })
+      .then(searchResult => {
+        console.log("Search Cunt is ",searchResult)
+        res.status(200).json({
+          message: "Posts fetched successfully!",
+          posts: fetchedPosts,
+          maxPosts: searchResult[0].count
+        });
+      })
+      .catch(error => {
+        res.status(500).json({
+          message: "Fetching posts failed!"
+        });
+      });  
+    
   }
   else{
     postQuery = Post.find();
+
+    if (pageSize && currentPage) {
+      postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
+    }
+    postQuery
+      .then(documents => {
+        fetchedPosts = documents;
+        return Post.count();
+      })
+      .then(count => {
+        res.status(200).json({
+          message: "Posts fetched successfully!",
+          posts: fetchedPosts,
+          maxPosts: count
+        });
+      })
+      .catch(error => {
+        res.status(500).json({
+          message: "Fetching posts failed!"
+        });
+      });  
   }
-  if (pageSize && currentPage) {
-    postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
-  }
-  postQuery
-    .then(documents => {
-      fetchedPosts = documents;
-      return Post.count();
-    })
-    .then(count => {
-      res.status(200).json({
-        message: "Posts fetched successfully!",
-        posts: fetchedPosts,
-        maxPosts: count
-      });
-    })
-    .catch(error => {
-      res.status(500).json({
-        message: "Fetching posts failed!"
-      });
-    });
-};
+  };
 
 exports.getPost = (req, res, next) => {
   Post.findById(req.params.id)

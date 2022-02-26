@@ -4,14 +4,17 @@
   </span>
   <span class="spacer"></span>
   <ul>
-    <li>
-      <!-- <a mat-button routerLink="/cart" routerLinkActive="mat-accent">Cart</a> -->
+    <!-- <li>
+      <a mat-button routerLink="/cart" routerLinkActive="mat-accent">Cart</a>
       <form (submit)="onSearch(searchValue)" class="search-tab">
         <input type="text" #searchValue placeholder="Search.." name="search">
         <mat-icon class="search-icon" matSuffix>search</mat-icon>
         <input type="submit" value="Submit">
       </form>
       <button (click)="onSearch('Car')">Search</button>
+    </li> -->
+    <li>
+        <input (input)="onSearch()" placeholder="Search" [(ngModel)]="searchItem" />
     </li>
     <li *ngIf="userIsAuthenticated">
       <!-- <a mat-button routerLink="/cart" routerLinkActive="mat-accent">Cart</a> -->

@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private authStatusSub: Subscription;
   socialUser: SocialUser;
   loggedIn: boolean;
-
+  fbImage: string = '../../assets/facebook.jpg';
   constructor(public authService: AuthService, private socialAuthService: SocialAuthService, @Optional() public dialogRef: MatDialogRef<LoginComponent>) {}
 
   ngOnInit() {

@@ -1,6 +1,6 @@
 import { Component, OnInit, } from "@angular/core";
-// import { Subscription } from "rxjs";
-
+import { filter } from 'rxjs/operators';
+import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from "./auth/auth.service";
 // import { ErrorService } from "./error/error.service";
 
@@ -9,23 +9,25 @@ import { AuthService } from "./auth/auth.service";
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"]
 })
-export class AppComponent implements OnInit {
-  // hasError = false;
-  // private errorSub: Subscription;
-
+export class AppComponent implements OnInit{
+  
   constructor(
     private authService: AuthService,
+    public router:Router,
     // private errorService: ErrorService
   ) {}
 
+  path: string = '';
+   
   ngOnInit() {
     this.authService.autoAuthUser();
-    // this.errorSub = this.errorService.getErrorListener().subscribe(
-    //   message => this.hasError = message !== null
-    // );
+    this.router.events
+    .pipe( filter(event => event instanceof NavigationEnd) )    
+    .subscribe(event=> 
+     {          
+        console.log("Event from AppComponent",event["url"]);
+        this.path = event["url"]
+     });
   }
-
-  // ngOnDestroy() {
-  //   this.errorSub.unsubscribe();
-  // }
+   
 }

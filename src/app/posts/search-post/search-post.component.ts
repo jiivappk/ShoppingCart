@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, AfterContentInit, AfterViewInit, AfterViewChecked, AfterContentChecked, OnChanges, SimpleChanges } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from "rxjs";
@@ -16,7 +16,7 @@ import { MatDialog } from "@angular/material/dialog";
   templateUrl: './search-post.component.html',
   styleUrls: ['./search-post.component.css']
 })
-export class SearchPostComponent implements OnInit {
+export class SearchPostComponent implements OnInit, OnChanges {
 
   posts: Post[] = [];
   isLoading = false;
@@ -38,34 +38,38 @@ export class SearchPostComponent implements OnInit {
     public cartService: CartService,
     private authService: AuthService
   ) {}
+  ngOnChanges(changes: SimpleChanges) {
+    console.log("Changes",changes);
+  }
+ 
 
   ngOnInit() {
-
     this.route.queryParams.subscribe((params)=>{
       this.searchValue = params['searchValue']
       console.log("SearchValue from Search-post",params['searchValue']);
+      this.isLoading = true;
+      this.postsService.searchPost(this.searchValue, this.postsPerPage, this.currentPage);
+      this.userId = this.authService.getUserId();
+      this.postsSub = this.postsService
+        .getPostUpdateListener()
+        .subscribe((postData: { posts: Post[]; postCount: number }) => {
+          this.isLoading = false;
+          this.totalPosts = postData.postCount;
+          this.posts = postData.posts;
+          console.log("Post from Search-post",this.posts)
+          console.log("PostCount from Search-post",this.totalPosts);
+        });
+      this.userIsAuthenticated = this.authService.getIsAuth();
+      this.authStatusSub = this.authService
+        .getAuthStatusListener()
+        .subscribe(isAuthenticated => {
+          this.userIsAuthenticated = isAuthenticated;
+          this.userId = this.authService.getUserId();
+        });
     })
-
-    this.isLoading = true;
-    this.postsService.searchPost(this.searchValue, this.postsPerPage, this.currentPage);
-    this.userId = this.authService.getUserId();
-    this.postsSub = this.postsService
-      .getPostUpdateListener()
-      .subscribe((postData: { posts: Post[]; postCount: number }) => {
-        this.isLoading = false;
-        this.totalPosts = postData.postCount;
-        this.posts = postData.posts;
-        console.log(this.posts)
-      });
-    this.userIsAuthenticated = this.authService.getIsAuth();
-    this.authStatusSub = this.authService
-      .getAuthStatusListener()
-      .subscribe(isAuthenticated => {
-        this.userIsAuthenticated = isAuthenticated;
-        this.userId = this.authService.getUserId();
-      });
-    console.log("Post List Component is called", this.posts);
   }
+
+
 
   onChangedPage(pageData: PageEvent) {
     this.isLoading = true;
@@ -74,39 +78,51 @@ export class SearchPostComponent implements OnInit {
     this.postsService.searchPost(this.searchValue,this.postsPerPage, this.currentPage);
   }
 
-  order(post:any){
-    this.router.navigate(['order'],{queryParams:{postId:post.id, content:post.content, imagePath:post.imagePath, title:post.title, creator:post.creator}})
-  }
+  // order(post:any){
+  //   this.router.navigate(['order'],{queryParams:{postId:post.id, content:post.content, imagePath:post.imagePath, title:post.title, creator:post.creator}})
+  // }
 
-  addToCart(post:any){
-    let userId = localStorage.getItem("userId");
-    if(userId == null){
-      console.log("User id is null");
-      this.dialog.open(LoginComponent, {data: {message: "Login Component"}});
-    }
-    else{
-      let cartItem = {
-        userId: userId,
-        postId: post.id,
-        content: post.content,
-        creator: post.creator,
-        imagePath: post.imagePath,
-        title: post.title,
-      }
-      console.log("Add to cart is cartItem", cartItem)
-      console.log("Add to cart userId",userId)
-      let result = this.cartService.addCartItems(cartItem)
-      console.log(result)
-    }
-  }
+  // addToCart(post:any){
+  //   let userId = localStorage.getItem("userId");
+  //   if(userId == null){
+  //     console.log("User id is null");
+  //     this.dialog.open(LoginComponent, {data: {message: "Login Component"}});
+  //   }
+  //   else{
+  //     let cartItem = {
+  //       userId: userId,
+  //       postId: post.id,
+  //       content: post.content,
+  //       creator: post.creator,
+  //       imagePath: post.imagePath,
+  //       title: post.title,
+  //     }
+  //     console.log("Add to cart is cartItem", cartItem)
+  //     console.log("Add to cart userId",userId)
+  //     let result = this.cartService.addCartItems(cartItem)
+  //     console.log(result)
+  //   }
+  // }
 
-  onDelete(postId: string) {
-    this.isLoading = true;
-    this.postsService.deletePost(postId).subscribe(() => {
-      this.postsService.getPosts(this.postsPerPage, this.currentPage);
-    }, () => {
-      this.isLoading = false;
-    });
+  // onDelete(postId: string) {
+  //   this.isLoading = true;
+  //   this.postsService.deletePost(postId).subscribe(() => {
+  //     this.postsService.getPosts(this.postsPerPage, this.currentPage);
+  //   }, () => {
+  //     this.isLoading = false;
+  //   });
+  // }
+
+  getSearchResults(){
+    this.postsService.searchPost(this.searchValue,this.postsPerPage,this.currentPage);
+    this.postsSub = this.postsService
+      .getPostUpdateListener()
+      .subscribe((postData: { posts: Post[]; postCount: number }) => {
+        this.isLoading = false;
+        this.totalPosts = postData.postCount;
+        this.posts = postData.posts;
+        console.log(this.posts)
+      });
   }
 
   ngOnDestroy() {
