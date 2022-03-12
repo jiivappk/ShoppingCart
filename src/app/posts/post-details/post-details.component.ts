@@ -64,4 +64,8 @@ export class PostDetailsComponent implements OnInit {
 
   }
 
+  yourfunctionName(event){
+    console.log("Your function is called", event)
+  }
+
 }
