@@ -9,7 +9,7 @@ exports.createCartItem = (req, res, next) => {
     title: req.body.title,
     content: req.body.content,
     imagePath: req.body.imagePath,
-    postId: req.body.postId,
+    productId: req.body.productId,
     creator: req.body.creator,
     userId: req.body.userId
   });

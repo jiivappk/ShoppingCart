@@ -4,9 +4,9 @@ import { filter } from 'rxjs/operators';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 import { AuthService } from "../auth/auth.service";
-import { CartService } from "../posts/cart.service";
-import { PostsService } from "../posts/posts.service";
-import { Cart } from "../posts/cart.model"
+import { CartService } from "../products/cart.service";
+import { ProductsService } from "../products/products.service";
+import { Cart } from "../products/cart.model"
 
 @Component({
   selector: "app-header",
@@ -14,7 +14,7 @@ import { Cart } from "../posts/cart.model"
   styleUrls: ["./header.component.css"]
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  postsPerPage = 2;
+  productsPerPage = 2;
   currentPage = 1;
   userIsAuthenticated = false;
   private authListenerSubs: Subscription;
@@ -23,7 +23,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   searchItem: string;
   constructor( private authService: AuthService, 
                public cartService: CartService,
-               public postService:PostsService,
+               public productService:ProductsService,
                public router:Router,
                private route:ActivatedRoute,
                ) {}

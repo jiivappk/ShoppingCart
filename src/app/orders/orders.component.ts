@@ -16,11 +16,11 @@ export class OrdersComponent implements OnInit {
   constructor(private orderService:OrderService,  private dialog: MatDialog, private route:ActivatedRoute) { }
 
   form: FormGroup;
-  postId:string;
-  postContent:string;
-  postCreator:string;
-  postImagePath:string;
-  postTitle:string;
+  productId:string;
+  productContent:string;
+  productCreator:string;
+  productImagePath:string;
+  productTitle:string;
   isLoading = false;
   pageContent = ['Delivery Address','Make Payment','Oredred Details'];
   states = [  'Andhra Pradesh',
@@ -80,16 +80,16 @@ export class OrdersComponent implements OnInit {
       }),
     });
     this.route.queryParams.subscribe((params)=>{
-      this.postId = params['postId']
-      this.postContent = params['content']
-      this.postCreator = params['creator']
-      this.postImagePath = params['imagePath']
-      this.postTitle = params['title']
-      console.log("postId from Order",params['postId']);
-      console.log("postContent from Order",params['content']);
-      console.log("postCreator from Order",params['creator']);
-      console.log("postImagePath from Order",params['imagePath']);
-      console.log("postTitle from Order",params['title']);
+      this.productId = params['productId']
+      this.productContent = params['content']
+      this.productCreator = params['creator']
+      this.productImagePath = params['imagePath']
+      this.productTitle = params['title']
+      console.log("productId from Order",params['productId']);
+      console.log("productContent from Order",params['content']);
+      console.log("productCreator from Order",params['creator']);
+      console.log("productImagePath from Order",params['imagePath']);
+      console.log("productTitle from Order",params['title']);
     })
 
   }
@@ -100,7 +100,7 @@ export class OrdersComponent implements OnInit {
   
 
   onSaveOrder(header){
-    console.log("Inside OnSavePost")
+    console.log("Inside OnSaveProduct")
     console.log(this.form.value)
     console.log("Expansion Header",header)
     let userId = localStorage.getItem("userId");
@@ -110,11 +110,11 @@ export class OrdersComponent implements OnInit {
     }
     else{
       let orderItem = {
-        title: this.postTitle,
-        content: this.postContent,
-        imagePath: this.postImagePath,
-        creator: this.postCreator,
-        postId: this.postId,
+        title: this.productTitle,
+        content: this.productContent,
+        imagePath: this.productImagePath,
+        creator: this.productCreator,
+        productId: this.productId,
         userId: userId,
         address: {
           fullName: this.form.value.fullName,

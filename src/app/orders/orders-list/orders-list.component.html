@@ -8,7 +8,7 @@
         </mat-card-header>
             
         <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
-        <a [routerLink]="['order-detail']" [queryParams]="{orderId:orderItem.orderId,content:orderItem.content,creator:orderItem.creator,imagePath:orderItem.imagePath,title:orderItem.title,address:orderItem.address,orderStatus:orderItem.orderStatus,postId:orderItem.postId,userId:orderItem.userId}"><img mat-card-image src={{orderItem.imagePath}} alt="Photo of a Shiba Inu"></a>
+        <a [routerLink]="['order-detail']" [queryParams]="{orderId:orderItem.orderId,content:orderItem.content,creator:orderItem.creator,imagePath:orderItem.imagePath,title:orderItem.title,address:orderItem.address,orderStatus:orderItem.orderStatus,productId:orderItem.productId,userId:orderItem.userId}"><img mat-card-image src={{orderItem.imagePath}} alt="Photo of a Shiba Inu"></a>
         
         <mat-card-content>
           <p>
@@ -24,7 +24,7 @@
       </mat-card>
     </div>
   </div>
-  <mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
+  <mat-paginator [length]="totalProducts" [pageSize]="productsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
     *ngIf="orderItems.length > 0"></mat-paginator>
   
   

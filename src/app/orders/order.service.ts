@@ -33,7 +33,7 @@ export class OrderService {
             content: orderData.orderItem.content,
             creator: orderData.orderItem.creator,
             imagePath: orderData.orderItem.imagePath,
-            postId: orderData.orderItem.postId,
+            productId: orderData.orderItem.productId,
             title: orderData.orderItem.title,
             userId: orderData.orderItem.userId,
             address: orderData.orderItem.address,
@@ -54,8 +54,8 @@ export class OrderService {
     });
   }
 
-  getOrderItems(postsPerPage: number, currentPage: number){
-    const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
+  getOrderItems(productsPerPage: number, currentPage: number){
+    const queryParams = `?pagesize=${productsPerPage}&page=${currentPage}`;
     this.http.get<{ message: string; orderItems: any; maxOrderItems: number }>(BACKEND_URL + queryParams)  
     .pipe(
       map(orderData => {
@@ -68,7 +68,7 @@ export class OrderService {
               content:orderItem.content,
               creator:orderItem.creator,
               imagePath:orderItem.imagePath,
-              postId:orderItem.postId,
+              productId:orderItem.productId,
               title:orderItem.title,
               userId:orderItem.userId,
             };

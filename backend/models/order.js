@@ -5,7 +5,7 @@ const orderSchema = mongoose.Schema({
   content: { type: String, required: true },
   imagePath: { type: String, required: true },
   creator: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  postId: { type: mongoose.Schema.Types.ObjectId, ref: "Post", required: true  },
+  productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true  },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   address: { type: Object, required: true},
   orderStatus: { type: Array, required: true}

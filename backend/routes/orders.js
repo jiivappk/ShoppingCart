@@ -9,12 +9,12 @@ const extractFile = require("../middleware/file");
 
 router.post("", checkAuth, OrderController.createOrder);
 
-// router.put("/:id", checkAuth, extractFile, PostController.updatePost);
+// router.put("/:id", checkAuth, extractFile, ProductController.updateProduct);
 
 router.get("", OrderController.getOrderItems);
 
-// router.get("/:id", PostController.getPost);
+// router.get("/:id", ProductController.getProduct);
 
-// router.delete("/:id", checkAuth, PostController.deletePost);
+// router.delete("/:id", checkAuth, ProductController.deleteProduct);
 
 module.exports = router;

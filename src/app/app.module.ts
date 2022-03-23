@@ -13,7 +13,7 @@ import { AuthInterceptor } from "./auth/auth-interceptor";
 import { ErrorInterceptor } from "./error-interceptor";
 import { ErrorComponent } from "./error/error.component";
 import { AngularMaterialModule } from "./angular-material.module";
-import { PostsModule } from "./posts/posts.module";
+import { ProductsModule } from "./products/products.module";
 import { OrdersComponent } from "./orders/orders.component";
 import { OrderDetailsComponent } from './orders/order-details/order-details.component';
 import { OrdersListComponent } from './orders/orders-list/orders-list.component';
@@ -37,7 +37,7 @@ import { NgImageSliderModule } from 'ng-image-slider';
     ReactiveFormsModule,
     FormsModule,
     CommonModule,
-    PostsModule,
+    ProductsModule,
     NgImageSliderModule,
   ],
   providers: [

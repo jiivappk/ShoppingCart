@@ -17,8 +17,8 @@ export class OrdersListComponent implements OnInit {
 
   orderItems: Order[] = [];
   isLoading = false;
-  totalPosts = 0;
-  postsPerPage = 2;
+  totalProducts = 0;
+  productsPerPage = 2;
   currentPage = 1;
   pageSizeOptions = [1, 2, 5, 10];
   userIsAuthenticated = false;
@@ -33,7 +33,7 @@ export class OrdersListComponent implements OnInit {
 
   ngOnInit() {
     this.isLoading = true;
-    this.orderService.getOrderItems(this.postsPerPage, this.currentPage);
+    this.orderService.getOrderItems(this.productsPerPage, this.currentPage);
     this.userId = this.authService.getUserId();
     this.orderItemsSub = this.orderService
       .getOrderUpdateListener()
@@ -48,12 +48,12 @@ export class OrdersListComponent implements OnInit {
             imagePath: orderItem.imagePath,
             orderId: orderItem.orderId,
             orderStatus: JSON.stringify(orderItem.orderStatus) ,
-            postId: orderItem.postId,
+            productId: orderItem.productId,
             title: orderItem.title,
             userId: orderItem.userId,
           })
         })
-        this.totalPosts = orderData.orderItemsCount;
+        this.totalProducts = orderData.orderItemsCount;
         console.log("Altered Order Items",this.orderItems)
       });
     this.userIsAuthenticated = this.authService.getIsAuth();
@@ -68,15 +68,15 @@ export class OrdersListComponent implements OnInit {
   onChangedPage(pageData: PageEvent) {
     this.isLoading = true;
     this.currentPage = pageData.pageIndex + 1;
-    this.postsPerPage = pageData.pageSize;
-    this.orderService.getOrderItems(this.postsPerPage, this.currentPage);
+    this.productsPerPage = pageData.pageSize;
+    this.orderService.getOrderItems(this.productsPerPage, this.currentPage);
   }
 
   onDelete(orderItemId: string) {
     console.log("Delete CartItem Id",orderItemId)
     this.isLoading = true;
     this.orderService.deleteOrderItems(orderItemId).subscribe(() => {
-      this.orderService.getOrderItems(this.postsPerPage, this.currentPage);
+      this.orderService.getOrderItems(this.productsPerPage, this.currentPage);
     }, () => {
       this.isLoading = false;
     });

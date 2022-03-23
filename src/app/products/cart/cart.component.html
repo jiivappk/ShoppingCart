@@ -1,0 +1,50 @@
+<!-- <mat-spinner *ngIf="isLoading"></mat-spinner>
+<mat-accordion multi="true" *ngIf="products.length > 0 && !isLoading">
+  <mat-expansion-panel *ngFor="let product of products">
+    <mat-expansion-panel-header>
+      {{ product.title }}
+    </mat-expansion-panel-header>
+    <div class="product-image">
+      <img [src]="product.imagePath" [alt]="product.title">
+    </div>
+    <p>{{ product.content }}</p>
+    <mat-action-row *ngIf="userIsAuthenticated && userId === product.creator">
+      <a mat-button color="primary" [routerLink]="['/edit', product.id]">EDIT</a>
+      <button mat-button color="warn" (click)="onDelete(product.id)">DELETE</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+<mat-paginator [length]="totalProducts" [pageSize]="productsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
+  *ngIf="products.length > 0"></mat-paginator>
+<p class="info-text mat-body-1" *ngIf="products.length <= 0 && !isLoading">No products added yet!</p> -->
+
+<div class="top-container">
+    <div style="margin: 20px;" *ngFor="let cartItem of cartItems" >
+      <mat-card class="example-card">
+        <mat-card-header>
+          <div mat-card-avatar class="example-header-image"></div>
+          <mat-card-title>{{cartItem.title}}</mat-card-title>
+          <mat-card-subtitle>{{cartItem.content}}</mat-card-subtitle>
+        </mat-card-header>
+            
+        <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+        <a [routerLink]="['product-detail']" [queryParams]="{id:cartItem.id,content:cartItem.content,creator:cartItem.creator,imagePath:cartItem.imagePath,title:cartItem.title}"><img mat-card-image src={{cartItem.imagePath}} alt="Photo of a Shiba Inu"></a>
+        
+        <mat-card-content>
+          <p>
+            The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+            A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+            bred for hunting.
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button (click)="onDelete(cartItem.id)">Remove from Cart</button>
+          <button mat-button>Order</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+  <mat-paginator [length]="totalProducts" [pageSize]="productsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
+    *ngIf="cartItems.length > 0"></mat-paginator>
+  
+  

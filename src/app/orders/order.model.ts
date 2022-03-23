@@ -3,7 +3,7 @@ export interface Order {
     title: string;
     content: string;
     imagePath: string;
-    postId: string;
+    productId: string;
     userId: string;
     creator: string;
     address: string;

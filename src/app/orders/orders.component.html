@@ -1,32 +1,32 @@
 <!-- <mat-spinner *ngIf="isLoading"></mat-spinner>
 <mat-accordion multi="true" *ngIf="pageContent.length > 0 && !isLoading">
-  <mat-expansion-panel *ngFor="let post of pageContent">
+  <mat-expansion-panel *ngFor="let product of pageContent">
     <mat-expansion-panel-header>
-      {{ postTitle }}
+      {{ productTitle }}
     </mat-expansion-panel-header>
-    <div class="post-image">
-      <img [src]="postImagePath" [alt]="post.title">
+    <div class="product-image">
+      <img [src]="productImagePath" [alt]="product.title">
     </div>
-    <p>{{ postContent }}</p>
-    <mat-action-row *ngIf="userIsAuthenticated && userId === postCreator">
-      <a mat-button color="primary" [routerLink]="['/edit', postId]">EDIT</a>
-      <button mat-button color="warn" (click)="onDelete(postId)">DELETE</button>
+    <p>{{ productContent }}</p>
+    <mat-action-row *ngIf="userIsAuthenticated && userId === productCreator">
+      <a mat-button color="primary" [routerLink]="['/edit', productId]">EDIT</a>
+      <button mat-button color="warn" (click)="onDelete(productId)">DELETE</button>
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
-<mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
+<mat-paginator [length]="totalProducts" [pageSize]="productsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
   *ngIf="pageContent.length > 0"></mat-paginator>
-<p class="info-text mat-body-1" *ngIf="posts.length <= 0 && !isLoading">No posts added yet!</p> -->
+<p class="info-text mat-body-1" *ngIf="products.length <= 0 && !isLoading">No products added yet!</p> -->
 
 
 <!-- <mat-spinner *ngIf="isLoading"></mat-spinner> -->
 <mat-accordion multi="true" *ngIf="pageContent.length > 0 && !isLoading">
-  <mat-expansion-panel #matExpansionPanel *ngFor="let post of pageContent; first as isFirst" [expanded]="isFirst">
+  <mat-expansion-panel #matExpansionPanel *ngFor="let product of pageContent; first as isFirst" [expanded]="isFirst">
     <mat-expansion-panel-header>
-        {{post}}
+        {{product}}
     </mat-expansion-panel-header>
-    <div *ngIf="post === 'Delivery Address'">
-        <!-- <form [formGroup]="form" (submit)="onSavePost(matExpansionPanel)" *ngIf="!isLoading"> -->
+    <div *ngIf="product === 'Delivery Address'">
+        <!-- <form [formGroup]="form" (submit)="onSaveProduct(matExpansionPanel)" *ngIf="!isLoading"> -->
         <form [formGroup]="form" *ngIf="!isLoading">
             <label>Full Name</label>
             <mat-form-field>
@@ -91,19 +91,19 @@
             <button mat-raised-button color="accent" type="submit">Use this address</button>
           </form>
     </div>
-    <div *ngIf="post === 'Make Payment'">
+    <div *ngIf="product === 'Make Payment'">
         <p>Choose a payment</p>
         <form [formGroup]="form" (submit)="onSaveOrder(matExpansionPanel)" *ngIf="!isLoading">
           <button mat-raised-button color="accent" type="submit">Use this address</button>
         </form>
     </div>
-    <div *ngIf="post === 'Oredred Details'">
+    <div *ngIf="product === 'Oredred Details'">
         <p>Order Completed</p>
-        <img [src]="postImagePath" [alt]="postTitle">
+        <img [src]="productImagePath" [alt]="productTitle">
     </div>
-    <mat-action-row *ngIf="userIsAuthenticated && userId === postCreator">
-      <a mat-button color="primary" [routerLink]="['/edit', postId]">EDIT</a>
-      <button mat-button color="warn" (click)="onDelete(postId)">DELETE</button>
+    <mat-action-row *ngIf="userIsAuthenticated && userId === productCreator">
+      <a mat-button color="primary" [routerLink]="['/edit', productId]">EDIT</a>
+      <button mat-button color="warn" (click)="onDelete(productId)">DELETE</button>
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>

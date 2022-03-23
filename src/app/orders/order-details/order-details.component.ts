@@ -19,7 +19,7 @@ export class OrderDetailsComponent implements OnInit {
   ];
   constructor(private route:ActivatedRoute) { }
   orderId:string;
-  postId:string;
+  productId:string;
   userId:any;
   orderContent:string;
   orderCreator:string;
@@ -38,10 +38,10 @@ export class OrderDetailsComponent implements OnInit {
       this.orderTitle = params['title']
       this.orderAddress = JSON.parse(params['address'])
       this.orderStatus = JSON.parse(params['orderStatus'])
-      this.postId = params['postId']
+      this.productId = params['productId']
       this.userId = params['userId']
       console.log("OrderID",params['orderId']);
-      console.log("PostID",params['postId']);
+      console.log("ProductID",params['productId']);
       console.log("UserID",params['userId']);
       console.log("OrderContent",params['content']);
       console.log("OrderCreator",params['creator']);
