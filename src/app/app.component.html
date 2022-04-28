@@ -1,5 +1,23 @@
-<app-header></app-header>
+<mat-drawer-container class="example-container" hasBackdrop=true>
+  <mat-drawer #drawer mode=over>
+    <ul>
+      <li>Home</li>
+      <li>Profile</li>
+      <li>Orders</li>
+      <li (click)="wishListRoute()">WishList</li>
+    </ul>
+  </mat-drawer>
+  <mat-drawer-content>
+    <app-header (sideNavEvent)="drawer.toggle()"></app-header>
+    <main [ngClass]="{login: (path ==='/auth/login' || path === '/auth/signup' || path === '/auth/forgotPassword')}">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-drawer-content>
+</mat-drawer-container>
+
+
+<!-- <app-header></app-header>
 <main [ngClass]="{login: (path ==='/auth/login' || path === '/auth/signup' || path === '/auth/forgotPassword')}">
   <router-outlet></router-outlet>
-</main>
+</main> -->
 <!-- <app-error *ngIf="hasError"></app-error> -->

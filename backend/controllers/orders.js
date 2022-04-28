@@ -13,8 +13,14 @@ exports.createOrder = (req, res, next) => {
       productId: req.body.productId,
       creator: req.body.creator,
       userId: req.body.userId,
+      price: req.body.price,
+      actualPrice: req.body.actualPrice,
+      noOfStocks: req.body.noOfStocks,
+      discountPercentage: req.body.discountPercentage,
       address: req.body.address,
-      orderStatus: req.body.orderStatus
+      additionalImages: req.body.additionalImages,
+      orderStatus: req.body.orderStatus,
+      refundStatus: req.body.refundStatus
     });
     order
       .save()
@@ -29,8 +35,14 @@ exports.createOrder = (req, res, next) => {
           orderItem: fetchedOrderItems,
           orderItem: {
             orderId:fetchedOrderItems._id,
+            price: fetchedOrderItems.price,
+            actualPrice: fetchedOrderItems.actualPrice,
+            noOfStocks: fetchedOrderItems.noOfStocks,
+            discountPercentage: fetchedOrderItems.discountPercentage,
             address: fetchedOrderItems.address,
+            additionalImages: fetchedOrderItems.additionalImages,
             orderStatus: fetchedOrderItems.orderStatus,
+            refundStatus: fetchedOrderItems.refundStatus,
             content:fetchedOrderItems.content,
             creator:fetchedOrderItems.creator,
             imagePath:fetchedOrderItems.imagePath,
@@ -64,11 +76,17 @@ exports.createOrder = (req, res, next) => {
          fetchedOrderItems.push({
           orderId:document._id,
           address: document.address,
+          price: document.price,
+          actualPrice: document.actualPrice,
+          noOfStocks: document.noOfStocks,
+          discountPercentage: document.discountPercentage,
+          additionalImages: document.additionalImages,
           orderStatus: document.orderStatus,
           content:document.content,
           creator:document.creator,
           imagePath:document.imagePath,
           productId:document.productId,
+          refundStatus:document.refundStatus,
           title:document.title,
           userId:document.userId,
          })

@@ -51,6 +51,7 @@ mat-card-header{
   text-overflow: ellipsis;
 }
 
+
 mat-card-subtitle{
   width: 150px;
   white-space: nowrap;
@@ -65,5 +66,53 @@ mat-card-content{
       width: 200px;
       overflow: hidden;
       text-overflow: ellipsis;
-      height: 118px; 
+      height: 130px; 
+}
+
+p{
+  height: 35px;
+  overflow: hidden;
+}
+
+.order-review-image {
+  display: flex;
+  gap: 2px;
+  vertical-align: middle;
+  width: 18px;
+  /* margin: 0 8px 0 12px; */
+  cursor: pointer;
+}
+
+.price-container{
+  display: block;
+  margin-top: 2px;
+}
+
+.selling-price-container {
+  font-size: 22px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.actual-price-container {
+  display: inline-block;
+  text-decoration: line-through;
+  font-size: 14px;
+  color: #878787;
+  padding-top: 10px;
+  margin-left: 10px;
+}
+
+.discount-percentage {
+  display: inline-block;
+  margin-left: 8px;
+  color: #388e3c;
+  font-size: 13px;
+  letter-spacing: -.2px;
+  font-weight: 500;
+}
+
+.stocks{
+  margin-top: 5px;
+  color: red;
 }

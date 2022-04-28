@@ -26,7 +26,7 @@ import { NgImageSliderModule } from 'ng-image-slider';
     ErrorComponent,
     OrdersComponent,
     OrderDetailsComponent,
-    OrdersListComponent
+    OrdersListComponent,
   ],
   imports: [
     BrowserModule,

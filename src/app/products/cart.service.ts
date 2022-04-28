@@ -16,11 +16,16 @@ export class CartService {
   public updatedCartItem:Cart;
   public maxCartItems:number;
   private cartUpdated = new Subject<{ cartItems: Cart[]; cartItemsCount: number }>();
+  private cartPrice = new Subject();
 
   constructor(private http: HttpClient, private router: Router) {}
 
   getCartUpdateListener() {
     return this.cartUpdated.asObservable();
+  }
+
+  getCartPriceListener(){
+    return this.cartPrice.asObservable();
   }
   addCartItems(cartItem:any){
     console.log("CartItem service is called", cartItem);
@@ -37,6 +42,14 @@ export class CartService {
             productId: cartData.cartItem.productId,
             title: cartData.cartItem.title,
             userId: cartData.cartItem.userId,
+            price: cartData.cartItem.price, 
+            actualPrice: cartData.cartItem.actualPrice, 
+            noOfStocks: cartData.cartItem.noOfStocks, 
+            discountPercentage: cartData.cartItem.discountPercentage,
+            deliveryPeriod: cartData.cartItem.deliveryPeriod,
+            deliveryCharge: cartData.cartItem.deliveryCharge,
+            replacementPeriod: cartData.cartItem.replacementPeriod,
+            saveForLater: cartData.cartItem.saveForLater
           },
           maxCartItems: cartData.maxCartItems
         };
@@ -53,9 +66,53 @@ export class CartService {
     });
   }
 
-  getCartItems(productsPerPage: number, currentPage: number){
-    const queryParams = `?pagesize=${productsPerPage}&page=${currentPage}`;
-    this.http.get<{ message: string; cartItems: any; maxCartItems: number }>(BACKEND_URL + queryParams)  
+  // getCartItems(productsPerPage: number, currentPage: number){
+  //   const queryParams = `?pagesize=${productsPerPage}&page=${currentPage}`;
+  //   this.http.get<{ message: string; cartItems: any; maxCartItems: number }>(BACKEND_URL + queryParams)  
+  //   .pipe(
+  //     map(cartData => {
+  //       return {
+  //         cartItems: cartData.cartItems.map(cartItem => {
+  //           return {
+  //             title: cartItem.title,
+  //             content: cartItem.content,
+  //             id: cartItem._id,
+  //             imagePath: cartItem.imagePath,
+  //             creator: cartItem.creator,
+  //             price: cartItem.price, 
+  //             actualPrice: cartItem.actualPrice, 
+  //             noOfStocks: cartItem.noOfStocks, 
+  //             discountPercentage: cartItem.discountPercentage,
+  //             deliveryPeriod: cartItem.deliveryPeriod,
+  //             deliveryCharge: cartItem.deliveryCharge,
+  //             replacementPeriod: cartItem.replacementPeriod,
+  //             saveForLater: cartItem.saveForLater
+  //           };
+  //         }),
+  //         maxCartItems: cartData.maxCartItems
+  //       };
+  //     })
+  //   )
+  //   .subscribe(transformedCartData => {
+  //     this.cartItems = transformedCartData.cartItems;
+  //     this.maxCartItems = transformedCartData.maxCartItems;
+  //     this.cartUpdated.next({
+  //       cartItems:this.cartItems,
+  //       cartItemsCount: transformedCartData.maxCartItems
+  //     });
+  //   });
+   
+  //   return {
+  //     message: "Cart Items fetched sucessfully",
+  //     cartItems: this.cartItems ,
+  //     maxCartItemsCount: this.maxCartItems
+  //   };
+
+  // }
+
+  getCartItems(){
+    // const queryParams = `?pagesize=${productsPerPage}&page=${currentPage}`;
+    this.http.get<{ message: string; cartItems: any; maxCartItems: number }>(BACKEND_URL)  
     .pipe(
       map(cartData => {
         return {
@@ -65,7 +122,15 @@ export class CartService {
               content: cartItem.content,
               id: cartItem._id,
               imagePath: cartItem.imagePath,
-              creator: cartItem.creator
+              creator: cartItem.creator,
+              price: cartItem.price, 
+              actualPrice: cartItem.actualPrice, 
+              noOfStocks: cartItem.noOfStocks, 
+              discountPercentage: cartItem.discountPercentage,
+              deliveryPeriod: cartItem.deliveryPeriod,
+              deliveryCharge: cartItem.deliveryCharge,
+              replacementPeriod: cartItem.replacementPeriod,
+              saveForLater: cartItem.saveForLater
             };
           }),
           maxCartItems: cartData.maxCartItems
@@ -80,14 +145,20 @@ export class CartService {
         cartItemsCount: transformedCartData.maxCartItems
       });
     });
+   
     return {
       message: "Cart Items fetched sucessfully",
       cartItems: this.cartItems ,
       maxCartItemsCount: this.maxCartItems
     };
+
   }
 
-  deleteCartItems(cartItemId: string) {
+  updateCartItem(cartItem) {
+    return this.http.put(BACKEND_URL + cartItem.id, cartItem)
+  }
+
+  deleteCartItems(cartItemId: any) {
     return this.http.delete(BACKEND_URL + cartItemId);
   }
 

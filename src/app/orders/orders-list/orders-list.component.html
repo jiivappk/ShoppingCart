@@ -1,29 +1,115 @@
 <div class="top-container">
-    <div style="margin: 20px;" *ngFor="let orderItem of orderItems" >
+    <div style="margin-bottom: 20px;" *ngFor="let orderItem of orderItems;let index" >
       <mat-card class="example-card">
-        <mat-card-header>
+        <!-- <mat-card-header>
           <div mat-card-avatar class="example-header-image"></div>
           <mat-card-title>{{orderItem.title}}</mat-card-title>
           <mat-card-subtitle>{{orderItem.content}}</mat-card-subtitle>
-        </mat-card-header>
-            
-        <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
-        <a [routerLink]="['order-detail']" [queryParams]="{orderId:orderItem.orderId,content:orderItem.content,creator:orderItem.creator,imagePath:orderItem.imagePath,title:orderItem.title,address:orderItem.address,orderStatus:orderItem.orderStatus,productId:orderItem.productId,userId:orderItem.userId}"><img mat-card-image src={{orderItem.imagePath}} alt="Photo of a Shiba Inu"></a>
-        
+        </mat-card-header> -->
         <mat-card-content>
-          <p>
-            The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-            A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-            bred for hunting.
-          </p>
+          
+            <div class="row" (click)="orderClicked(orderItem)">
+        
+              <div class="col-6-12">
+                <div class="row">
+                  <div class="col-3-12">
+                    <div class="order-image-container-flex">
+                      <div class="order-image-container">
+                        <img class="order-image" [alt]="orderItem.content" [src]="orderItem.imagePath">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-8-12">
+                    <div class="content-detail-container">
+                      <span class="row content-container">
+                        {{orderItem.content}}
+                      </span>
+                    </div>
+                    <div class="seller-detail-container">
+                      <span style="margin: 0 3px 0 0;">Seller:</span>
+                      <span>Myself</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        
+              <div class="col-2-12 order-price-container" >${{orderItem.price}}</div>
+              <div class="col-4-12 order-status-container" >
+                <div>
+                  <div style="display: flex; align-items:center">
+                    <div class="order-status-icon order-status-icon-color"></div>
+                    <span  class="order-status">{{ orderItem.orderStatus[orderItem.orderStatus.length-1]['content'] }} On {{orderItem.orderStatus[orderItem.orderStatus.length-1]['date']}}</span>
+                  </div>
+                  <div class="delivery-message"> Your order has been placed</div>
+                </div>
+                <div class="review-text-container">
+                  <div class="review-text-container-flex row">
+                    <a style="cursor: pointer;">
+                      <img class="order-review-image" src="https://static8.depositphotos.com/1338574/831/i/600/depositphotos_8318731-stock-photo-gold-star.jpg">
+                      <span class="review-text">Rate & Review Product</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
         </mat-card-content>
-        <mat-card-actions>
+        <!-- <mat-card-actions>
           <button mat-button (click)="onDelete(orderItem.id)">Remove from Cart</button>
           <button mat-button>Order</button>
-        </mat-card-actions>
+        </mat-card-actions> -->
       </mat-card>
     </div>
   </div>
+
+  <!-- Div Style -->
+
+  <!-- <div style="margin: 20px;" *ngFor="let orderItem of orderItems;let index" >
+    <div class="row" (click)="orderClicked(orderItem)">
+
+      <div class="col-6-12">
+        <div class="row">
+          <div class="col-3-12">
+            <div class="order-image-container-flex">
+              <div class="order-image-container">
+                <img class="order-image" [alt]="orderItem.content" [src]="orderItem.imagePath">
+              </div>
+            </div>
+          </div>
+          <div class="col-8-12">
+            <div class="content-detail-container">
+              <span class="row content-container">
+                {{orderItem.content}}
+              </span>
+            </div>
+            <div class="seller-detail-container">
+              <span style="margin: 0 3px 0 0;">Seller:</span>
+              <span>Myself</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-2-12 order-price-container" >${{orderItem.price}}</div>
+      <div class="col-4-12 order-status-container" >
+        <div>
+          <div style="display: flex; align-items:center">
+            <div class="order-status-icon order-status-icon-color"></div>
+            <span  class="order-status">{{ orderItem.orderStatus[orderItem.orderStatus.length-1]['content'] }} On {{orderItem.orderStatus[orderItem.orderStatus.length-1]['date']}}</span>
+          </div>
+          <div class="delivery-message"> Your order has been placed</div>
+        </div>
+        <div class="review-text-container">
+          <div class="review-text-container-flex row">
+            <a style="cursor: pointer;">
+              <img class="order-review-image" src="https://static8.depositphotos.com/1338574/831/i/600/depositphotos_8318731-stock-photo-gold-star.jpg">
+              <span class="review-text">Rate & Review Product</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
   <mat-paginator [length]="totalProducts" [pageSize]="productsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
     *ngIf="orderItems.length > 0"></mat-paginator>
   

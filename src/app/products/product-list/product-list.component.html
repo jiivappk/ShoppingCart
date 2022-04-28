@@ -22,20 +22,33 @@
   <div style="margin: 20px;" *ngFor="let product of products" >
     <mat-card class="example-card">
       <mat-card-header>
-        <div mat-card-avatar class="example-header-image"></div>
+        <!-- <div mat-card-avatar class="example-header-image"></div> -->
         <mat-card-title>{{product.title}}</mat-card-title>
         <mat-card-subtitle>{{product.content}}</mat-card-subtitle>
       </mat-card-header>
           
       <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
-      <a [routerLink]="['product-detail']" [queryParams]="{id:product.id,content:product.content,creator:product.creator,imagePath:product.imagePath,title:product.title}"><img mat-card-image src={{product.imagePath}} alt="Photo of a Shiba Inu"></a>
-      
+      <a>
+        <img style="position: relative;" mat-card-image src={{product.imagePath}} alt="Photo of a Shiba Inu" [routerLink]="['product-detail']" [queryParams]="{id:product.id,content:product.content,creator:product.creator,imagePath:product.imagePath,additionalImages:product.additionalImages, title:product.title}">
+        <i [ngClass]="wishlistProductsId.includes(product.id) ? 'fas fa-heart' : 'far fa-heart' " style="position:absolute; right:10px; color: #ec0b0b;" (click)="clicked($event, product)"></i>
+        </a>
       <mat-card-content>
         <p>
           The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
           A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
           bred for hunting.
         </p>
+        <div class="order-review-image">
+          <img class="order-review-image" src="https://static8.depositphotos.com/1338574/831/i/600/depositphotos_8318731-stock-photo-gold-star.jpg">
+          <img class="order-review-image" src="https://static8.depositphotos.com/1338574/831/i/600/depositphotos_8318731-stock-photo-gold-star.jpg">
+          <img class="order-review-image" src="https://static8.depositphotos.com/1338574/831/i/600/depositphotos_8318731-stock-photo-gold-star.jpg">
+        </div>
+        <div class="price-container">
+          <div class="selling-price-container">$900</div>
+          <div class="actual-price-container">$1200</div>
+          <div class="discount-percentage">59%</div>
+        </div>
+        <div class="stocks">No Of stocks left: 3</div>
       </mat-card-content>
       <mat-card-actions>
         <button mat-button (click)="addToCart(product)">Add to Cart</button>

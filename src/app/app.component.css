@@ -1,3 +1,9 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 main {
   width: 80%;
   margin: 1rem auto;
@@ -14,3 +20,39 @@ main {
 /* *{
   margin:0px;
 } */
+
+/* .example-container {
+  width: 400px;
+  height: 200px;
+  margin: 12px;
+  border: 1px solid #555;
+}
+
+mat-drawer-content {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+} */
+
+mat-drawer{
+  width: 250px;
+  background-color: aqua;
+}
+
+mat-drawer li{
+  list-style-type: none;
+  background-color:cornflowerblue;
+  margin: 2px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+mat-drawer-content {
+    position: relative;
+    z-index: 1;
+    display: block;
+    height: 100%;
+    overflow: auto;
+    height: 100vh;
+}

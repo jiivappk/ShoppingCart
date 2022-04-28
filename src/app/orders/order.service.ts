@@ -36,8 +36,14 @@ export class OrderService {
             productId: orderData.orderItem.productId,
             title: orderData.orderItem.title,
             userId: orderData.orderItem.userId,
+            price: orderData.orderItem.price,
+            actualPrice: orderData.orderItem.actualPrice,
+            noOfStocks: orderData.orderItem.noOfStocks,
+            discountPercentage: orderData.orderItem.discountPercentage,
             address: orderData.orderItem.address,
-            orderStatus: orderData.orderItem.orderStatus
+            additionalImages: orderData.orderItem.additionalImages,
+            orderStatus: orderData.orderItem.orderStatus,
+            refundStatus: orderData.orderItem.refundStatus
           },
           maxOrderItems: orderData.maxOrderItems
         };
@@ -59,12 +65,19 @@ export class OrderService {
     this.http.get<{ message: string; orderItems: any; maxOrderItems: number }>(BACKEND_URL + queryParams)  
     .pipe(
       map(orderData => {
+        console.log("Order Items from backend is",orderData);
         return {
           orderItems: orderData.orderItems.map(orderItem => {
             return {
               orderId:orderItem.orderId,
+              price: orderItem.price,
+              actualPrice: orderItem.actualPrice,
+              noOfStocks: orderItem.noOfStocks,
+              discountPercentage: orderItem.discountPercentage,
               address: orderItem.address,
+              additionalImages: orderItem.additionalImages,
               orderStatus: orderItem.orderStatus,
+              refundStatus: orderItem.refundStatus,
               content:orderItem.content,
               creator:orderItem.creator,
               imagePath:orderItem.imagePath,

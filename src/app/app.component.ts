@@ -25,9 +25,12 @@ export class AppComponent implements OnInit{
     .pipe( filter(event => event instanceof NavigationEnd) )    
     .subscribe(event=> 
      {          
-        console.log("Event from AppComponent",event["url"]);
         this.path = event["url"]
      });
+  }
+
+  wishListRoute(){
+    this.router.navigate(['wishlist']);
   }
    
 }

@@ -6,6 +6,12 @@ export interface Order {
     productId: string;
     userId: string;
     creator: string;
+    price: number;
+    actualPrice: number;
+    noOfStocks: number;
+    discountPercentage: number;
     address: string;
-    orderStatus: string;
+    additionalImages: Array<string>;
+    orderStatus: Array<string>;
+    refundStatus: string;
   }
