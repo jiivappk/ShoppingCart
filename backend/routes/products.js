@@ -11,6 +11,10 @@ router.post("", checkAuth, extractFile, ProductController.createProduct);
 
 router.put("/:id", checkAuth, extractFile, ProductController.updateProduct);
 
+// router.post("", checkAuth, ProductController.createProduct);
+
+// router.put("/:id", checkAuth, ProductController.updateProduct);
+
 router.get("", ProductController.getProducts);
 
 router.get("/:id", ProductController.getProduct);

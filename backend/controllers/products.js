@@ -2,12 +2,24 @@ const Product = require("../models/product");
 
 exports.createProduct = (req, res, next) => {
   const url = req.protocol + "://" + req.get("host");
-  console.log("Create product is called",url)
+  console.log("Create product is called",url);
+  const additionalImages = [];
+  for(file of req.files.additionalImages){
+    additionalImages.push(url + "/images/" +file['filename']);
+  }
   const product = new Product({
     title: req.body.title,
     content: req.body.content,
-    imagePath: url + "/images/" + req.file.filename,
-    creator: req.userData.userId
+    imagePath: url + "/images/" + req.files.image[0]['filename'],
+    additionalImages: additionalImages,
+    creator: req.userData.userId,
+    price: req.body.price,
+    actualPrice: req.body.actualPrice,
+    noOfStocks: req.body.noOfStocks,
+    discountPercentage: req.body.discountPercentage,
+    deliveryPeriod: req.body.deliveryPeriod,
+    deliveryCharge: req.body.deliveryCharge,
+    replacementPeriod: req.body.replacementPeriod
   });
   product
     .save()

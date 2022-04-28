@@ -10,9 +10,10 @@ import { AngularMaterialModule } from "../angular-material.module";
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { CartComponent } from './cart/cart.component';
 import { SearchProductComponent } from './search-product/search-product.component';
+import { WishlistComponent } from './wishlist/wishlist.component';
 
 @NgModule({
-  declarations: [ProductCreateComponent, ProductListComponent, ProductDetailsComponent, CartComponent, SearchProductComponent],
+  declarations: [ProductCreateComponent, ProductListComponent, ProductDetailsComponent, CartComponent, SearchProductComponent, WishlistComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

@@ -34,24 +34,11 @@
     background-image: url("http://localhost:3000/images/mypic.jpg");
     background-size: cover;
   }
-
-  .container{
-    display: flex;
-    flex-direction: row;
-  }
   
   .top-container{
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-  }
-
-  .bottom-container{
-    margin-left:25px;
-    margin-bottom: 20px;
-    position: sticky;
-    top: 15px;
-    align-self: flex-start;
   }
   
   .mat-card-image{
@@ -82,6 +69,7 @@
         /* height: 118px;  */
   }
 
+
   a{
     text-decoration: none;
     color: inherit;
@@ -102,8 +90,6 @@
 
   .col-4-12{
     width: 33.33%;
-    justify-content: flex-end;
-    padding-left: 130px;
   }
 
   .col-3-12{
@@ -116,7 +102,7 @@
 
   .col-10-12{
     width: 66.66%;
-    padding-left: 30px;
+    padding-left: 25px;
   }
   .order-image-container-flex{
     display: flex;
@@ -220,7 +206,6 @@
     cursor: pointer;
     width: auto;
     vertical-align: top;
-    padding-left: 13px;
   }
 
   .rating-container{
@@ -274,112 +259,4 @@
     font-size: 13px;
     letter-spacing: -.2px;
     font-weight: 500;
-  }
-
-  .price-detail-header{
-    display: block;
-    text-transform: uppercase;
-    padding: 13px 24px;
-    font-weight: 500;
-    color: #878787;
-    border-radius: 2px 2px 0 0;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 16px;
-  }
-
-  .price-detial-container{
-    padding: 0 24px
-  }
-
-  .price{
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-    align-items: flex-start;
-    max-width: 100%;
-  }
-
-  .price-items-container{
-    display: flex;
-    align-items: center;
-  }
-
-  .discount-detial-container{
-    padding: 0 24px
-  }
-
-  .discount{
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-    align-items: flex-start;
-    max-width: 100%;
-  }
-
-  .discount-items-container{
-    display: flex;
-    align-items: center;
-  }
-
-  .delivery-detial-container{
-    padding: 0 24px
-  }
-
-  .delivery{
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-    align-items: flex-start;
-    max-width: 100%;
-  }
-
-  .delivery-items-container{
-    display: flex;
-    align-items: center;
-  }
-
-  .total-dash-border{
-    border-top: 1px dashed #e0e0e0;
-    font-weight: 500;
-    font-size: 18px;
-  }
-
-  .total-detial-container{
-    padding: 0 24px
-  }
-
-  .total{
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-    align-items: flex-start;
-    max-width: 100%;
-  }
-
-  .total-items-container{
-    display: flex;
-    align-items: center;
-  }
-
-  .savings-message{
-    border-top: 1px dashed #e0e0e0;
-    padding: 12px 24px;
-    font-size: 16px;
-    display: flex;
-    justify-content: space-between;
-    border-radius: 2px;
-    color: #388e3c;
-    font-weight: 500;
-  }
-
-  .place-order-button{
-    text-align: center;
-    padding: 20px;
-    background-color: orangered;
-    color: white;
-  }
-
-  .paginator-card{
-    padding: 0;
-    margin-top: 10px;
   }

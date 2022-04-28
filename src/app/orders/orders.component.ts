@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { OrderService } from "./order.service";
@@ -15,14 +15,11 @@ export class OrdersComponent implements OnInit {
 
   constructor(private orderService:OrderService,  private dialog: MatDialog, private route:ActivatedRoute) { }
 
+  @ViewChild('accordianList') accordianList: ElementRef;
+
   form: FormGroup;
-  productId:string;
-  productContent:string;
-  productCreator:string;
-  productImagePath:string;
-  productTitle:string;
   isLoading = false;
-  pageContent = ['Delivery Address','Make Payment','Oredred Details'];
+  pageItems = ['Delivery Address','Make Payment','Oredred Details'];
   states = [  'Andhra Pradesh',
               'Arunachal Pradesh',
               'Assam',
@@ -52,9 +49,45 @@ export class OrdersComponent implements OnInit {
               'Uttar Pradesh',
               'Uttarakhand',
               'West Bengal'
-           ]
+           ];
+  orderItem = {
+            title: "",
+            content: "",
+            imagePath: "",
+            creator: "",
+            productId: "",
+            userId: "",
+            price: 0,
+            actualPrice: 0,
+            noOfStocks: 0,
+            discountPercentage: 0,
+            additionalImages: [],
+            address: {
+              fullName: "",
+              mobile: "",
+              pinCode: "",
+              flatNo: "",
+              area: "",
+              landMark: "",
+              town: "",
+              state: "",
+              },
+            orderStatus: [],
+            refundStatus: "NA"
+          }
+
+  
 
   ngOnInit(): void {
+    let userId = localStorage.getItem("userId");
+    if(userId == null){
+      console.log("User id is null");
+      this.dialog.open(LoginComponent, {data: {message: "Login Component"}});
+    }
+    else{
+      this.orderItem.userId = userId;
+    }
+
     this.form = new FormGroup({
       fullName: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3)]
@@ -80,71 +113,64 @@ export class OrdersComponent implements OnInit {
       }),
     });
     this.route.queryParams.subscribe((params)=>{
-      this.productId = params['productId']
-      this.productContent = params['content']
-      this.productCreator = params['creator']
-      this.productImagePath = params['imagePath']
-      this.productTitle = params['title']
-      console.log("productId from Order",params['productId']);
-      console.log("productContent from Order",params['content']);
-      console.log("productCreator from Order",params['creator']);
-      console.log("productImagePath from Order",params['imagePath']);
-      console.log("productTitle from Order",params['title']);
+      this.orderItem.productId = params['productId']
+      this.orderItem.content = params['content']
+      this.orderItem.creator = params['creator']
+      this.orderItem.imagePath = params['imagePath']
+      this.orderItem.title = params['title'],
+      this.orderItem.additionalImages = params['additionalImages']
+      this.orderItem.price = params['price']
+      this.orderItem.actualPrice = params['actualPrice']
+      this.orderItem.noOfStocks = params['noOfStocks']
+      this.orderItem.discountPercentage = params['discountPercentage']
     })
-
-  }
-
-  ngAfterViewInit(){
+    
 
   }
   
 
-  onSaveOrder(header){
-    console.log("Inside OnSaveProduct")
+  onSaveAddress(firstExpansionPanel, secondExpansionPanel ,thirdExpansionPanel){
+    console.log("Inside onSaveAddress")
     console.log(this.form.value)
-    console.log("Expansion Header",header)
-    let userId = localStorage.getItem("userId");
-    if(userId == null){
-      console.log("User id is null");
-      this.dialog.open(LoginComponent, {data: {message: "Login Component"}});
-    }
-    else{
-      let orderItem = {
-        title: this.productTitle,
-        content: this.productContent,
-        imagePath: this.productImagePath,
-        creator: this.productCreator,
-        productId: this.productId,
-        userId: userId,
-        address: {
-          fullName: this.form.value.fullName,
-          mobile: this.form.value.mobile,
-          pinCode: this.form.value.pinCode,
-          flatNo: this.form.value.flatNo,
-          area: this.form.value.area,
-          landMark: this.form.value.landMark,
-          town: this.form.value.town,
-          state: this.form.value.state,
-          },
-        orderStatus: [
-          {
-            content:"Ordered",
-            date:"15/02/2022 10.30",
-            status:"R",
-          },
-
-        ]
-      }
-      console.log("Add to order is orderItem", orderItem)
-      console.log("Add to cart userId",userId)
-      let result = this.orderService.addOrderItems(orderItem)
-      console.log(result)
-    }
-    // this.orderService.addOrderItems()
+    console.log("firstExpansionPanel",firstExpansionPanel)
+    firstExpansionPanel.close();
+    secondExpansionPanel.open();
+    thirdExpansionPanel.close();
+ 
+    this.orderItem.address.fullName = this.form.value.fullName,
+    this.orderItem.address.mobile = this.form.value.mobile,
+    this.orderItem.address.pinCode = this.form.value.pinCode,
+    this.orderItem.address.flatNo = this.form.value.flatNo,
+    this.orderItem.address.area = this.form.value.area,
+    this.orderItem.address.landMark = this.form.value.landMark,
+    this.orderItem.address.town = this.form.value.town,
+    this.orderItem.address.state = this.form.value.state
+    
   }
 
-  Expanded(header){
-    console.log("Expansion Header",header.panel._expanded)
+  onPayment(firstExpansionPanel, secondExpansionPanel, thirdExpansionPanel){
+    firstExpansionPanel.close();
+    secondExpansionPanel.close();
+    thirdExpansionPanel.open();
+    this.orderItem.orderStatus.push({
+      content: "Ordered",
+      date: "15/02/2022 10.30",
+      status: "R"
+    })
+    this.orderItem.orderStatus.push({
+      content: "Delivered",
+      date: "25/02/2022 11.30",
+      status: "R"
+    })
+    this.orderItem.orderStatus.push({
+      content: "Cancelled",
+      date: "11/03/2022 12.30",
+      status: "R"
+    })
+    console.log("Add to order is orderItem", this.orderItem)
+    let result = this.orderService.addOrderItems(this.orderItem)
+    console.log(result)
+  
   }
 
 }

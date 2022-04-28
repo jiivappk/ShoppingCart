@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from "@angular/core";
 import { Subscription } from "rxjs";
 import { filter } from 'rxjs/operators';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -8,12 +8,15 @@ import { CartService } from "../products/cart.service";
 import { ProductsService } from "../products/products.service";
 import { Cart } from "../products/cart.model"
 
+
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",
   styleUrls: ["./header.component.css"]
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+
+  @Output() sideNavEvent = new EventEmitter();
   productsPerPage = 2;
   currentPage = 1;
   userIsAuthenticated = false;
@@ -33,7 +36,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     .pipe( filter(event => event instanceof NavigationEnd) )    
     .subscribe(event=> 
      {          
-        console.log("Event from header",event["url"]);
         if(event["url"] == '/'){
           this.searchItem = "";
         }
@@ -45,13 +47,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe(isAuthenticated => {
         this.userIsAuthenticated = isAuthenticated;
       });
-      this.cartService.getCartItems(2,1);
+      // this.cartService.getCartItems(2,1);
+      this.cartService.getCartItems();
       this.cartItemsSub = this.cartService
       .getCartUpdateListener()
       .subscribe((cartData: { cartItems: Cart[]; cartItemsCount: number }) => {
         this.totalCartItems = cartData.cartItemsCount;
         console.log(this.totalCartItems)
       });
+  }
+
+  sideNavButtonClicked(){
+    this.sideNavEvent.emit(true);
   }
 
   onLogout() {

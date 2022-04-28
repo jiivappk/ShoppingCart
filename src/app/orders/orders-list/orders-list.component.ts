@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Router } from '@angular/router';
 import { PageEvent } from "@angular/material/paginator";
 import { Subscription } from "rxjs";
 
@@ -23,12 +24,14 @@ export class OrdersListComponent implements OnInit {
   pageSizeOptions = [1, 2, 5, 10];
   userIsAuthenticated = false;
   userId: string;
+  imageObjectArray = []
   private orderItemsSub: Subscription;
   private authStatusSub: Subscription;
 
   constructor(
     public orderService: OrderService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -39,15 +42,20 @@ export class OrdersListComponent implements OnInit {
       .getOrderUpdateListener()
       .subscribe((orderData: { orderItems: Order[]; orderItemsCount: number }) => {
         this.isLoading = false;
-        // this.orderItems = orderData.orderItems;
-        orderData.orderItems.map((orderItem)=>{
+        orderData.orderItems.map((orderItem, index)=>{
           this.orderItems.push({
-            address: JSON.stringify(orderItem.address) ,
+            price: orderItem.price,
+            actualPrice: orderItem.actualPrice,
+            noOfStocks: orderItem.noOfStocks,
+            discountPercentage: orderItem.discountPercentage,
+            address: orderItem.address ,
+            additionalImages: orderItem.additionalImages,
             content: orderItem.content,
             creator: orderItem.creator,
             imagePath: orderItem.imagePath,
             orderId: orderItem.orderId,
-            orderStatus: JSON.stringify(orderItem.orderStatus) ,
+            orderStatus: orderItem.orderStatus,
+            refundStatus: orderItem.refundStatus,
             productId: orderItem.productId,
             title: orderItem.title,
             userId: orderItem.userId,
@@ -55,7 +63,11 @@ export class OrdersListComponent implements OnInit {
         })
         this.totalProducts = orderData.orderItemsCount;
         console.log("Altered Order Items",this.orderItems)
+        // console.log("Order status",JSON.parse(this.orderItems[0]['orderStatus'][0]))
+        // console.log(JSON.parse(this.orderItems[0]['orderStatus'][0]))
+        
       });
+
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.authStatusSub = this.authService
       .getAuthStatusListener()
@@ -63,6 +75,14 @@ export class OrdersListComponent implements OnInit {
         this.userIsAuthenticated = isAuthenticated;
         this.userId = this.authService.getUserId();
       });
+    console.log("ImageObjArray",this.imageObjectArray);  
+  }
+
+  orderClicked(orderItem){
+    orderItem['address'] = JSON.stringify(orderItem.address);
+    orderItem['orderStatus'] = orderItem.orderStatus.map(object=>JSON.stringify(object));
+    console.log("Order Clicked",orderItem);
+    this.router.navigate(['order-list/order-detail'],{queryParams:{orderId:orderItem.orderId, content:orderItem.content, creator:orderItem.creator, imagePath:orderItem.imagePath, title:orderItem.title, address:orderItem.address, price:orderItem.price, actualPrice: orderItem.actualPrice, noOfStocks: orderItem.noOfStocks, discountPercentage: orderItem.discountPercentage, additionalImages:orderItem.additionalImages, orderStatus:orderItem.orderStatus, productId:orderItem.productId, userId:orderItem.userId, refundStatus:orderItem.refundStatus} })
   }
 
   onChangedPage(pageData: PageEvent) {

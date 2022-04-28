@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const cartSchema = mongoose.Schema({
+const wishlistSchema = mongoose.Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
   imagePath: { type: String, required: true },
@@ -10,11 +10,7 @@ const cartSchema = mongoose.Schema({
   discountPercentage: { type: Number },
   productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true  },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  creator: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  deliveryPeriod: { type: Number }, 
-  deliveryCharge: { type: Number },
-  replacementPeriod: { type: Number },
-  saveForLater: { type: Boolean}
+  creator: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }
 });
 
-module.exports = mongoose.model("Cartmodel", cartSchema,"cart");
+module.exports = mongoose.model("Wishlistmodel", wishlistSchema, "wishlist");

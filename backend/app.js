@@ -6,7 +6,8 @@ const productsRoutes = require("./routes/products");
 const orderRoutes = require("./routes/orders")
 const cartRoutes = require("./routes/cart");
 const userRoutes = require("./routes/user");
-var cors = require('cors')
+const wishlistRoutes = require('./routes/wishlist');
+var cors = require('cors');
 
 const app = express();
 
@@ -69,6 +70,7 @@ app.use("/images", express.static(path.join("backend/images")));
 app.use("/api/products", productsRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/wishlist",wishlistRoutes);
 app.use("/api/user", userRoutes);
 
 module.exports = app;

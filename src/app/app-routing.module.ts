@@ -9,6 +9,7 @@ import { CartComponent } from "./products/cart/cart.component";
 import { OrdersComponent } from "./orders/orders.component";
 import { OrdersListComponent } from "./orders/orders-list/orders-list.component";
 import { OrderDetailsComponent } from "./orders/order-details/order-details.component";
+import { WishlistComponent } from "./products/wishlist/wishlist.component";
 
 const routes: Routes = [
   { path: "", component: ProductListComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: "order-list", component: OrdersListComponent, canActivate: [AuthGuard] },
   { path: "order-list/order-detail", component: OrderDetailsComponent, canActivate: [AuthGuard] },
   { path: "cart", component: CartComponent, canActivate: [AuthGuard] },
+  { path: "wishlist", component: WishlistComponent, canActivate: [AuthGuard] },
   { path: "edit/:productId", component: ProductCreateComponent, canActivate: [AuthGuard] },
   { path: "auth", loadChildren: ()=>import('./auth/auth.module').then(m=>m.AuthModule)}
 ];
