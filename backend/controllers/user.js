@@ -78,26 +78,6 @@ exports.signIn = (req, res, next)=>{
 } 
 
 exports.createUser = (req, res, next) => {
-  // console.log("Password is",req.body.password)
-  // bcrypt.hash(req.body.password, 10).then(hash => {
-  //   const user = new User({
-  //     email: req.body.email,
-  //     password: hash
-  //   });
-  //   user
-  //     .save()
-  //     .then(result => {
-  //       res.status(201).json({
-  //         message: "User created!",
-  //         result: result
-  //       });
-  //     })
-  //     .catch(err => {
-  //       res.status(500).json({
-  //         message: "Invalid authentication credentials!"
-  //       });
-  //     });
-  // });
   console.log("Create User route is called");
   const { token } = req.body;
   if(token){
@@ -115,23 +95,18 @@ exports.createUser = (req, res, next) => {
                         user: user
                         });
                     }
-                  // const newUser =new User({email:email, password: password});
-                  // newUser.save()
-                  //   .then(result=>{
-                  //     res.status(201).json({
-                  //               message: "User created!",
-                  //               result: result
-                  //             });
-                  //   })
-                  //   .catch(err=>{
-                  //     res.status(500).json({
-                  //               message: "Error creating account"
-                  //             });
-                  //   })
                   bcrypt.hash(password, 10).then(hash => {
                     const user = new User({
                       email: email,
-                      password: hash
+                      password: hash,
+                      firstName: '',
+                      lastName: '',
+                      address: [],
+                      phoneNumber: '',
+                      profilePic: '',
+                      gender: '',
+                      dob: '',
+
                     });
                     user
                       .save()
@@ -190,7 +165,15 @@ exports.userLogin = (req, res, next) => {
       res.status(200).json({
         token: token,
         expiresIn: 3600,
-        userId: fetchedUser._id
+        userId: fetchedUser._id,
+        email: fetchedUser.email,
+        firstName: fetchedUser.firstName,
+        lastName: fetchedUser.lastName,
+        gender: fetchedUser.gender,
+        phoneNumber: fetchedUser.phoneNumber,
+        profilePic: fetchedUser.profilePic,
+        address : fetchedUser.address,
+        dob: fetchedUser.dob
       });
     })
     .catch(err => {

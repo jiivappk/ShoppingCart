@@ -35,6 +35,22 @@
       <mat-error *ngIf="form.get('content').invalid">Please enter a product title.</mat-error>
     </mat-form-field>
 
+    <div class="category-container">
+      <mat-form-field>
+        <mat-label>Select Category</mat-label>
+        <mat-select formControlName="category" (selectionChange)="categorySelected($event.value)">
+          <mat-option *ngFor="let category of categoryList" [value]="category">{{category}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <input matInput type="text" (input)="newCategoryWritten()" formControlName="newCategory"  placeholder="Enter Product Category">
+        <mat-error *ngIf="form.get('category').invalid">Product Category is required.</mat-error>
+      </mat-form-field>
+      
+    </div>
+
+
     <mat-form-field>
       <input matInput type="number" formControlName="price" placeholder="Product Selling Price in rupee">
       <mat-error *ngIf="form.get('price').invalid">Please enter a product selling price.</mat-error>
@@ -51,5 +67,6 @@
     </mat-form-field>
     
     <button mat-raised-button color="accent" type="submit">Save Product</button>
+    
   </form>
 </mat-card>

@@ -25,3 +25,8 @@ input[type="file"] {
   gap: 15px;
   flex-wrap: wrap;
 }
+
+.category-container{
+  display: flex;
+  gap: 100px;
+}

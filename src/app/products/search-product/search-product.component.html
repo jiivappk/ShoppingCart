@@ -18,6 +18,7 @@
   *ngIf="products.length > 0"></mat-paginator>
 <p class="info-text mat-body-1" *ngIf="products.length <= 0 && !isLoading">No products added yet!</p> -->
 <h4>Search Results for: {{searchValue}} </h4>
+<h4 *ngIf="errorText.length > 0">{{errorText}}</h4>
 <div class="top-container">
     <div style="margin: 20px;" *ngFor="let product of products" >
       <mat-card class="example-card">

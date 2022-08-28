@@ -29,8 +29,8 @@ export class AppComponent implements OnInit{
      });
   }
 
-  wishListRoute(){
-    this.router.navigate(['wishlist']);
+  changeRoute(routePath){
+    this.router.navigate([routePath]);
   }
    
 }

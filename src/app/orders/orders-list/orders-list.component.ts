@@ -62,9 +62,6 @@ export class OrdersListComponent implements OnInit {
           })
         })
         this.totalProducts = orderData.orderItemsCount;
-        console.log("Altered Order Items",this.orderItems)
-        // console.log("Order status",JSON.parse(this.orderItems[0]['orderStatus'][0]))
-        // console.log(JSON.parse(this.orderItems[0]['orderStatus'][0]))
         
       });
 
@@ -74,14 +71,12 @@ export class OrdersListComponent implements OnInit {
       .subscribe(isAuthenticated => {
         this.userIsAuthenticated = isAuthenticated;
         this.userId = this.authService.getUserId();
-      });
-    console.log("ImageObjArray",this.imageObjectArray);  
+      }); 
   }
 
   orderClicked(orderItem){
     orderItem['address'] = JSON.stringify(orderItem.address);
     orderItem['orderStatus'] = orderItem.orderStatus.map(object=>JSON.stringify(object));
-    console.log("Order Clicked",orderItem);
     this.router.navigate(['order-list/order-detail'],{queryParams:{orderId:orderItem.orderId, content:orderItem.content, creator:orderItem.creator, imagePath:orderItem.imagePath, title:orderItem.title, address:orderItem.address, price:orderItem.price, actualPrice: orderItem.actualPrice, noOfStocks: orderItem.noOfStocks, discountPercentage: orderItem.discountPercentage, additionalImages:orderItem.additionalImages, orderStatus:orderItem.orderStatus, productId:orderItem.productId, userId:orderItem.userId, refundStatus:orderItem.refundStatus} })
   }
 
@@ -93,7 +88,6 @@ export class OrdersListComponent implements OnInit {
   }
 
   onDelete(orderItemId: string) {
-    console.log("Delete CartItem Id",orderItemId)
     this.isLoading = true;
     this.orderService.deleteOrderItems(orderItemId).subscribe(() => {
       this.orderService.getOrderItems(this.productsPerPage, this.currentPage);

@@ -24,11 +24,9 @@ export class WishlistService {
     return this.wishlistUpdated.asObservable();
   }
   addWishlistItems(wishlistItem:any){
-    console.log("WishlistItem service is called", wishlistItem);
     this.http.post<{ message: string; wishlistItem: any; maxWishlistItems: number }>(BACKEND_URL,wishlistItem)
     .pipe(
       map(wishlistData => {
-        console.log("WishlistItem from Backend",wishlistData)
         return {
           wishlistItem:{
             id: wishlistData.wishlistItem._id,
@@ -49,7 +47,6 @@ export class WishlistService {
     )
     .subscribe(transformedWishlistData => {
       this.updatedWishlistItem = transformedWishlistData.wishlistItem;
-      console.log("Wishlist Items updated",this.updatedWishlistItem);
       this.wishlistUpdated.next({
         wishlistItems:this.wishlistItems,
         wishlistItemsCount: transformedWishlistData.maxWishlistItems
@@ -135,7 +132,6 @@ export class WishlistService {
 
 
   deleteWishlistItems(wishlistId: string) {
-    console.log("Inside Delete WishList Service", wishlistId)
     return this.http.delete(BACKEND_URL + wishlistId);
   }
 

@@ -10,6 +10,7 @@ exports.createProduct = (req, res, next) => {
   const product = new Product({
     title: req.body.title,
     content: req.body.content,
+    category: req.body.category,
     imagePath: url + "/images/" + req.files.image[0]['filename'],
     additionalImages: additionalImages,
     creator: req.userData.userId,
@@ -70,24 +71,41 @@ exports.updateProduct = (req, res, next) => {
 exports.getProducts = (req, res, next) => {
   let fetchedProducts;
   let productQuery;
-  const pageSize = +req.query.pagesize;
-  const currentPage = +req.query.page;
-  const title = req.query.title;
+  let categoryName = '';
+  let pageSize = '';
+  let currentPage = '';
+  if(req.query.categoryName){
+   categoryName = req.query.categoryName
+  }
+  else{
+    pageSize = +req.query.pagesize;
+    currentPage = +req.query.page;
+    title = req.query.title;
+  }
   console.log("Product controller getproducts is called!!!!!!!!!!!!!!!!!!")
   console.log("Title",title);
   console.log("PageSize",pageSize);
   console.log("currentPage",currentPage);
   
-  if(title!=undefined){
-    productQuery = Product.find({title: { $regex: new RegExp(title) } })
-    
-    if (pageSize && currentPage) {
-      productQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
+  if(title!=undefined || categoryName!=undefined){
+    if(categoryName){
+      productQuery = Product.find({category: { $regex: new RegExp(categoryName) } })
+    }
+    else{
+      productQuery = Product.find({title: { $regex: new RegExp(title) } })
+      if (pageSize && currentPage) {
+        productQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
+      }
     }
     productQuery
       .then(documents => {
         fetchedProducts = documents;
-        return Product.aggregate([{$match: {title: {$regex: new RegExp(title)}}}, { $count: "count"}])
+        if(categoryName){
+          return Product.aggregate([{$match: {category: {$regex: new RegExp(categoryName)}}}, { $count: "count"}])
+        }
+        else{
+          return Product.aggregate([{$match: {title: {$regex: new RegExp(title)}}}, { $count: "count"}])
+        }
       })
       .then(searchResult => {
         console.log("Search Cunt is ",searchResult)
@@ -196,3 +214,69 @@ exports.deleteProduct = (req, res, next) => {
       });
     });
 };
+
+exports.categoryList = (req, res, next) => {
+  Product.aggregate([
+    {
+      $group :
+      {
+        _id : "$category",
+        lowestPriceProduct:
+        {
+          $accumulator:
+          {
+            init: function() {                        
+              return { price: -1, imagePath: "" }
+            },
+    
+            accumulate: function(state, price, imagePath) { 
+            if(state.price < 0){
+              return {
+                price: price,
+                imagePath: imagePath
+              }
+            }
+            else {
+               return {
+                price: state.price > price? price : state.price,
+                imagePath: state.price > price? imagePath : state.imagePath,
+              }
+            }
+            },
+    
+            accumulateArgs: ["$price", "$imagePath"],              
+    
+            merge: function(state1, state2) {         
+              return {                                
+                price: state2.price,
+                imagePath: state2.imagePath 
+              }
+            },
+    
+            finalize: function(state) {               
+              return state       
+            },
+            lang: "js"
+          }
+        }
+      }
+    }
+    ])
+    .then(result => {
+      if (result) {
+        res.status(200).json({ 
+          message: "Category Fetched successful!",
+          categoryList: result
+        });
+      } else {
+        res.status(401).json({ message: "Not authorized!" });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Fetching Category failed!"
+      });
+    });
+};
+
+

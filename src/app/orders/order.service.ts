@@ -22,11 +22,9 @@ export class OrderService {
     return this.orderUpdated.asObservable();
   }
   addOrderItems(orderItem:any){
-    console.log("OrderItems service is called", orderItem);
     this.http.post<{ message: string; orderItem: any; maxOrderItems: number }>(BACKEND_URL,orderItem)
     .pipe(
       map(orderData => {
-        console.log("OrderItem from Backend",orderData)
         return {
           orderItem:{
             orderId: orderData.orderItem.orderId,
@@ -51,7 +49,6 @@ export class OrderService {
     )
     .subscribe(transformedOrderData => {
       this.updatedOrderItem = transformedOrderData.orderItem;
-      console.log("Order Items updated",this.updatedOrderItem);
       this.orderUpdated.next({
         orderItems:this.orderItems,
         orderItemsCount: transformedOrderData.maxOrderItems
@@ -65,7 +62,6 @@ export class OrderService {
     this.http.get<{ message: string; orderItems: any; maxOrderItems: number }>(BACKEND_URL + queryParams)  
     .pipe(
       map(orderData => {
-        console.log("Order Items from backend is",orderData);
         return {
           orderItems: orderData.orderItems.map(orderItem => {
             return {

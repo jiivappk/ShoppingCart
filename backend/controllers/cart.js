@@ -1,10 +1,8 @@
 const Cart = require("../models/cart");
 
 exports.createCartItem = (req, res, next) => {
-  console.log("Request for cartitem Controller is",req);
   const url = req.protocol + "://" + req.get("host");
   let fetchedCartItems;
-  console.log("url is ",url);
   const cartItem = new Cart({
     title: req.body.title,
     content: req.body.content,

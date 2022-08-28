@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
 @Component({
-  selector: 'app-order-details',
-  templateUrl: './order-details.component.html',
-  styleUrls: ['./order-details.component.css']
+  selector: 'app-account',
+  templateUrl: './account.component.html',
+  styleUrls: ['./account.component.css']
 })
-export class OrderDetailsComponent implements OnInit {
+export class AccountComponent implements OnInit {
 
   value: any[] = [
     {content:"Ordered" ,date:"15/02/2022 10.30", status:"S"},
@@ -17,7 +17,7 @@ export class OrderDetailsComponent implements OnInit {
     {content:"Delivered" ,date:"20/02/2022 10.30", status:"R"},
     {content:"Delivered" ,date:"20/02/2022 10.30", status:"R"},
   ];
-  constructor(private route:ActivatedRoute) { }
+  constructor(private route:ActivatedRoute, private authService: AuthService, private router: Router) { }
   orderPrice:string;
   orderAdditionalImages = [];
   orderId:string;
@@ -32,7 +32,12 @@ export class OrderDetailsComponent implements OnInit {
   orderRefundStatus: string;
   imageObject = [];
   
+  userName = 'User';
+  userImageUrl = '../assets/User-Image-Male.webp';
   ngOnInit(): void {
+    this.authService.profileDetails$.subscribe((details)=>{
+      console.log("Profile Details", details);
+    })
     this.route.queryParams.subscribe((params)=>{
       this.orderPrice = params['price']
       this.orderAdditionalImages = params['additionalImages']
@@ -55,37 +60,7 @@ export class OrderDetailsComponent implements OnInit {
       }
     })
 
-  //   this.imageObject= [
-  //     {
-  //       image: "http://localhost:3000/images/Front_View.jpg",
-  //       thumbImage: "http://localhost:3000/images/Front_View.jpg",
-  //       title: 'Slider Image 1',
-  //       alt: 'Image Alt 1',
-  //     }, 
-  //     {
-  //       image: "http://localhost:3000/images/Left_View.jpg",
-  //       thumbImage: "http://localhost:3000/images/Left_View.jpg",
-  //       title: 'Slider Image 1',
-  //       alt: 'Image Alt 1',
-  //     }, 
-  //     {
-  //       image: "http://localhost:3000/images/Right_View.jpg",
-  //       thumbImage: "http://localhost:3000/images/Right_View.jpg",
-  //       title: 'Slider Image 1',
-  //       alt: 'Image Alt 1',
-  //     }, 
-  //     {
-  //       image: 'http://localhost:3000/images/Special_View.jpg',
-  //       thumbImage: 'http://localhost:3000/images/Special_View.jpg',
-  //       title: 'Slider Image 1',
-  //       alt: 'Image Alt 1',
-  //     }, {
-  //       image: 'http://localhost:3000/images/Top_View.jpg',
-  //       thumbImage: 'http://localhost:3000/images/Top_View.jpg',
-  //       title: 'Slider Image 2',
-  //       alt: 'Image Alt 2'
-  //     }
-  //  ];
+    // this.router.navigate([''])
 
   }
 
@@ -117,3 +92,4 @@ export class OrderDetailsComponent implements OnInit {
   }
 
 }
+

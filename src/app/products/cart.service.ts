@@ -28,11 +28,9 @@ export class CartService {
     return this.cartPrice.asObservable();
   }
   addCartItems(cartItem:any){
-    console.log("CartItem service is called", cartItem);
     this.http.post<{ message: string; cartItem: any; maxCartItems: number }>(BACKEND_URL,cartItem)
     .pipe(
       map(cartData => {
-        console.log("CartItem from Backend",cartData)
         return {
           cartItem:{
             id: cartData.cartItem._id,
@@ -57,7 +55,6 @@ export class CartService {
     )
     .subscribe(transformedCartData => {
       this.updatedCartItem = transformedCartData.cartItem;
-      console.log("Cart Items updated",this.updatedCartItem);
       this.cartUpdated.next({
         cartItems:this.cartItems,
         cartItemsCount: transformedCartData.maxCartItems

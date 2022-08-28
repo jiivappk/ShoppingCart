@@ -32,7 +32,6 @@ export class ProductDetailsComponent implements OnInit {
           alt: this.productTitle + 'Image'
          })
       }
-      console.log("Image Object",this.imageObject)
     })
 
 
@@ -71,11 +70,8 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   imageClicked(index,imageSlider){
-    console.log("Your function is called", index)
     let tempImage = this.productImagePath;
-    console.log("Main Image",this.productImagePath)
     this.productImagePath = this.imageObject[index]['thumbImage'];
-    console.log("Main Image Changed to",this.imageObject[index]['thumbImage'])
     
     this.imageObject = [];
     for(let i in this.productAdditionalImages){
@@ -98,8 +94,6 @@ export class ProductDetailsComponent implements OnInit {
     this.imageObject[index]['thumbImage'] = tempImage;
     this.productAdditionalImages = [];
     this.productAdditionalImages = this.imageObject.map(value=>value['thumbImage']);
-    console.log("imageObject",this.imageObject);
-    console.log("productAdditionalImages",this.productAdditionalImages);
   }
 
 }

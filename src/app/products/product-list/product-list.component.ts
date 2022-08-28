@@ -9,6 +9,7 @@ import { CartService } from "../cart.service";
 import { WishlistService  } from "../wishlist.service";
 import { AuthService } from "../../auth/auth.service";
 import { LoginComponent } from "../../auth/login/login.component";
+import { ActivatedRoute, ParamMap } from "@angular/router";
 
 import { MatDialog } from "@angular/material/dialog";
 
@@ -18,11 +19,6 @@ import { MatDialog } from "@angular/material/dialog";
   styleUrls: ["./product-list.component.css"]
 })
 export class ProductListComponent implements OnInit, OnDestroy {
-  // products = [
-  //   { title: "First Product", content: "This is the first product's content" },
-  //   { title: "Second Product", content: "This is the second product's content" },
-  //   { title: "Third Product", content: "This is the third product's content" }
-  // ];
   products: Product[] = [];
   isLoading = false;
   totalProducts = 0;
@@ -40,6 +36,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   constructor(
     private dialog: MatDialog,
     private router: Router,
+    private route: ActivatedRoute,
     public productsService: ProductsService,
     public cartService: CartService,
     public wishlistService: WishlistService,
@@ -50,23 +47,33 @@ export class ProductListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isLoading = true;
 
-    //getting wishlist product ids
-    this.wishlistService.getWishlistProductsId().subscribe((documents)=>{
-      this.wishlistProductsId = documents['wishlistProductsId'];
-      console.log("Wish Liist Product Ids",this.wishlistProductsId);
-    })
-
-    //getting products from backend
-    this.productsService.getProducts(this.productsPerPage, this.currentPage);
-    this.userId = this.authService.getUserId();
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      if (paramMap.has("category-name")) {
+         console.log("CreateUser Route token is", paramMap.has("category-name"));
+         const categoryName = paramMap.get("category-name");
+         //getting products based on category from backend
+         this.productsService.getProducts(null,null,categoryName)
+      } else {
+        console.log("Token is missing");
+        //getting products from backend
+        this.productsService.getProducts(this.productsPerPage, this.currentPage,null);
+        this.userId = this.authService.getUserId();
+      }
+    });
+    
+    //updating the product list
     this.productsSub = this.productsService
       .getProductUpdateListener()
       .subscribe((productData: { products: Product[]; productCount: number }) => {
         this.isLoading = false;
         this.totalProducts = productData.productCount;
         this.products = productData.products;
-        console.log(this.products)
       });
+    //getting wishlist product ids
+    this.wishlistService.getWishlistProductsId().subscribe((documents)=>{
+      this.wishlistProductsId = documents['wishlistProductsId'];
+    })
+
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.authStatusSub = this.authService
       .getAuthStatusListener()
@@ -74,7 +81,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.userIsAuthenticated = isAuthenticated;
         this.userId = this.authService.getUserId();
       });
-    console.log("Product List Component is called", this.products);
   }
 
   onChangedPage(pageData: PageEvent) {
@@ -85,15 +91,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   order(product:any){
-    console.log("Product to be ordered", product);
     this.router.navigate(['order'],{queryParams:{productId:product.id, additionalImages:product.additionalImages, content:product.content, imagePath:product.imagePath, title:product.title, creator:product.creator, price:product.price, actualPrice:product.actualPrice, noOfStocks:product.noOfStocks, discountPercentage:product.discountPercentage }});
   }
 
   addToCart(product:any){
-    console.log("Add to cart product",product);
     let userId = localStorage.getItem("userId");
     if(userId == null){
-      console.log("User id is null");
       this.dialog.open(LoginComponent, {data: {message: "Login Component"}});
     }
     else{
@@ -114,19 +117,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
         saveForLater: false
 
       }
-      console.log("Add to cart is cartItem", cartItem)
-      console.log("Add to cart userId",userId)
       let result = this.cartService.addCartItems(cartItem)
-      console.log(result)
     }
   }
 
   addToWishlist(product, fas, far){
-    console.log("Inside addToWishlist", fas, far);
     this.wishlistAdded = true;
     let userId = localStorage.getItem("userId");
     if(userId == null){
-      console.log("User id is null");
       this.dialog.open(LoginComponent, {data: {message: "Login Component"}});
     }
     else{
@@ -142,19 +140,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
         noOfStocks: product.noOfStocks,
         discountPercentage: product.discountPercentage
       }
-      console.log("Add to cart is cartItem", wishlistItem)
-      console.log("Add to cart userId",userId)
       let result = this.wishlistService.addWishlistItems(wishlistItem)
-      console.log(result)
     }
   }
 
   removeFromWishlist(productId, fas, far){
-    console.log("Inside removeFromWishlist", fas, far);
     this.wishlistAdded = false;
     let userId = localStorage.getItem("userId");
     if(userId == null){
-      console.log("User id is null");
       this.dialog.open(LoginComponent, {data: {message: "Login Component"}});
     }
     else{
@@ -172,16 +165,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   clicked(event,product){
-    console.log(event.target.className);
     // this.renderer.addClass(event.target, "far")
     if(event.target.className  === 'far fa-heart'){
 
     //add to wishlist call
-    console.log("Inside addToWishlist");
     this.wishlistAdded = true;
     let userId = localStorage.getItem("userId");
     if(userId == null){
-      console.log("User id is null");
       this.dialog.open(LoginComponent, {data: {message: "Login Component"}});
     }
     else{
@@ -197,10 +187,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
         noOfStocks: product.noOfStocks,
         discountPercentage: product.discountPercentage
       }
-      console.log("Add to cart is cartItem", wishlistItem)
-      console.log("Add to cart userId",userId)
       let result = this.wishlistService.addWishlistItems(wishlistItem)
-      console.log(result)
     }
     // add to wishlist ends
       this.renderer.removeClass(event.target, 'far');
@@ -211,11 +198,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
     else if(event.target.className === 'fas fa-heart'){
 
       //remove from wishlist called
-      console.log("Inside removeFromWishlist");
       this.wishlistAdded = false;
       let userId = localStorage.getItem("userId");
       if(userId == null){
-        console.log("User id is null");
         this.dialog.open(LoginComponent, {data: {message: "Login Component"}});
       }
       else{

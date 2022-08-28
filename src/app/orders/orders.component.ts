@@ -81,7 +81,6 @@ export class OrdersComponent implements OnInit {
   ngOnInit(): void {
     let userId = localStorage.getItem("userId");
     if(userId == null){
-      console.log("User id is null");
       this.dialog.open(LoginComponent, {data: {message: "Login Component"}});
     }
     else{
@@ -130,9 +129,6 @@ export class OrdersComponent implements OnInit {
   
 
   onSaveAddress(firstExpansionPanel, secondExpansionPanel ,thirdExpansionPanel){
-    console.log("Inside onSaveAddress")
-    console.log(this.form.value)
-    console.log("firstExpansionPanel",firstExpansionPanel)
     firstExpansionPanel.close();
     secondExpansionPanel.open();
     thirdExpansionPanel.close();
@@ -167,9 +163,7 @@ export class OrdersComponent implements OnInit {
       date: "11/03/2022 12.30",
       status: "R"
     })
-    console.log("Add to order is orderItem", this.orderItem)
     let result = this.orderService.addOrderItems(this.orderItem)
-    console.log(result)
   
   }
 

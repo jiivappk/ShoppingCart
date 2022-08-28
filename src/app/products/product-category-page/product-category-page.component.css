@@ -1,0 +1,118 @@
+:host {
+    display: block;
+    margin-top: 1rem;
+  }
+  
+  mat-spinner {
+    margin: auto;
+  }
+  
+  mat-paginator {
+    margin-top: 1rem;
+  }
+  
+  .info-text {
+    text-align: center;
+  }
+  
+  .product-image {
+    width: 100%;
+  }
+  
+  .product-image img {
+    width: 100%;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  }
+  
+  .example-card {
+    max-width: 200px;
+    /* max-height: 100px; */
+  }
+  
+  .example-header-image {
+    /* background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg'); */
+    background-image: url("http://localhost:3000/images/mypic.jpg");
+    background-size: cover;
+  }
+  
+  .top-container{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .mat-card-image{
+    width:-webkit-fill-available;
+    height:230px ;
+  }
+  
+  mat-card-header{
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+  }
+  
+  
+  mat-card-subtitle{
+    width: 150px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    margin-bottom: 25px;
+  }
+  
+  mat-card-content{
+        display: block;
+        margin-bottom: 16px;
+        width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        /* height: 130px;  */
+  }
+  
+  p{
+    height: 35px;
+    overflow: hidden;
+  }
+  
+  .order-review-image {
+    display: flex;
+    gap: 2px;
+    vertical-align: middle;
+    width: 18px;
+    /* margin: 0 8px 0 12px; */
+    cursor: pointer;
+  }
+  
+  .price-container{
+    display: block;
+    margin-top: 2px;
+  }
+  
+  .selling-price-container {
+    font-size: 22px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  .actual-price-container {
+    display: inline-block;
+    text-decoration: line-through;
+    font-size: 14px;
+    color: #878787;
+    padding-top: 10px;
+    margin-left: 10px;
+  }
+  
+  .discount-percentage {
+    display: inline-block;
+    margin-left: 8px;
+    color: #388e3c;
+    font-size: 13px;
+    letter-spacing: -.2px;
+    font-weight: 500;
+  }
+  
+  .stocks{
+    margin-top: 5px;
+    color: red;
+  }

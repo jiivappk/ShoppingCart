@@ -73,7 +73,6 @@ export class CartComponent implements OnInit, OnDestroy {
         });
         this.totalProducts = cartData.cartItemsCount;
         this.saveItemCount = this.totalProducts - this.itemCount;
-        console.log("CartItems from service",this.cartItems)
       })
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.authStatusSub = this.authService
@@ -142,26 +141,21 @@ export class CartComponent implements OnInit, OnDestroy {
       this.cartItems[index].saveForLater = true;
       this.calculateCartPrice();
       this.cartService.updateCartItem(this.cartItems[index]).subscribe((updatedCartItem)=>{
-        console.log("Cart Item Updated",updatedCartItem);
         this.saveItemCount++;
       })
-      console.log("SaveForLater", this.cartItems);
     }
     else if(updateOption === 'removeSaveLater'){
       this.cartItems[index].saveForLater = false;
       this.calculateCartPrice();
       this.cartService.updateCartItem(this.cartItems[index]).subscribe((updatedCartItem)=>{
-        console.log("Cart Item Updated",updatedCartItem);
         this.saveItemCount--;
       })
-      console.log("SaveForLater", this.cartItems)
     }
     
 
   }
 
   onDelete(cartItemId: string) {
-    console.log("Delete CartItem Id",cartItemId)
     this.isLoading = true;
     this.cartService.deleteCartItems(cartItemId).subscribe(() => {
       // this.cartService.getCartItems(this.productsPerPage, this.currentPage);

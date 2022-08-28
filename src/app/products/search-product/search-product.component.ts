@@ -27,6 +27,7 @@ export class SearchProductComponent implements OnInit, OnChanges {
   userIsAuthenticated = false;
   userId: string;
   searchValue: string;
+  errorText: string = '';
   private productsSub: Subscription;
   private authStatusSub: Subscription;
 
@@ -45,20 +46,23 @@ export class SearchProductComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.route.queryParams.subscribe((params)=>{
+      console.log("Search value is  updated");
       this.searchValue = params['searchValue']
-      console.log("SearchValue from Search-product",params['searchValue']);
       this.isLoading = true;
-      this.productsService.searchProduct(this.searchValue, this.productsPerPage, this.currentPage);
+      let searchResult = this.productsService.searchProduct(this.searchValue, this.productsPerPage, this.currentPage);
       this.userId = this.authService.getUserId();
       this.productsSub = this.productsService
         .getProductUpdateListener()
-        .subscribe((productData: { products: Product[]; productCount: number }) => {
-          this.isLoading = false;
-          this.totalProducts = productData.productCount;
-          this.products = productData.products;
-          console.log("Product from Search-product",this.products)
-          console.log("ProductCount from Search-product",this.totalProducts);
-        });
+        .subscribe(
+          (productData: { products: Product[]; productCount: number, error:string }) => {
+            this.isLoading = false;
+            this.totalProducts = productData.productCount;
+            this.products = productData.products;
+            this.errorText = productData.error;
+            console.log("Results for search product",productData) 
+          
+          }
+        );
       this.userIsAuthenticated = this.authService.getIsAuth();
       this.authStatusSub = this.authService
         .getAuthStatusListener()
@@ -121,7 +125,6 @@ export class SearchProductComponent implements OnInit, OnChanges {
         this.isLoading = false;
         this.totalProducts = productData.productCount;
         this.products = productData.products;
-        console.log(this.products)
       });
   }
 

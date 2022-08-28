@@ -12,24 +12,31 @@ const BACKEND_URL = environment.apiUrl + "/products/";
 @Injectable({ providedIn: "root" })
 export class ProductsService {
   private products: Product[] = [];
-  private productsUpdated = new Subject<{ products: Product[]; productCount: number }>();
-  
+  private productsUpdated = new Subject<{ products: Product[]; productCount: number, error: string }>();
+  private categoryList = [];
+  private categoryUpdated = new Subject();
   constructor(private http: HttpClient, private router: Router) {}
 
-  getProducts(productsPerPage: number, currentPage: number) {
-    const queryParams = `?pagesize=${productsPerPage}&page=${currentPage}`;
+  getProducts(productsPerPage?: number, currentPage?: number, categoryName?: string) {
+    let queryParams = ''
+    if(categoryName){
+      queryParams = `?categoryName=${categoryName}`;
+    }
+    else{
+      queryParams = `?pagesize=${productsPerPage}&page=${currentPage}`;
+    }
     this.http
       .get<{ message: string; products: any; maxProducts: number }>(
         BACKEND_URL + queryParams
       )
       .pipe(
         map(productData => {
-          console.log("Product Data from Backend",productData);
           return {
             products: productData.products.map(product => {
               return {
                 title: product.title,
                 content: product.content,
+                category: product.category,
                 id: product._id,
                 imagePath: product.imagePath,
                 additionalImages: product.additionalImages,
@@ -51,9 +58,9 @@ export class ProductsService {
         this.products = transformedProductData.products;
         this.productsUpdated.next({
           products: [...this.products],
-          productCount: transformedProductData.maxProducts
+          productCount: transformedProductData.maxProducts,
+          error: ''
         });
-        console.log("Products",this.products)
       });
   }
 
@@ -71,8 +78,22 @@ export class ProductsService {
     }>(BACKEND_URL + id);
   }
 
+  getCategory(){
+    this.http
+      .get<{}>(
+        BACKEND_URL + 'category'
+      )
+      .subscribe((category)=>{
+        this.categoryList = [...category['categoryList']]
+        this.categoryUpdated.next({categoryList:this.categoryList})
+      })
+  }
+
+  getCategoryUpdateListener(){
+    return this.categoryUpdated.asObservable();
+  }
+
   searchProduct(title: string,productsPerPage: number, currentPage: number) {
-    console.log("Search Product Api is called", title, productsPerPage, currentPage)
     const queryParams = `?pagesize=${productsPerPage}&page=${currentPage}&title=${title}`;
     // return this.http.get<{
     //   _id: string;
@@ -88,7 +109,6 @@ export class ProductsService {
       )
       .pipe(
         map(productData => {
-          console.log("Product Data from Backend",productData);
           return {
             products: productData.products.map(product => {
               return {
@@ -103,31 +123,33 @@ export class ProductsService {
           };
         })
       )
-      .subscribe(transformedProductData => {
+      .subscribe(
+        (transformedProductData) => {
         this.products = transformedProductData.products;
         this.productsUpdated.next({
           products: [...this.products],
-          productCount: transformedProductData.maxProducts
+          productCount: transformedProductData.maxProducts,
+          error: ''
         });
-      });
+        },
+        (err)=>{
+          console.log("Error occured while fetching products",err);
+          if(err.error.message === 'Fetching products failed!'){
+            this.productsUpdated.next({
+              products: [],
+              productCount: 0,
+              error: 'No Data Found!!'
+            });
+          }
+        }
+      );
   }
 
-  addProduct(title: string, content: string, image: File, additionalImages: FileList, price:number, actualPrice:number, noOfStocks:number, discountPercentage:number, deliveryCharge:number, deliveryPeriod:number, replacementPeriod:number) {
-    console.log("From addProduct Service");
-    console.log("title",title);
-    console.log("content",content);
-    console.log("image",image);
-    console.log("additionalImages",additionalImages);
-    console.log("Price",price);
-    console.log("actualPrice",actualPrice);
-    console.log("noOfStockes", noOfStocks);
-    console.log("DiscountPercentage", discountPercentage);
-    console.log("DeliveryPeriod", deliveryPeriod);
-    console.log("DeliveryCharge", deliveryCharge);
-    console.log("ReplacementPeriod", replacementPeriod);
+  addProduct(title: string, content: string, category: string, image: File, additionalImages: FileList, price:number, actualPrice:number, noOfStocks:number, discountPercentage:number, deliveryCharge:number, deliveryPeriod:number, replacementPeriod:number) {
     const productData: any = new FormData();
     productData.append("title", title);
     productData.append("content", content);
+    productData.append("category", category);
     productData.append("image", image, title);
     productData.append("price",price);
     productData.append("actualPrice",actualPrice);

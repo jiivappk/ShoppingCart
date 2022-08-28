@@ -46,7 +46,6 @@ export class WishlistComponent implements OnInit {
         this.isLoading = false;
         this.wishlistItems = wishlistData.wishlistItems;
         this.totalProducts = wishlistData.wishlistItemsCount;
-        console.log(this.wishlistItems)
       });
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.authStatusSub = this.authService
@@ -66,7 +65,6 @@ export class WishlistComponent implements OnInit {
 
 
   onDelete(wishlistItemId: string) {
-    console.log("Delete WishlistItem Id",wishlistItemId)
     this.isLoading = true;
     this.wishlistService.deleteWishlistItems(wishlistItemId).subscribe(() => {
       this.wishlistService.getWishlistItems(this.productsPerPage, this.currentPage);

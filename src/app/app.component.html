@@ -1,10 +1,10 @@
 <mat-drawer-container class="example-container" hasBackdrop=true>
   <mat-drawer #drawer mode=over>
     <ul>
-      <li>Home</li>
-      <li>Profile</li>
-      <li>Orders</li>
-      <li (click)="wishListRoute()">WishList</li>
+      <li style="cursor: pointer" (click)="changeRoute('')">Home</li>
+      <li style="cursor: pointer" (click)="changeRoute('profile')">Profile</li>
+      <li style="cursor: pointer">Orders</li>
+      <li style="cursor: pointer" (click)="changeRoute('wishlist')">WishList</li>
     </ul>
   </mat-drawer>
   <mat-drawer-content>

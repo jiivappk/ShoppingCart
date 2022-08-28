@@ -53,7 +53,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .getCartUpdateListener()
       .subscribe((cartData: { cartItems: Cart[]; cartItemsCount: number }) => {
         this.totalCartItems = cartData.cartItemsCount;
-        console.log(this.totalCartItems)
       });
   }
 
@@ -66,7 +65,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onSearch(){
-    console.log("OnSEarch is called",this.searchItem)
     this.router.navigate(["search"],{queryParams:{searchValue:this.searchItem}})
   }
 

@@ -21,6 +21,7 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
   form: FormGroup;
   imagePreview: string;
   additionalImages = [];
+  categoryList = ['other-category','mobile', 'laptop', 'car', 'headphone', 'bike', 'furniture'];
   private mode = "create";
   private productId: string;
   private authStatusSub: Subscription;
@@ -44,6 +45,8 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
         validators: [Validators.required, Validators.minLength(3)]
       }),
       content: new FormControl(null, { validators: [Validators.required, Validators.maxLength(250)] }),
+      category: new FormControl(null),
+      newCategory: new FormControl({ value: null, disabled: true }, { validators: [Validators.required]}),
 
       price: new FormControl(null, {validators: [Validators.required] }),
       actualPrice: new FormControl(null, {validators: [Validators.required]}),
@@ -85,11 +88,23 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
         this.productId = null;
       }
     });
+  } 
+  
+  newCategoryWritten(){
+    this.form.patchValue({category: this.form.get('newCategory').value})
+  }
+
+  categorySelected(selectedValue){
+    if(selectedValue === 'other-category'){
+      this.form.get('newCategory').enable();
+      this.form.patchValue({category: this.form.get('newCategory').value})
+    }
+    else{
+      this.form.get('newCategory').disable();
+    }
   }
 
   onImagePicked(event: Event, targetImage) {
-    console.log("Image Picked is called", event);
-    console.log("target",targetImage);
     if(targetImage === 'primaryImage'){
       const file = (event.target as HTMLInputElement).files[0];
       this.form.patchValue({ image: file });
@@ -101,10 +116,8 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
       reader.readAsDataURL(file);
     }
     else if(targetImage === 'additionalImages'){
-      console.log("On additionalImages block")
       const {files} = (event.target as HTMLInputElement);
       this.form.patchValue({ additionalImages: files });
-      console.log("Form value",this.form.get("additionalImages"));
       this.form.get("additionalImages").updateValueAndValidity();
       for(let i = 0;i<files.length;i++){
         const reader = new FileReader();
@@ -116,28 +129,31 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
     }
   }
 
+
   onSaveProduct() {
+    // if(this.form.value.newCategory){
+      // this.categoryService.updateCategoryItem({categoryList: this.form.value.newCategory})
+      //   .subscribe((result)=>{
+      //     console.log("Result from update is", result)
+      //   })
+        // this.categoryService.addCategoryItems({categoryList: this.categoryList});
+    // }
     let price = this.form.value.price;
     let actualPrice = this.form.value.actualPrice;
     let discount = 100-((price/actualPrice)*100);
-    console.log("Discount",discount);
     this.form.patchValue({discountPercentage: discount})
     this.form.patchValue({deliveryPeriod: 12})
     this.form.patchValue({deliveryCharge: 0})
     this.form.patchValue({replacementPeriod: 10})
-    console.log("Dicount For Value",this.form.value.discountPercentage);
-    console.log("Save Producct method is called")
     if (this.form.invalid) {
-      console.log("Form is invalid")
-      console.log("Invalid Form",this.form);
       return;
     }
     this.isLoading = true;
     if (this.mode === "create") {
-      console.log("Inside Create Model")
       this.productsService.addProduct(
         this.form.value.title,
         this.form.value.content,
+        this.form.value.category,
         this.form.value.image,
         this.form.value.additionalImages,
         price,
@@ -149,7 +165,6 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
         this.form.value.replacementPeriod
 
       );
-      console.log("Form values are", this.form);
     } else {
       this.productsService.updateProduct(
         this.productId,

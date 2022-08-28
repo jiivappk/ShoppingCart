@@ -15,7 +15,7 @@
       <button (click)="onSearch('Car')">Search</button>
     </li> -->
     <li>
-        <input (input)="onSearch()" placeholder="Search" [(ngModel)]="searchItem" />
+        <input (change)="onSearch()" placeholder="Search" [(ngModel)]="searchItem" />
     </li>
     <li *ngIf="userIsAuthenticated">
       <!-- <a mat-button routerLink="/cart" routerLinkActive="mat-accent">Cart</a> -->

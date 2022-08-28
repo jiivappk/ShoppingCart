@@ -1,0 +1,64 @@
+<!-- <mat-card>
+    <mat-card-header>
+        <mat-card-title>Personal Details</mat-card-title>
+        <mat-card-subtitle>{{orderContent}}</mat-card-subtitle>
+      </mat-card-header>
+          
+      <mat-card-content>
+        <p>
+          The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+          bred for hunting.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button>Add to Cart</button>
+        <button mat-button>Order</button>
+      </mat-card-actions>
+</mat-card>
+
+<mat-card style="margin-top: 20px;"> 
+      <mat-card-header class="delivery-address-header">
+        <mat-card-title>Delivery Address</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="delivery-address-content">
+          <div><h3><div>Area</div><div>:</div></h3><p>{{"orderAddress.area"}}</p></div>
+          <div><h3><div>Flat No</div><div>:</div></h3><p>{{"orderAddress.flatNo"}}</p></div>
+          <div><h3><div>Full Name</div><div>:</div></h3><p>{{"orderAddress.fullName"}}</p></div>
+          <div><h3><div>LandMark</div><div>:</div></h3><p>{{"orderAddress.landMark"}}</p></div>
+          <div><h3><div>Mobile</div><div>:</div></h3><p>{{"orderAddress.mobile"}}</p></div>
+          <div><h3><div>Pin Code</div><div>:</div></h3><p>{{"orderAddress.pinCode"}}</p></div>
+          <div><h3><div>State</div><div>:</div></h3><p>{{"orderAddress.state"}}</p></div>
+          <div><h3><div>Town</div><div>:</div></h3><p>{{"orderAddress.town"}}</p></div>
+      </mat-card-content>
+</mat-card> -->
+
+<div class="profile-parent">
+  <div class="profile-container row">
+    <div class="side-panel-container">
+      <div>
+        <div class="name-container">
+          <div class="photo-container row">
+            <img height="50px" width="50px" src="https://cdn.pixabay.com/photo/2020/07/14/13/07/icon-5404125_960_720.png" />
+            <div class="name-column">
+              <div style="font-size: 12px;">Hello ,</div>
+              <div class="name-colum-dynamic">{{userName}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="option-container">
+          <div class="option">Personal Information</div>
+          <div class="option">Manage Address</div>
+        </div>
+      </div>
+    </div>
+    <div class="main-panel-container">
+      <div class="main-container">
+        <div class="container">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

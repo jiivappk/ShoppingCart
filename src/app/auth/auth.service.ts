@@ -1,12 +1,23 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { Subject } from "rxjs";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 
 import { environment } from "../../environments/environment";
 import { AuthData } from "./auth-data.model";
 
 const BACKEND_URL = environment.apiUrl + "/user/";
+
+const profileDetailsValues = {
+  userId: '',
+  email: '',
+  firstName: '',
+  lastName: '',
+  gender:'',
+  phoneNumber: '',
+  profilePic: '',
+  dob: '',
+}
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
@@ -15,6 +26,8 @@ export class AuthService {
   private tokenTimer: any;
   private userId: string;
   private authStatusListener = new Subject<boolean>();
+  public profileDetails = new BehaviorSubject(profileDetailsValues);
+  public profileDetails$ = this.profileDetails.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -47,15 +60,12 @@ export class AuthService {
   }
 
   createUser(token:string) {
-    console.log("From createUser Auth service")
     const authData:any = { token: token };
     this.http.post(BACKEND_URL + "/createUser", authData).subscribe(
       (response) => {
         this.router.navigate(["/auth/login"]);
-        console.log("User is created",response)
       },
       error => {
-        console.log("User cannot be created",error);
         this.authStatusListener.next(false);
       }
     );
@@ -63,14 +73,12 @@ export class AuthService {
 
   googleLogin(token: string) {
     const authData = { idToken: token};
-    console.log("AuthData from googleLogin service",authData);
     this.http
       .post<{ token: string; expiresIn: number; userId: string }>(
         BACKEND_URL + "/googleLogin",
         authData
       )
       .subscribe(response => {
-        console.log("Response when logged in:",response)
         const token = response.token;
         this.token = token;
         if (token) {
@@ -83,7 +91,6 @@ export class AuthService {
           const expirationDate = new Date(
             now.getTime() + expiresInDuration * 1000
           );
-          console.log(expirationDate);
           this.saveAuthData(token, expirationDate, this.userId);
           this.router.navigate(["/"]);
         }
@@ -95,14 +102,12 @@ export class AuthService {
 
   facebookLogin(token, id){
     const authData = { accessToken: token, userID: id};
-    console.log("AuthData from facebookLogin service",authData);
     this.http
       .post<{ token: string; expiresIn: number; userId: string }>(
         BACKEND_URL + "/facebookLogin",
         authData
       )
       .subscribe(response => {
-        console.log("Response when logged in:",response)
         const token = response.token;
         this.token = token;
         if (token) {
@@ -115,7 +120,6 @@ export class AuthService {
           const expirationDate = new Date(
             now.getTime() + expiresInDuration * 1000
           );
-          console.log(expirationDate);
           this.saveAuthData(token, expirationDate, this.userId);
           this.router.navigate(["/"]);
         }
@@ -133,7 +137,6 @@ export class AuthService {
       )
       .subscribe(
         response => {
-          console.log("Response when logged in:",response)
           const token = response.token;
           this.token = token;
           if (token) {
@@ -146,8 +149,18 @@ export class AuthService {
             const expirationDate = new Date(
               now.getTime() + expiresInDuration * 1000
             );
-            console.log(expirationDate);
             this.saveAuthData(token, expirationDate, this.userId);
+            const profileDetails = {
+              userId: response.userId,
+              email: response['email'],
+              firstName: response['firstName'],
+              lastName: response['lastName'],
+              gender: response['gender'],
+              phoneNumber: response['phoneNumber'],
+              profilePic: response['profilePic'],
+              dob: response['dob'],
+            }
+            this.profileDetails.next(profileDetails);
             this.router.navigate(["/"]);
           }
         },
@@ -184,7 +197,6 @@ export class AuthService {
   }
 
   private setAuthTimer(duration: number) {
-    console.log("Setting timer: " + duration);
     this.tokenTimer = setTimeout(() => {
       this.logout();
     }, duration * 1000);
