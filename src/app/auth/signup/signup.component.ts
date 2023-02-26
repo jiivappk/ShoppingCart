@@ -11,6 +11,10 @@ import { AuthService } from "../auth.service";
 export class SignupComponent implements OnInit, OnDestroy {
   isLoading = false;
   private authStatusSub: Subscription;
+  public confirmPasswordError = false;
+  public email = '';
+  public isMailSent = false;
+  
 
   constructor(public authService: AuthService) {}
 
@@ -26,8 +30,14 @@ export class SignupComponent implements OnInit, OnDestroy {
     if (form.invalid) {
       return;
     }
-    this.isLoading = true;
-    this.authService.signIn(form.value.email, form.value.password);
+    if(form.value.confirmPassword !== form.value.password){
+      this.confirmPasswordError = true;
+      return;
+    }
+    this.confirmPasswordError = false;
+    this.email = form.value.email;
+    this.authService.signIn(form.value.email, form.value.confirmPassword);
+    this.isMailSent = true;
   }
 
   ngOnDestroy() {

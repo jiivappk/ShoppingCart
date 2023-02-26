@@ -1,0 +1,45 @@
+<div class="personal-info-container">
+    <div style="padding-bottom: 24px;">
+        <span class="personal-informtion-text">Personal Information</span>
+        <span *ngIf="!editUser" class="personal-information-edit" (click)="editModeClicked()">Edit User Detail</span>
+        <span *ngIf="editUser" class="personal-information-edit" (click)="editModeClicked()">Cancel</span>
+    </div>
+    <form>
+        <div class="form-group mb-2">
+            <label for="firstName" class="form-label">First Name:</label>
+            <input class="form-control" [(ngModel)]="firstName" type="text" id="firstName" name="firstName" [readonly]="!editUser"/>
+        </div>
+        <div class="form-group mb-2">
+            <label for="lastName" class="form-label">Last Name:</label>
+            <input class="form-control"  [(ngModel)]="lastName" type="text" id="lastName" name="lastName" [readonly]="!editUser"/>
+        </div>
+        <div class="form-group mb-2">
+            <label for="gender" class="form-label">Gender:</label>
+            <input class="form-control"  [(ngModel)]="gender" type="text" id="gender" name="gender" [readonly]="!editUser"/>
+        </div>
+        <div class="form-group mb-2">
+            <label for="dob" class="form-label">Date Of Birth:</label>
+            <input class="form-control"  [(ngModel)]="dob" type="text" id="dob" name="dob" [readonly]="!editUser"/>
+        </div>
+        <button *ngIf="editUser" (click)="savePersonalInfo()">Save User Detail</button>
+    </form>
+    <form [formGroup]="myForm" (ngSubmit)="updateEmail()">
+        <div class="form-group mb-2">
+            <label for="email" class="form-label">Email:</label>
+            <input class="form-control" [class.is-invalid] = "myForm.get('email').invalid && myForm.get('email').touched" formControlName="email" [(ngModel)]="email" type="text" id="email" name="email" readonly/>
+            <small style="color: red;" *ngIf="">Please provide a valid email address.<br></small>
+            <label *ngIf="changeEmailInitiate === true" for="password" class="form-label">Enter Password:</label>
+            <input *ngIf="changeEmailInitiate === true" class="form-control" [class.is-invalid] = "emptyPassword || invalidPassword" formControlName="password" [(ngModel)]="password" type="password" id="password" name="password"/>
+            <small style="color: red;" *ngIf="changeEmailInitiate === true && emptyPassword">Password Cannot be empty.<br></small>
+            <small style="color: red;" *ngIf="changeEmailInitiate === true && invalidPassword">Please provide a valid Password with minimum length 4 and maximum length 10.<br></small>
+            <label *ngIf="changeEmailInitiate === true" for="email" class="form-label">Enter New Email:</label>
+            <input *ngIf="changeEmailInitiate === true" class="form-control" [class.is-invalid] = "emptyNewEmail || invalidNewEmail || duplicateNewEmail" formControlName="newEmail" [(ngModel)]="newEmail" type="text" id="newEmail" name="newEmail"/>
+            <small style="color: red;" *ngIf="changeEmailInitiate === true && emptyNewEmail">New Email Cannot be empty.<br></small>
+            <small style="color: red;" *ngIf="changeEmailInitiate === true && invalidNewEmail">Please provide a valid email address.<br></small>
+            <small style="color: red;" *ngIf="changeEmailInitiate === true && duplicateNewEmail">New Email and Old Email cannot be same.<br></small>
+        </div> 
+        <button *ngIf="changeEmailInitiate === false" (click)="changeEmailStatus(true)">Change Email</button>
+        <button *ngIf="changeEmailInitiate === true" (click)="changeEmailStatus(false)">Cancel</button>
+        <button *ngIf="changeEmailInitiate === true" [disabled]="disableProceedButton" type="submit">Proceed</button>
+    </form>
+</div>

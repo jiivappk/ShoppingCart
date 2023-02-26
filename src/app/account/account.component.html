@@ -38,7 +38,7 @@
     <div class="side-panel-container">
       <div>
         <div class="name-container">
-          <div class="photo-container row">
+          <div class="photo-container" style="display: inline-flex;">
             <img height="50px" width="50px" src="https://cdn.pixabay.com/photo/2020/07/14/13/07/icon-5404125_960_720.png" />
             <div class="name-column">
               <div style="font-size: 12px;">Hello ,</div>
@@ -47,8 +47,8 @@
           </div>
         </div>
         <div class="option-container">
-          <div class="option">Personal Information</div>
-          <div class="option">Manage Address</div>
+          <div class="option" (click)="changeNavigate('personal-information')">Personal Information</div>
+          <div class="option" (click)="changeNavigate('manage-address')">Manage Address</div>
         </div>
       </div>
     </div>

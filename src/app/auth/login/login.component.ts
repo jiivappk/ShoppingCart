@@ -8,7 +8,7 @@ import { AuthService } from "../auth.service";
 import { SocialAuthService } from "angularx-social-login";
 import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
 import { SocialUser } from "angularx-social-login";
-
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: "./login.component.html",
@@ -20,12 +20,21 @@ export class LoginComponent implements OnInit, OnDestroy {
   socialUser: SocialUser;
   loggedIn: boolean;
   fbImage: string = '../../assets/facebook.jpg';
-  constructor(public authService: AuthService, private socialAuthService: SocialAuthService, @Optional() public dialogRef: MatDialogRef<LoginComponent>) {}
+  authStatus: boolean;
+  mailId = {email: ''};
+  constructor(
+    private router: Router,
+    public authService: AuthService, 
+    private socialAuthService: SocialAuthService, 
+    @Optional() public dialogRef: MatDialogRef<LoginComponent>,  
+    ) {}
 
   ngOnInit() {
     this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
       authStatus => {
+        this.authStatus = !authStatus
         this.isLoading = false;
+        console.log("authStatus",this.authStatus);
       }
     );
   }
@@ -71,8 +80,22 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
     this.isLoading = true;
-    this.authService.login(form.value.email, form.value.password);
-    this.dialogRef.close();
+    const result = this.authService.login(form.value.email, form.value.password);
+    // this.dialogRef.close();
+  }
+
+  onforgotPassword(email) {
+    if (!email) {
+      return;
+    }
+    console.log("Forgot Password",email)
+    this.isLoading = true;
+    // this.authService.forgotPassword(email)
+    //   .subscribe((response)=>{
+    //       console.log("Email has been sent",response)
+    //       this.mailId.email = email;
+    //   })
+    this.router.navigate([`/auth/forgetPassword/${email}`]);
   }
 
   ngOnDestroy() {

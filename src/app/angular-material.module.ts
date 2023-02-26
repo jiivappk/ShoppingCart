@@ -26,6 +26,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
     MatBadgeModule,
     MatSelectModule,
     MatSidenavModule,
+
   ]
 })
 export class AngularMaterialModule {}

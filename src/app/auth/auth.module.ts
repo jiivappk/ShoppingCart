@@ -10,11 +10,11 @@ import { AuthRoutingModule } from "./auth-routing.module";
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
 import { CreateUserComponent } from './create-user/create-user.component';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent, CreateUserComponent, ForgotPasswordComponent, ResetPasswordComponent],
+  declarations: [LoginComponent, SignupComponent, CreateUserComponent, ForgetPasswordComponent, ResetPasswordComponent],
   imports: [CommonModule, AngularMaterialModule, FormsModule, AuthRoutingModule, SocialLoginModule],
   providers: [
     {

@@ -1,0 +1,39 @@
+<form *ngIf="type === 'mailUpdate' ">
+    <div class="form-group mb-2">
+        <label  for="firstOtp" class="form-label">{{oldMailId}}:</label>
+        <input class="form-control" name="firstOtp" [(ngModel)]="oldMailOtp" type="text" placeholder="OTP"/><br>
+    </div>
+    <div class="form-group mb-2">
+        <label for="secondOtp" class="form-label">{{newMailId}}:</label>
+        <input class="form-control" name ="secondOtp" [(ngModel)]="newMailOtp" type="text" placeholder='OTP'/><br>
+    </div>
+    <div style="float: right;">
+        <button class="me-2" (click)="closeDialog('cancel')">Cancel</button>
+        <button *ngIf="type === 'mailUpdate' " class="ms-2" (click)="closeDialog('change')">Next</button>
+        <!-- <button *ngIf="type === 'mailUpdate' " class="ms-2" (click)="closeDialog('change')">Submit</button> -->
+    </div>
+</form>
+
+<form *ngIf="type === 'passwordReset' ">
+    <div class="form-group mb-2">
+        <label for="passwordReset" class="form-label">Enter New Password</label>
+        <input class="form-control" name ="passwordReset" [(ngModel)]="newPassword" type="text" placeholder='Enter New Password'/><br>
+    </div>
+    <div class="form-group mb-2">
+        <label for="confirmPasswordReset" class="form-label">Confirm New Password</label>
+        <input class="form-control" name ="confirmPasswordReset" [(ngModel)]="confirmNewPassword" type="text" placeholder='Re-Enter New Password'/><br>
+        <small *ngIf="passwordMismatchError" style="color:red">New password does not match with confirm password</small>
+    </div>
+    <div class="form-group mb-2">
+        <label for="passwordResetOtp" class="form-label">Enter OTP sent to {{emailId}}</label>
+        <input class="form-control" name ="passwordResetOtp" [(ngModel)]="passwordResetOtp" type="text" placeholder='Enter OTP'/><br>
+    </div>
+    <small *ngIf="isError" style="color: red;">{{errorMessage}}</small>
+    <div style="float: right;">
+        <!-- <button class="me-2" *ngIf="type === 'mailUpdate' " (click)="closeDialog('cancel')">Cancel</button> -->
+        <!-- <button *ngIf="type === 'mailUpdate' " class="ms-2" (click)="closeDialog('change')">Next</button> -->
+        <!-- <button *ngIf="type === 'mailUpdate' " class="ms-2" (click)="closeDialog('change')">Submit</button> -->
+        <button class="me-2" *ngIf="type === 'passwordReset' " (click)="closeDialog('cancel')">Cancel</button>
+        <button class="ms-2" (click)="closeDialog('submit')">Submit</button>
+    </div>
+</form>

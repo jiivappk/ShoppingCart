@@ -8,7 +8,7 @@ import { AuthData } from "./auth-data.model";
 
 const BACKEND_URL = environment.apiUrl + "/user/";
 
-const profileDetailsValues = {
+const userDetail = {
   userId: '',
   email: '',
   firstName: '',
@@ -26,8 +26,8 @@ export class AuthService {
   private tokenTimer: any;
   private userId: string;
   private authStatusListener = new Subject<boolean>();
-  public profileDetails = new BehaviorSubject(profileDetailsValues);
-  public profileDetails$ = this.profileDetails.asObservable();
+  // public userDetailSub = new BehaviorSubject(userDetail);
+  // public userDetailSub$ = this.userDetailSub.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -69,6 +69,18 @@ export class AuthService {
         this.authStatusListener.next(false);
       }
     );
+  }
+
+  editUser(firstName: string, lastName:string, gender:string, dob:string){
+    const userDetail = {
+      token: this.token,
+      userId: this.userId,
+      firstName: firstName,
+      lastName: lastName,
+      gender: gender,
+      dob: dob,
+    }
+    return this.http.post(BACKEND_URL + "/editUser", userDetail);
   }
 
   googleLogin(token: string) {
@@ -150,22 +162,12 @@ export class AuthService {
               now.getTime() + expiresInDuration * 1000
             );
             this.saveAuthData(token, expirationDate, this.userId);
-            const profileDetails = {
-              userId: response.userId,
-              email: response['email'],
-              firstName: response['firstName'],
-              lastName: response['lastName'],
-              gender: response['gender'],
-              phoneNumber: response['phoneNumber'],
-              profilePic: response['profilePic'],
-              dob: response['dob'],
-            }
-            this.profileDetails.next(profileDetails);
+            this.setUserDetail(response.userId,response['email'],response['firstName'],response['lastName'],response['gender'],response['phoneNumber'],response['profilePic'],response['dob']);
             this.router.navigate(["/"]);
           }
         },
         error => {
-          this.authStatusListener.next(false);
+          this.authStatusListener.next(false); 
         }
       );
   }
@@ -193,6 +195,7 @@ export class AuthService {
     this.userId = null;
     clearTimeout(this.tokenTimer);
     this.clearAuthData();
+    // this.setUserDetail();
     this.router.navigate(["/"]);
   }
 
@@ -212,6 +215,7 @@ export class AuthService {
     localStorage.removeItem("token");
     localStorage.removeItem("expiration");
     localStorage.removeItem("userId");
+    localStorage.removeItem("userDetail");
   }
 
   private getAuthData() {
@@ -237,8 +241,8 @@ export class AuthService {
       )
   }
 
-  resetPassword(resetLink: string, newPassword: string){
-    const authData: any = { resetLink: resetLink, newPassword: newPassword};
+  resetPassword(passwordResetToken: string, newPassword: string){
+    const authData: any = { passwordResetToken: passwordResetToken, newPassword: newPassword};
     this.http
       .put<{ email: string; expiresIn: number; userId: string }>(
         BACKEND_URL + "/reset-password",
@@ -248,4 +252,20 @@ export class AuthService {
         console.log(result)
       })
   }
+
+  setUserDetail(userId = '', email = '', firstName = '', lastName = '', gender = '', phoneNumber = '', profilePic = '', dob = ''){
+    const userDetail = {
+      userId: userId,
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      gender: gender,
+      phoneNumber: phoneNumber,
+      profilePic: profilePic,
+      dob: dob,
+    }
+    // this.userDetailSub.next(userDetail);
+    localStorage.setItem("userDetail", JSON.stringify(userDetail));
+  }
+
 }

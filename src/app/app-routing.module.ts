@@ -11,12 +11,11 @@ import { OrdersListComponent } from "./orders/orders-list/orders-list.component"
 import { OrderDetailsComponent } from "./orders/order-details/order-details.component";
 import { WishlistComponent } from "./products/wishlist/wishlist.component";
 import { ProductCategoryPageComponent } from "./products/product-category-page/product-category-page.component";
-import { AccountComponent } from "./account/account.component";
 const routes: Routes = [
   { path: "", component: ProductCategoryPageComponent },
   { path: "product", component: ProductListComponent },
   { path: "product/:category-name", component: ProductListComponent },
-  { path: "account", component: AccountComponent},
+  { path: "account", loadChildren: ()=>import('./account/account.module').then(m=>m.AccountModule) },
   { path: "search", component: SearchProductComponent },
   { path: "product/product-detail", component: ProductDetailsComponent },
   { path: "create", component: ProductCreateComponent, canActivate: [AuthGuard] },

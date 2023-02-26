@@ -1,0 +1,16 @@
+.personal-info-container{
+    padding-bottom: 56px;
+}
+
+.personal-informtion-text{
+    font-size: 18px;
+    font-weight: 500;
+    padding-right: 24px;
+}
+
+.personal-information-edit{
+    font-size: 14px;
+    font-weight: 500;
+    color: #2874f0;
+    cursor: pointer;
+}

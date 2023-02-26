@@ -9,10 +9,15 @@
       <input type="password" name="password" ngModel matInput placeholder="Password" #passwordInput="ngModel" required>
       <mat-error *ngIf="passwordInput.invalid">Please enter a valid password.</mat-error>
     </mat-form-field>
+    <span *ngIf="authStatus">
+      <a (click)="onforgotPassword(loginForm.value.email)" style="color:red; cursor:pointer">Forgot Password</a>
+      <!-- <a routerLink="/auth/forgetPassword" style="color:red; cursor:pointer">Forgot Password</a> -->
+      <!-- <a [routerLink]="['/auth/forgetPassword']" [state]="{ mailId }" style="color:red; cursor:pointer">Forgot Password</a> -->
+      
+    </span>
     <button mat-raised-button color="accent" type="submit" *ngIf="!isLoading">Login</button>
-  </form>
+  </form><br>
   <hr>
-  <!-- <button mat-raised-button color="accent" type="button" (click)="signInWithGoogle()">Login with Google</button> -->
   <div class="social-btn" style="display: flex; justify-content:center" (click)="signInWithGoogle()">
     <div class="social-icon-wrapper">
       <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
@@ -20,7 +25,6 @@
     <p class="btn-text" ><b>Sign in with google</b></p>
   </div>
   <hr>
-  <!-- <button mat-raised-button color="accent" type="button" (click)="signInWithFB()">Login with Facebook</button> -->
   <div class="social-btn" style="display: flex; justify-content:center" (click)="signInWithFB()">
     <div class="social-icon-wrapper" >
       <img class="social-icon" src="https://cdn-icons-png.flaticon.com/512/124/124010.png"/>
@@ -29,3 +33,4 @@
   </div>
   
 </mat-card>
+
