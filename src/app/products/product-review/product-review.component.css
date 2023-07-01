@@ -1,20 +1,10 @@
-.address-container{
-    display: grid;
-}
-
 .full-row{
     display: grid;
     grid-template-columns: 100%;
     margin-top: 20px;
 }
 
-.row{
-    display: grid;
-    grid-template-columns: 50% 50%;
-    margin-top: 20px;
-}
-
-.area-box{
+.comment-box{
     min-height: 90px;
 }
 
@@ -37,10 +27,49 @@
 }
 
 ::ng-deep.mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
-    /* top: -15px !important; */
     left: 0px !important;
     transform: translateY(-1.88125em) scale(1) !important;
-    /* transform: translate(0,-1.88125em, 0) scale(1) !important; */
     margin-left: 0px !important;
     padding-left: 0px !important;
+}
+
+.white-icon{
+    color:rgb(236 235 235);
+    margin: 35px 15px 0px 0px;
+}
+
+.yellow-icon{
+    color:rgb(255, 215, 0);
+    margin: 35px 15px 0px 0px;
+}
+
+input[type="file"] {
+    visibility: hidden;
+}
+
+.imagePreviewContainer{
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.image-preview {
+    height: 5rem;
+    margin: 1rem 0;
+    position: relative;
+}
+
+.image-preview img {
+    height: 100%;
+}
+
+.image-remove-button{
+    position: absolute;
+    cursor: pointer;
+    top: -3px;
+    right: -3px;
+    font-size: 18px;
+    color: #dc3545;
+    background: #ffff;
+    border-radius: 10px;
 }

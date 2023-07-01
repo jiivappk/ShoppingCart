@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-  <span>
+  <span *ngIf="!isSideNavOpen">
     <mat-icon (click)="sideNavButtonClicked()">reorder</mat-icon>
     <a routerLink="/">MyMessages</a>
   </span>

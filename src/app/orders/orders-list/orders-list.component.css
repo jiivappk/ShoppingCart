@@ -192,11 +192,11 @@
     text-transform: uppercase;
   }
 
-  .order-status-container{
+  .order-info-container{
     color: #212121;
   }
 
-  .order-status-icon{
+  .order-info-icon{
     height: 10px;
     width: 10px;
     border-radius: 50%;
@@ -205,12 +205,12 @@
     margin-right: 8px;
   }
 
-  .order-status-icon-color{
+  .order-info-icon-color{
     background-color: #26a541;
     border: 2px solid #26a541;
   }
 
-  .order-status{
+  .order-info{
     font-size: 14px;
     font-weight: 500;
   }

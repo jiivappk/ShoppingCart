@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, OnDestroy, Output, EventEmitter, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { Subscription } from "rxjs";
 import { filter } from 'rxjs/operators';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -14,8 +14,9 @@ import { Cart } from "../products/cart.model"
   templateUrl: "./header.component.html",
   styleUrls: ["./header.component.css"]
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
 
+  @Input() initiateToogleEvent = false;
   @Output() sideNavEvent = new EventEmitter();
   productsPerPage = 2;
   currentPage = 1;
@@ -24,6 +25,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private cartItemsSub: Subscription;
   private totalCartItems: number;
   searchItem: string;
+  public isSideNavOpen = false;
   constructor( private authService: AuthService, 
                public cartService: CartService,
                public productService:ProductsService,
@@ -57,7 +59,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   sideNavButtonClicked(){
-    this.sideNavEvent.emit(true);
+    this.isSideNavOpen = !this.isSideNavOpen;
+    this.sideNavEvent.emit(this.isSideNavOpen);
   }
 
   onLogout() {
@@ -66,6 +69,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onSearch(){
     this.router.navigate(["search"],{queryParams:{searchValue:this.searchItem}})
+  }
+  
+  ngOnChanges(changes: SimpleChanges): void {
+      console.log(changes);
+      this.isSideNavOpen = false;
   }
 
   ngOnDestroy() {

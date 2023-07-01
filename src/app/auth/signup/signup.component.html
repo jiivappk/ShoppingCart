@@ -3,6 +3,26 @@
     <mat-spinner *ngIf="isLoading"></mat-spinner>
     <form (submit)="onSignup(signupForm)" #signupForm="ngForm" *ngIf="!isLoading">
       <mat-form-field>
+        <input matInput name="firstName" ngModel type="text" placeholder="Enter your First Name" #firstNameInput="ngModel" required>
+        <mat-error *ngIf="firstNameInput.invalid">Please enter a valid Name.</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput name="lastName" ngModel type="text" placeholder="Enter your Last Name" #lastNameInput="ngModel" required>
+        <mat-error *ngIf="lastNameInput.invalid">Please enter a valid Name.</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput name="gender" ngModel type="text" placeholder="Enter Male/Female/Other" #genderInput="ngModel" required>
+        <mat-error *ngIf="genderInput.invalid">Please enter a valid gender.</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput name="dob" ngModel type="text" placeholder="Enter your Date Of Birth" #dobInput="ngModel" required>
+        <mat-error *ngIf="dobInput.invalid">Please enter a valid Date of Birth.</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput name="phoneNumber" ngModel type="text" placeholder="Enter your Mobile Number" #phoneNumberInput="ngModel" required>
+        <mat-error *ngIf="phoneNumberInput.invalid">Please enter a valid Mobile Number.</mat-error>
+      </mat-form-field>
+      <mat-form-field>
         <input matInput name="email" ngModel type="email" placeholder="E-Mail" #emailInput="ngModel" required email>
         <mat-error *ngIf="emailInput.invalid">Please enter a valid email.</mat-error>
       </mat-form-field>

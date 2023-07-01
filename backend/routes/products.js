@@ -4,6 +4,7 @@ const ProductController = require("../controllers/products");
 
 const checkAuth = require("../middleware/check-auth");
 const extractFile = require("../middleware/file");
+const extractProductReviewFile = require("../middleware/product-review-file");
 
 const router = express.Router();
 

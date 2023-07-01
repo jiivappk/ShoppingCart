@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const ProductReview = require("../models/product-review");
 
 exports.createProduct = (req, res, next) => {
   const url = req.protocol + "://" + req.get("host");
@@ -71,27 +72,29 @@ exports.updateProduct = (req, res, next) => {
 exports.getProducts = (req, res, next) => {
   let fetchedProducts;
   let productQuery;
-  let categoryName = '';
+  let categoryName;
+  let title;
   let pageSize = '';
   let currentPage = '';
   if(req.query.categoryName){
-   categoryName = req.query.categoryName
+   categoryName = req.query.categoryName;
+   pageSize = +req.query.pagesize;
+   currentPage = +req.query.page;
   }
   else{
     pageSize = +req.query.pagesize;
     currentPage = +req.query.page;
     title = req.query.title;
   }
-  console.log("Product controller getproducts is called!!!!!!!!!!!!!!!!!!")
-  console.log("Title",title);
-  console.log("PageSize",pageSize);
-  console.log("currentPage",currentPage);
   
   if(title!=undefined || categoryName!=undefined){
-    if(categoryName){
+    if(categoryName){ // For category list
       productQuery = Product.find({category: { $regex: new RegExp(categoryName) } })
+      if (pageSize && currentPage) {
+        productQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
+      }
     }
-    else{
+    else{ // For search Product
       productQuery = Product.find({title: { $regex: new RegExp(title) } })
       if (pageSize && currentPage) {
         productQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
@@ -181,7 +184,6 @@ exports.searchProduct = (req, res, next) => {
   productQuery
     .then(documents => {
       fetchedProducts = documents;
-      
       return productQuery.count();
     })
     .then(count => {
@@ -278,5 +280,3 @@ exports.categoryList = (req, res, next) => {
       });
     });
 };
-
-

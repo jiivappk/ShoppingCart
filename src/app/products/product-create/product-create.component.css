@@ -14,10 +14,22 @@ input[type="file"] {
 .image-preview {
   height: 5rem;
   margin: 1rem 0;
+  position: relative;
 }
 
 .image-preview img {
   height: 100%;
+}
+
+.image-remove-button{
+  position: absolute;
+  cursor: pointer;
+  top: -3px;
+  right: -3px;
+  font-size: 18px;
+  color: #dc3545;
+  background: #ffff;
+  border-radius: 10px;
 }
 
 .secondaryImagePreviewContainer{

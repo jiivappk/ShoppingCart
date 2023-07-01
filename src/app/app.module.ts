@@ -20,7 +20,9 @@ import { OrdersListComponent } from './orders/orders-list/orders-list.component'
 import { NgImageSliderModule } from 'ng-image-slider';
 import { OtpVerificationDialogComponent } from './otp-verification-dialog/otp-verification-dialog.component';
 import { AccountModule } from './account/account.module';
-
+import { AllReviewPageComponent } from './products/all-reviews/all-review-page.component';
+import { NgBootstrapModule } from './ngbootstrap.module';
+// import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,6 +32,7 @@ import { AccountModule } from './account/account.module';
     OrderDetailsComponent,
     OrdersListComponent,
     OtpVerificationDialogComponent,
+    AllReviewPageComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +46,8 @@ import { AccountModule } from './account/account.module';
     CommonModule,
     ProductsModule,
     NgImageSliderModule,
+    // NgbModule,
+    NgBootstrapModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

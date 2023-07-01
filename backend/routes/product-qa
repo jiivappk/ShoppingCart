@@ -1,0 +1,18 @@
+const express = require("express");
+
+const ProductQAController = require("../controllers/product-qa");
+
+const checkAuth = require("../middleware/check-auth");
+
+const router = express.Router();
+
+router.get("/single-qa", ProductQAController.getSingleProductQA);
+
+router.get("", ProductQAController.getProductQA);
+
+router.post("/add-qa", checkAuth, extractProductReviewFile, ProductQAController.addProductQA);
+
+router.post("/update-qa", checkAuth, extractProductReviewFile, ProductQAController.updateProductReview);
+
+
+module.exports = router;

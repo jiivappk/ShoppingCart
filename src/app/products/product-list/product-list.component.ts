@@ -30,6 +30,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   wishlistAdded = false;
   wishlistArray = [];
   wishlistProductsId = [];
+  public categoryName = null;
   private productsSub: Subscription;
   private authStatusSub: Subscription;
 
@@ -46,13 +47,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isLoading = true;
-
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has("category-name")) {
          console.log("CreateUser Route token is", paramMap.has("category-name"));
-         const categoryName = paramMap.get("category-name");
+         this.categoryName = paramMap.get("category-name");
          //getting products based on category from backend
-         this.productsService.getProducts(null,null,categoryName)
+         this.productsService.getProducts(this.productsPerPage, this.currentPage, this.categoryName)
       } else {
         console.log("Token is missing");
         //getting products from backend
@@ -80,6 +80,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       .subscribe(isAuthenticated => {
         this.userIsAuthenticated = isAuthenticated;
         this.userId = this.authService.getUserId();
+        console.log("User id",this.userId,"Product Id",this.products)
       });
   }
 
@@ -87,7 +88,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.currentPage = pageData.pageIndex + 1;
     this.productsPerPage = pageData.pageSize;
-    this.productsService.getProducts(this.productsPerPage, this.currentPage);
+    this.productsService.getProducts(this.productsPerPage, this.currentPage, this.categoryName);
   }
 
   order(product:any){
@@ -226,7 +227,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   onDelete(productId: string) {
     this.isLoading = true;
     this.productsService.deleteProduct(productId).subscribe(() => {
-      this.productsService.getProducts(this.productsPerPage, this.currentPage);
+      this.productsService.getProducts(this.productsPerPage, this.currentPage, this.categoryName);
     }, () => {
       this.isLoading = false;
     });

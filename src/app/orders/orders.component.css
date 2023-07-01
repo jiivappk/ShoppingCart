@@ -14,3 +14,50 @@ mat-spinner {
 .item{
     flex-grow: 1;
 }
+
+.address-container{
+  display: grid;
+}
+
+.full-row{
+  display: grid;
+  grid-template-columns: 100%;
+  margin-top: 20px;
+}
+
+.row{
+  display: grid;
+  grid-template-columns: 50% 50%;
+  margin-top: 20px;
+}
+
+.area-box{
+  min-height: 90px;
+}
+
+.mat-form-field{
+  width: 100%;
+}
+
+::ng-deep.mat-form-field-infix{
+  border: 2px solid grey;
+  margin-top: 20px;
+}
+
+::ng-deep.mat-form-field-label-wrapper{
+  overflow: unset !important;
+}
+
+::ng-deep.mat-form-field-appearance-legacy .mat-form-field-label{
+  left:10px !important;
+  overflow: unset !important;
+}
+
+::ng-deep.mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+  /* top: -15px !important; */
+  left: 0px !important;
+  transform: translateY(-1.88125em) scale(1) !important;
+  /* transform: translate(0,-1.88125em, 0) scale(1) !important; */
+  margin-left: 0px !important;
+  padding-left: 0px !important;
+}

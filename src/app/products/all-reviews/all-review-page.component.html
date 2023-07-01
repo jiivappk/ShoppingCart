@@ -1,0 +1,84 @@
+<div class="product-detail-image">
+    <mat-card>
+        <div style="display:flex">
+            <div>
+              <mat-card-content style="width:39rem;">
+                <div class="container">
+                  <div class="image-container">
+                    <img mat-card-image src="{{productImagePath}}" alt="Photo of a Shiba Inu">
+                  </div>
+                </div>
+                <div class="image-carousal-container">
+                  <ng-image-slider [images]="imageObject" [imageSize]="{width: 200, height: 115, space: 4}" (imageClick)="imageClicked($event, imageSlider)" [imagePopup]="false" #imageSlider></ng-image-slider>
+                </div>
+              </mat-card-content>
+              <!-- <mat-card-actions style="width:39rem;">
+                <button mat-button>Add to Cart</button>
+                <button mat-button>Order</button>
+              </mat-card-actions> -->
+            </div>
+            <div style="padding:20px">
+              <!-- <p>
+                {{productContent}}
+              </p> -->
+              <!-- <div class="price-container">
+                <div class="selling-price-container">$900</div>
+                <div class="actual-price-container">$1200</div>
+                <div class="discount-percentage">59%</div>
+              </div> -->
+              <!-- <div class="stocks">No Of stocks left: 3</div> -->
+              <!-- <p style="margin-top: 20px;">
+                The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+                A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+                bred for hunting.
+              </p> -->
+              <div class="review">
+                <div class="rating-header">
+                  <h4>Ratings and Reviews</h4>
+                  <button>Rate this Product</button>
+                </div>
+                <div class="order-review-image">
+                  <h4>4.3</h4>
+                  <img class="order-review-image" src="https://static8.depositphotos.com/1338574/831/i/600/depositphotos_8318731-stock-photo-gold-star.jpg">
+                </div>
+                <div>
+                  <small class="ratings-count">83 Ratings and 8 Reviews</small>
+                </div>
+              </div>
+              <div class="comments" *ngIf="productReviews.length > 0">
+                <div *ngFor="let product of productReviews" class="review-container">
+                  <!-- <p class="profile-pic">{{product.profilePic.length>0?product.profilePic:product.userName[0]}}</p> -->
+                  <div class="review-header">
+                    <p class="profile-pic"><span class="profile-name">{{product.userName[0]}}</span></p>
+                    <p style="padding-left: 10px;">{{product.userName}}</p>
+                  </div>
+                  <div class="rating">
+                    <p style="height:2px">{{product.ratingScale}}</p>
+                    <!-- <img class="order-review-image" src="https://static8.depositphotos.com/1338574/831/i/600/depositphotos_8318731-stock-photo-gold-star.jpg"> -->
+                    <div style="margin-left: 3px;">
+                      <i class="fa fa-star fa-xs" style="color:white" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <p style="margin-top: 5px;">{{product.comment}}</p>
+  
+                  <div class="secondaryImageContainer" style="margin-top:10px">
+                    <div class="imagePreviewContainer" id="imagePreviewContainerId">
+                      <div *ngFor="let url of product['images']; index as i">
+                        <div class="image-preview" *ngIf="i<3" data-content="i">
+                            <img [src]="url" style="width: 9rem;height: 5rem;" (click)="loadSingleImagesModal(product['images'], i, product.userName, product.ratingScale, product.comment)">
+                            <span  *ngIf="i==2 && product['images'].length > 3" class="image-count-exceeds" (click)="loadAllImagesModal(product['images'], product.userName, product.ratingScale, product.comment)">+ {{product['images'].length - (i+1)}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+            </div>
+        </div>
+    </mat-card>
+  </div>
+
+  <mat-paginator [length]="totalProducts" [pageSize]="productsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
+    *ngIf="productReviews.length > 0"></mat-paginator>
+  

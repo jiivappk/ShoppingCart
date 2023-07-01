@@ -47,8 +47,8 @@ export class AuthService {
     return this.authStatusListener.asObservable();
   }
 
-  signIn(email: string, password: string) {
-    const authData: AuthData = { email: email, password: password };
+  signIn(firstName: string, lastName: string, gender: string, dob:string, phoneNumber: string, email: string, password: string) {
+    const authData = { firstName: firstName, lastName: lastName, gender: gender, dob: dob, phoneNumber: phoneNumber, email: email, password: password };
     this.http.post(BACKEND_URL + "/signup", authData).subscribe(
       () => {
         this.router.navigate(["/"]);
@@ -71,16 +71,21 @@ export class AuthService {
     );
   }
 
-  editUser(firstName: string, lastName:string, gender:string, dob:string){
+  editUser(userInfo){
     const userDetail = {
       token: this.token,
       userId: this.userId,
-      firstName: firstName,
-      lastName: lastName,
-      gender: gender,
-      dob: dob,
+      firstName: userInfo.firstName,
+      lastName: userInfo.lastName,
+      gender: userInfo.gender,
+      dob: userInfo.dob,
+      email: userInfo.email,
+      phoneNumber: userInfo.phoneNumber,
+      profilePic: userInfo.profilePic,
+      address: userInfo.address,
+      addressType: userInfo.addressType
     }
-    return this.http.post(BACKEND_URL + "/editUser", userDetail);
+    return this.http.put(BACKEND_URL + "/editUser", userDetail);
   }
 
   googleLogin(token: string) {
@@ -162,7 +167,7 @@ export class AuthService {
               now.getTime() + expiresInDuration * 1000
             );
             this.saveAuthData(token, expirationDate, this.userId);
-            this.setUserDetail(response.userId,response['email'],response['firstName'],response['lastName'],response['gender'],response['phoneNumber'],response['profilePic'],response['dob']);
+            this.setUserDetail(response['userId'],response['email'],response['firstName'],response['lastName'],response['gender'],response['phoneNumber'],response['profilePic'],response['dob'],response['address']);
             this.router.navigate(["/"]);
           }
         },
@@ -253,7 +258,7 @@ export class AuthService {
       })
   }
 
-  setUserDetail(userId = '', email = '', firstName = '', lastName = '', gender = '', phoneNumber = '', profilePic = '', dob = ''){
+  setUserDetail(userId = '', email = '', firstName = '', lastName = '', gender = '', phoneNumber = '', profilePic = '', dob = '', address = []){
     const userDetail = {
       userId: userId,
       email: email,
@@ -263,6 +268,7 @@ export class AuthService {
       phoneNumber: phoneNumber,
       profilePic: profilePic,
       dob: dob,
+      address: address
     }
     // this.userDetailSub.next(userDetail);
     localStorage.setItem("userDetail", JSON.stringify(userDetail));

@@ -42,7 +42,8 @@ const resetVerificationtLink = (mailId, type) => {
 exports.signIn = (req, res, next)=>{
 
   console.log("SignIn Request", req.body);
-  const {email, password } = req.body;
+  // const {firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, gender, dob, phoneNumber, email, password } = req.body;
   User.findOne({ email: email })
     .then(user => {
       if(user != null){
@@ -58,7 +59,7 @@ exports.signIn = (req, res, next)=>{
       });
     })
 
-  const token = jwt.sign({ email: email, password: password }, process.env.JWT_KEY, { expiresIn: "2m" });
+  const token = jwt.sign({ firstName: firstName, lastName:lastName, gender:gender, dob:dob, phoneNumber:phoneNumber, email: email, password: password }, process.env.JWT_KEY, { expiresIn: "2m" });
 
   
   const smtpTransport = nodemailer.createTransport({
@@ -70,7 +71,7 @@ exports.signIn = (req, res, next)=>{
     });
   console.log("Client Url is", process.env.CLIENT_URL);
   smtpTransport.sendMail({
-    to: 'jeevananthann97@gmail.com',
+    to: email,
     from: 'noreplay@gmail.com',
     subject: 'Signup verification',
     html: `<h1>Please verify your email</h1><a href=${process.env.CLIENT_URL}/auth/createUser/${token}> 
@@ -89,7 +90,8 @@ exports.createUser = (req, res, next) => {
           if(err){
             return res.status(400).json({message: 'Incorrect or Expired Link.'})
           }
-          const {email, password} = decodedToken;
+          // const {email, password} = decodedToken;
+          const {firstName, lastName, gender, dob, phoneNumber, email, password} = decodedToken;
           console.log("Decoded email and Password", email, password);
           User.findOne({ email: email })
               .then(user => {
@@ -103,16 +105,16 @@ exports.createUser = (req, res, next) => {
                     const user = new User({
                       email: email,
                       password: hash,
-                      passwordResetToken: '',
-                      firstName: '',
-                      lastName: '',
+                      firstName: firstName,
+                      lastName: lastName,
+                      phoneNumber: phoneNumber,
+                      gender: gender,
+                      dob: dob,
                       address: [],
-                      phoneNumber: '',
                       profilePic: '',
-                      gender: '',
-                      dob: '',
                       oldEmailToken: '',
-                      newEmailToken: ''
+                      newEmailToken: '',
+                      passwordResetToken: ''
                     });
                     user
                       .save()
@@ -160,7 +162,11 @@ exports.editUser = (req,res,next)=>{
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
                     gender: req.body.gender,
-                    dob: req.body.dob
+                    dob: req.body.dob,
+                    email: req.body.email,
+                    phoneNumber: req.body.phoneNumber,
+                    profilePic: req.body.profilePic,
+                    address: req.body.address
                   });
 
                   User.updateOne({_id: userId},  updatedUser)
@@ -169,17 +175,21 @@ exports.editUser = (req,res,next)=>{
                       if (updatedUser.n > 0) {
                         User.findOne({ _id: userId })
                           .then((user)=>{
-                            res.status(200).json({ message: "Update successful!",
+                            res.status(200).json({ 
+                              status: 'OK',
+                              message: "Update successfull",
                               user: {
                                 userId: user._id,
                                 email: user.email,
                                 firstName: user.firstName,
                                 lastName: user.lastName,
                                 address: user.address,
+                                email: user.email,
                                 phoneNumber: user.phoneNumber,
                                 profilePic: user.profilePic,
                                 gender: user.gender,
-                                dob: user.dob
+                                dob: user.dob,
+                                address: user.address
                               }
                             });
                           })

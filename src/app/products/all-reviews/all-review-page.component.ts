@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ProductsService } from '../products.service';
 import { MatDialog } from "@angular/material/dialog";
 import { LoadImagesDialogComponent } from '../load-images-model/load-images-model.component';
+import { PageEvent } from "@angular/material/paginator";
 
 @Component({
-  selector: 'app-product-details',
-  templateUrl: './product-details.component.html',
-  styleUrls: ['./product-details.component.css']
+  selector: 'app-all-review-page',
+  templateUrl: './all-review-page.component.html',
+  styleUrls: ['./all-review-page.component.css']
 })
-export class ProductDetailsComponent implements OnInit {
+export class AllReviewPageComponent implements OnInit {
 
   constructor(
     private route:ActivatedRoute, 
-    public router:Router,
     private productService: ProductsService,
     private dialog:MatDialog
     ) { }
@@ -24,10 +24,12 @@ export class ProductDetailsComponent implements OnInit {
   productAdditionalImages = [];
   productTitle:string;
   imageObject:any = [];
-  productsPerPage = 2;
+  productsPerPage = 5;
   currentPage = 1;
   productReviews = [];
-  
+  totalProducts = 0;
+  pageSizeOptions = [1, 2, 5, 10];
+  isLoading = false;
   ngOnInit(): void {
     this.route.queryParams.subscribe((params)=>{
       this.productId = params['id']
@@ -46,9 +48,8 @@ export class ProductDetailsComponent implements OnInit {
     })
    
     this.productService.getProductReviews(this.productId, this.productsPerPage, this.currentPage).subscribe((result)=>{
-      console.log(result['productReviews']);
       this.productReviews = [...result['productReviews']];
-      console.log("this.productReviews",this.productReviews);
+      this.totalProducts = result['totalReviewCount'] ? result['totalReviewCount'] : 0;
     })
 
   }
@@ -88,8 +89,15 @@ export class ProductDetailsComponent implements OnInit {
     const dialogRef = this.dialog.open(LoadImagesDialogComponent, {data: {images: productImages,imageIndex:imageIndex, userName:userName, ratingScale:ratingScale, comment:comment, isSingleImage:true}});
   }
 
-  routeToAllReview(){
-    this.router.navigate(['../all-reviews/',], {relativeTo: this.route, queryParams: {id:this.productId,content:this.productContent,creator:this.productCreator,imagePath:this.productImagePath,additionalImages:this.productAdditionalImages, title:this.productTitle}} );
+
+  onChangedPage(pageData: PageEvent) {
+    this.isLoading = true;
+    this.currentPage = pageData.pageIndex + 1;
+    this.productsPerPage = pageData.pageSize;
+    this.productService.getProductReviews(this.productId, this.productsPerPage, this.currentPage).subscribe((result)=>{
+      this.productReviews = [...result['productReviews']];
+      this.totalProducts = result['totalReviewCount'] ? result['totalReviewCount'] : 0;
+    })
   }
 
 }

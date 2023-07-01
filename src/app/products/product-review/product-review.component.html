@@ -1,0 +1,51 @@
+<form [formGroup]="form" (submit)="onSaveReview()">
+    <div style="display:flex">
+        <div style="display:flex; flex-flow:column">
+            <div>
+                <mat-icon [ngClass]="ratingScale >=1 ? 'yellow-icon' : 'white-icon' " ngbTooltip="Very Bad" (mouseenter)="onMouseEnter(1)" (mouseleave)="onMouseOut(1)" (click)="ratingScaleSelected(1)">grade</mat-icon>
+                <mat-icon [ngClass]="ratingScale >=2 ? 'yellow-icon' : 'white-icon' " ngbTooltip="Bad" (mouseenter)="onMouseEnter(2)" (mouseleave)="onMouseOut(2)" (click)="ratingScaleSelected(2)">grade</mat-icon>
+                <mat-icon [ngClass]="ratingScale >=3 ? 'yellow-icon' : 'white-icon' " ngbTooltip="Good" (mouseenter)="onMouseEnter(3)" (mouseleave)="onMouseOut(3)" (click)="ratingScaleSelected(3)">grade</mat-icon>
+                <mat-icon [ngClass]="ratingScale >=4 ? 'yellow-icon' : 'white-icon' " ngbTooltip="Very Good" (mouseenter)="onMouseEnter(4)" (mouseleave)="onMouseOut(4)" (click)="ratingScaleSelected(4)">grade</mat-icon>
+                <mat-icon [ngClass]="ratingScale >=5 ? 'yellow-icon' : 'white-icon' " ngbTooltip="Excellent" (mouseenter)="onMouseEnter(5)" (mouseleave)="onMouseOut(5)" (click)="ratingScaleSelected(5)">grade</mat-icon>
+            </div>
+            <mat-error *ngIf="ratingScale < 1 && isSubmitButtonCLicked">Please enter a rating scale.</mat-error>
+        </div>
+        <div>
+            <p *ngIf="ratingScale === 1" style="font-weight: 500;color:rgb(243, 23, 23);margin: 35px 15px 0px 0px;">Very Bad</p>
+            <p *ngIf="ratingScale === 2" style="font-weight: 500;color:rgb(236 109 34);margin: 35px 15px 0px 0px;">Bad</p>
+            <p *ngIf="ratingScale === 3" style="font-weight: 500;color:rgb(43, 114, 5);margin: 35px 15px 0px 0px;">Good</p>
+            <p *ngIf="ratingScale === 4" style="font-weight: 500;color:rgb(43, 114, 5);margin: 35px 15px 0px 0px;">Very Good</p>
+            <p *ngIf="ratingScale === 5" style="font-weight: 500;color:rgb(43, 114, 5);margin: 35px 15px 0px 0px;">Excellent</p>
+        </div>
+    </div>
+    <div class="full-row">
+        <mat-form-field>
+            <textarea matInput class="comment-box" formControlName="comment" placeholder="Enter your feedback about the product"></textarea>
+            <mat-error *ngIf="form.get('comment').invalid">Please enter your feedback.</mat-error>
+        </mat-form-field><br>
+    </div>
+    <!-- <button (click)="fileInput.click()" style="display:flex">
+        <mat-icon matSuffix style="margin-right: 5px;">camera_enhance</mat-icon>
+        <span>Add Image</span>
+        <input #fileInput type="file" (change)="onFileInput($event)" style="display:none;" />
+    </button> -->
+
+    <div class="secondaryImageContainer" style="margin-top:10px">
+        <div>
+          <button mat-stroked-button type="button" (click)="filePicker2.click()">Add Images</button>
+          <input type="file" #filePicker2 accept="image/gif, image/jpeg, image/png" (change)="onImagePicked($event)" multiple>
+        </div>
+  
+        <div class="imagePreviewContainer">
+          <div *ngFor="let url of imagesPreview; index as i">
+            <div class="image-preview" *ngIf="imagesPreview.length !== 0 && form.get('images').valid">
+                <img [src]="url" [alt]="form.value.title">
+                <i class="fa image-remove-button" (click)="onImageRemoval(i)">&#xf057;</i>
+            </div>
+          </div>
+        </div>
+        <mat-error *ngIf="imageCountExceedsError">More than six images are not allowed. Please Remove extra images.</mat-error>
+    </div>
+    
+    <button type="submit">Submit</button>
+</form>

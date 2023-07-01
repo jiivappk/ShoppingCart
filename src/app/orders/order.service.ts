@@ -21,8 +21,43 @@ export class OrderService {
   getOrderUpdateListener() {
     return this.orderUpdated.asObservable();
   }
-  addOrderItems(orderItem:any){
-    this.http.post<{ message: string; orderItem: any; maxOrderItems: number }>(BACKEND_URL,orderItem)
+  async addOrderItems(orderItem:any){
+    // const result = this.http.post<{ message: string; orderItem: any; maxOrderItems: number }>(BACKEND_URL,orderItem)
+    // .pipe(
+    //   map(orderData => {
+    //     return {
+    //       orderItem:{
+    //         orderId: orderData.orderItem.orderId,
+    //         content: orderData.orderItem.content,
+    //         creator: orderData.orderItem.creator,
+    //         imagePath: orderData.orderItem.imagePath,
+    //         productId: orderData.orderItem.productId,
+    //         title: orderData.orderItem.title,
+    //         userId: orderData.orderItem.userId,
+    //         price: orderData.orderItem.price,
+    //         actualPrice: orderData.orderItem.actualPrice,
+    //         noOfStocks: orderData.orderItem.noOfStocks,
+    //         discountPercentage: orderData.orderItem.discountPercentage,
+    //         deliveryAddress: orderData.orderItem.deliveryAddress,
+    //         additionalImages: orderData.orderItem.additionalImages,
+    //         orderInfo: orderData.orderItem.orderInfo,
+    //         refundStatus: orderData.orderItem.refundStatus
+    //       },
+    //       maxOrderItems: orderData.maxOrderItems
+    //     };
+    //   })
+    // )
+    // .subscribe(transformedOrderData => {
+    //   this.updatedOrderItem = transformedOrderData.orderItem;
+    //   this.orderUpdated.next({
+    //     orderItems:this.orderItems,
+    //     orderItemsCount: transformedOrderData.maxOrderItems
+    //   });
+    //   return "Order Placed Successfuly";
+    // });
+    // return result;
+
+    const result = await this.http.post<{ message: string; orderItem: any; maxOrderItems: number }>(BACKEND_URL,orderItem)
     .pipe(
       map(orderData => {
         return {
@@ -38,23 +73,29 @@ export class OrderService {
             actualPrice: orderData.orderItem.actualPrice,
             noOfStocks: orderData.orderItem.noOfStocks,
             discountPercentage: orderData.orderItem.discountPercentage,
-            address: orderData.orderItem.address,
+            deliveryAddress: orderData.orderItem.deliveryAddress,
             additionalImages: orderData.orderItem.additionalImages,
+            orderInfo: orderData.orderItem.orderInfo,
             orderStatus: orderData.orderItem.orderStatus,
             refundStatus: orderData.orderItem.refundStatus
           },
-          maxOrderItems: orderData.maxOrderItems
+          maxOrderItems: orderData.maxOrderItems,
+          status: orderData.message
         };
       })
-    )
-    .subscribe(transformedOrderData => {
-      this.updatedOrderItem = transformedOrderData.orderItem;
-      this.orderUpdated.next({
-        orderItems:this.orderItems,
-        orderItemsCount: transformedOrderData.maxOrderItems
-      });
-      return "Order Placed Successfuly";
+    ).toPromise();
+    this.updatedOrderItem = result.orderItem;
+    this.orderUpdated.next({
+      orderItems:this.orderItems,
+      orderItemsCount: result.maxOrderItems
     });
+    // if(result.status === 'success'){
+    //   return 'success';
+    // }
+    // else{
+    //   return 'failed';
+    // }
+    return result;    
   }
 
   getOrderItems(productsPerPage: number, currentPage: number){
@@ -70,8 +111,9 @@ export class OrderService {
               actualPrice: orderItem.actualPrice,
               noOfStocks: orderItem.noOfStocks,
               discountPercentage: orderItem.discountPercentage,
-              address: orderItem.address,
+              deliveryAddress: orderItem.deliveryAddress,
               additionalImages: orderItem.additionalImages,
+              orderInfo: orderItem.orderInfo,
               orderStatus: orderItem.orderStatus,
               refundStatus: orderItem.refundStatus,
               content:orderItem.content,

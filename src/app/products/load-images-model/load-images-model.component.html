@@ -1,0 +1,33 @@
+<div *ngIf="isSingleImage" class="single-image-container">
+    <div style="width:39rem;">
+        <div class="image-carousal-container">
+          <ng-image-slider [images]="imageObject" [infinite]="true" [imageSize]="{width: '100%', height: '80%', space: 4}" [imagePopup]="false" #imageSlider></ng-image-slider>
+        </div>
+    </div>
+    <div style="margin-left:10px">
+        <div style="display: flex;margin-bottom:10px">
+            <div class="rating">
+                <p style="height:2px">{{ratingScale}}</p>
+                <div style="margin-left: 3px;">
+                  <i class="fa fa-star fa-xs" style="color:white" aria-hidden="true"></i>
+                </div>
+              </div>
+            <h5 style="margin-left:5px">{{userName}}</h5>
+        </div>
+        <p>{{comment}}</p>
+    </div>
+</div>
+
+<div *ngIf="!isSingleImage">
+    <div>User Images(<span>{{imageCount}}</span>)</div>
+    <div class="imagePreviewContainer">
+        <div *ngFor="let url of images; index as i">
+            <div class="image-preview">
+                <img [src]="url" (click)="singleImageSlide(i)">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

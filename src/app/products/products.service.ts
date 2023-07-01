@@ -7,7 +7,8 @@ import { Router } from "@angular/router";
 import { environment } from "../../environments/environment";
 import { Product } from "./product.model";
 
-const BACKEND_URL = environment.apiUrl + "/products/";
+const PRODUCT_BACKEND_URL = environment.apiUrl + "/products/";
+const PRODUCT_REVIEW_BACKEND_URL = environment.apiUrl + "/product-review/";
 
 @Injectable({ providedIn: "root" })
 export class ProductsService {
@@ -20,14 +21,14 @@ export class ProductsService {
   getProducts(productsPerPage?: number, currentPage?: number, categoryName?: string) {
     let queryParams = ''
     if(categoryName){
-      queryParams = `?categoryName=${categoryName}`;
+      queryParams = `?categoryName=${categoryName}&pagesize=${productsPerPage}&page=${currentPage}`;
     }
     else{
       queryParams = `?pagesize=${productsPerPage}&page=${currentPage}`;
     }
     this.http
       .get<{ message: string; products: any; maxProducts: number }>(
-        BACKEND_URL + queryParams
+        PRODUCT_BACKEND_URL + queryParams
       )
       .pipe(
         map(productData => {
@@ -75,13 +76,13 @@ export class ProductsService {
       content: string;
       imagePath: string;
       creator: string;
-    }>(BACKEND_URL + id);
+    }>(PRODUCT_BACKEND_URL + id);
   }
 
   getCategory(){
     this.http
       .get<{}>(
-        BACKEND_URL + 'category'
+        PRODUCT_BACKEND_URL + 'category'
       )
       .subscribe((category)=>{
         this.categoryList = [...category['categoryList']]
@@ -101,11 +102,11 @@ export class ProductsService {
     //   content: string;
     //   imagePath: string;
     //   creator: string;
-    // }>(BACKEND_URL + queryParams);
+    // }>(PRODUCT_BACKEND_URL + queryParams);
 
     this.http
       .get<{ message: string; products: any; maxProducts: number }>(
-        BACKEND_URL + queryParams
+        PRODUCT_BACKEND_URL + queryParams
       )
       .pipe(
         map(productData => {
@@ -163,7 +164,7 @@ export class ProductsService {
     }
     this.http
       .post<{ message: string; product: Product }>(
-        BACKEND_URL,
+        PRODUCT_BACKEND_URL,
         productData
       )
       .subscribe(responseData => {
@@ -189,14 +190,52 @@ export class ProductsService {
       };
     }
     this.http
-      .put(BACKEND_URL + id, productData)
+      .put(PRODUCT_BACKEND_URL + id, productData)
       .subscribe(response => {
         this.router.navigate(["/"]);
       });
   }
 
   deleteProduct(productId: string) {
-    return this.http.delete(BACKEND_URL + productId);
+    return this.http.delete(PRODUCT_BACKEND_URL + productId);
+  }
+
+  addProductReview(productId:any, productTitle:any, userId:any, userName:any, profilePic:any, ratingScale:any, comment: any, images: FileList) {
+    const productData: any = new FormData();
+    productData.append("productId", productId);
+    productData.append("productTitle", productTitle);
+    productData.append("userId", userId);
+    productData.append("userName", userName);
+    productData.append("profilePic", profilePic);
+    productData.append("ratingScale", ratingScale);
+    productData.append("comment", comment);
+    for(let i = 0;i<images.length;i++){
+      productData.append("images", images[i], productTitle);   
+    }
+    this.http
+      .post(
+        PRODUCT_REVIEW_BACKEND_URL + "add-review",
+        productData
+      )
+      .subscribe(responseData => {
+        this.router.navigate(["/"]);
+      });
+  }
+
+  getSingleProductReview(productId:any, userId:any) {
+    const queryParams = `?productId=${productId}&userId=${userId}`;
+    return this.http
+      .get(
+        PRODUCT_REVIEW_BACKEND_URL + "single-review" + queryParams
+      )
+  }
+
+  getProductReviews(productId:any, productsPerPage:any, currentPage:any) {
+    const queryParams = `?productId=${productId}&pagesize=${productsPerPage}&page=${currentPage}`;
+    return this.http
+      .get(
+        PRODUCT_REVIEW_BACKEND_URL  + queryParams
+      )
   }
 
 }

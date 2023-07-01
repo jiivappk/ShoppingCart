@@ -41,14 +41,26 @@
       <!-- <img mat-card-image src="{{orderImagePath}}" alt="Photo of a Shiba Inu"> -->
       <!-- <ng-image-slider [images]="imageObject" #navigation></ng-image-slider> -->
       <mat-card-content class="delivery-address-content">
-          <div><h3><div>Area</div><div>:</div></h3><p>{{orderAddress.area}}</p></div>
+          <!-- <div><h3><div>Area</div><div>:</div></h3><p>{{orderAddress.area}}</p></div>
           <div><h3><div>Flat No</div><div>:</div></h3><p>{{orderAddress.flatNo}}</p></div>
           <div><h3><div>Full Name</div><div>:</div></h3><p>{{orderAddress.fullName}}</p></div>
           <div><h3><div>LandMark</div><div>:</div></h3><p>{{orderAddress.landMark}}</p></div>
           <div><h3><div>Mobile</div><div>:</div></h3><p>{{orderAddress.mobile}}</p></div>
           <div><h3><div>Pin Code</div><div>:</div></h3><p>{{orderAddress.pinCode}}</p></div>
           <div><h3><div>State</div><div>:</div></h3><p>{{orderAddress.state}}</p></div>
-          <div><h3><div>Town</div><div>:</div></h3><p>{{orderAddress.town}}</p></div>
+          <div><h3><div>Town</div><div>:</div></h3><p>{{orderAddress.town}}</p></div> -->
+                    <div style="display:flex">
+                        <p *ngIf="orderAddress.name" style="margin-right:20px">{{orderAddress.name}}</p>
+                        <p *ngIf="orderAddress.mobile">{{orderAddress.mobile}}</p>
+                    </div>
+                    <div style="display:flex">
+                        <span *ngIf="orderAddress.area" style="margin-right:5px">{{orderAddress.area}},</span>
+                        <span *ngIf="orderAddress.landMark" style="margin-right:5px">{{orderAddress.landMark}},</span>
+                        <span *ngIf="orderAddress.town" style="margin-right:5px">{{orderAddress.town}},</span>
+                        <span *ngIf="orderAddress.state" style="margin-right:5px">{{orderAddress.state}},</span>
+                        <p *ngIf="orderAddress.pinCode" style="margin-right:5px">{{orderAddress.pinCode}}.</p>
+                        <span *ngIf="orderAddress.alternateMobileNumber" style="margin-right:5px">{{orderAddress.alternateMobileNumber}},</span>
+                    </div>
       </mat-card-content>
       <!-- <mat-card-actions>
         <button mat-button>Add to Cart</button>
@@ -69,8 +81,8 @@
     <div class="timeline">
       <div *ngFor="let item of value" class="timeline-event">
         <div class="timeline-point-track-container">
-          <div class="timeline-point" [ngClass]="item?.status === 'S' ? 'heighlight' : ''"></div>
-          <div class="timeline-track" [ngClass]="item?.status === 'S' ? 'heighlight' : ''"></div>
+          <div class="timeline-point" [ngClass]="item?.status === 'success' ? 'heighlight' : ''"></div>
+          <div class="timeline-track" [ngClass]="item?.status === 'success' ? 'heighlight' : ''"></div>
         </div>
         <div class="timeline-content">
           <span>

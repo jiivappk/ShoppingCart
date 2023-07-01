@@ -5,7 +5,13 @@ exports.createOrder = (req, res, next) => {
     console.log("Request for cartitem Controller is",req.body);
     const url = req.protocol + "://" + req.get("host");
     let fetchedOrderItems;
-    console.log("url is ",url);
+    let orderStatus = 'Ordered';
+    let orderInfo = req.body.orderInfo;
+    orderInfo.map((data)=>{
+      if(data.status === 'success'){
+        orderStatus = data.content;
+      }
+    })
     const order = new Order({
       title: req.body.title,
       content: req.body.content,
@@ -17,9 +23,10 @@ exports.createOrder = (req, res, next) => {
       actualPrice: req.body.actualPrice,
       noOfStocks: req.body.noOfStocks,
       discountPercentage: req.body.discountPercentage,
-      address: req.body.address,
+      deliveryAddress: req.body.deliveryAddress,
       additionalImages: req.body.additionalImages,
-      orderStatus: req.body.orderStatus,
+      orderInfo: req.body.orderInfo,
+      orderStatus: orderStatus,
       refundStatus: req.body.refundStatus
     });
     order
@@ -31,7 +38,7 @@ exports.createOrder = (req, res, next) => {
       })
       .then(count => {
         res.status(201).json({
-          message: "Order Placed successfully",
+          message: "success",
           orderItem: fetchedOrderItems,
           orderItem: {
             orderId:fetchedOrderItems._id,
@@ -39,8 +46,9 @@ exports.createOrder = (req, res, next) => {
             actualPrice: fetchedOrderItems.actualPrice,
             noOfStocks: fetchedOrderItems.noOfStocks,
             discountPercentage: fetchedOrderItems.discountPercentage,
-            address: fetchedOrderItems.address,
+            deliveryAddress: fetchedOrderItems.deliveryAddress,
             additionalImages: fetchedOrderItems.additionalImages,
+            orderInfo: fetchedOrderItems.orderInfo,
             orderStatus: fetchedOrderItems.orderStatus,
             refundStatus: fetchedOrderItems.refundStatus,
             content:fetchedOrderItems.content,
@@ -56,7 +64,7 @@ exports.createOrder = (req, res, next) => {
       .catch(error => {
         console.log("Error occured while saving  to Order", error);
         res.status(500).json({
-          message: "Placing Order failed!"
+          message: "failed"
         });
       });
   };
@@ -75,12 +83,13 @@ exports.createOrder = (req, res, next) => {
         documents.map((document)=>{
          fetchedOrderItems.push({
           orderId:document._id,
-          address: document.address,
+          deliveryAddress: document.deliveryAddress,
           price: document.price,
           actualPrice: document.actualPrice,
           noOfStocks: document.noOfStocks,
           discountPercentage: document.discountPercentage,
           additionalImages: document.additionalImages,
+          orderInfo: document.orderInfo,
           orderStatus: document.orderStatus,
           content:document.content,
           creator:document.creator,

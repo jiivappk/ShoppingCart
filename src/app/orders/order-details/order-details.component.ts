@@ -9,13 +9,13 @@ import { ActivatedRoute } from '@angular/router';
 export class OrderDetailsComponent implements OnInit {
 
   value: any[] = [
-    {content:"Ordered" ,date:"15/02/2022 10.30", status:"S"},
-    {content:"Processing" ,date:"15/02/2022 14.00", status:"S"},
-    {content:"Shipped" ,date:"16/02/2022 10.30", status:"R"},
-    {content:"Delivered" ,date:"20/02/2022 10.30", status:"R"},
-    {content:"Delivered" ,date:"20/02/2022 10.30", status:"R"},
-    {content:"Delivered" ,date:"20/02/2022 10.30", status:"R"},
-    {content:"Delivered" ,date:"20/02/2022 10.30", status:"R"},
+    {content:"Ordered" ,date:"15/02/2022 10.30", status:"success"},
+    {content:"Processing" ,date:"15/02/2022 14.00", status:"success"},
+    {content:"Shipped" ,date:"16/02/2022 10.30", status:"inProgress"},
+    {content:"Delivered" ,date:"20/02/2022 10.30", status:"inProgress"},
+    {content:"Delivered" ,date:"20/02/2022 10.30", status:"inProgress"},
+    {content:"Delivered" ,date:"20/02/2022 10.30", status:"inProgress"},
+    {content:"Delivered" ,date:"20/02/2022 10.30", status:"inProgress"},
   ];
   constructor(private route:ActivatedRoute) { }
   orderPrice:string;
@@ -28,6 +28,7 @@ export class OrderDetailsComponent implements OnInit {
   orderImagePath:string;
   orderTitle:string;
   orderAddress:any;
+  orderInfo:any;
   orderStatus:any;
   orderRefundStatus: string;
   imageObject = [];
@@ -41,7 +42,8 @@ export class OrderDetailsComponent implements OnInit {
       this.orderCreator = params['creator']
       this.orderImagePath = params['imagePath']
       this.orderTitle = params['title']
-      this.orderAddress = JSON.parse(params['address'])
+      this.orderAddress = JSON.parse(params['deliveryAddress'])
+      this.orderInfo = params['orderInfo']
       this.orderStatus = params['orderStatus']
       this.orderRefundStatus = params['refundStatus']
       this.productId = params['productId']
@@ -54,7 +56,7 @@ export class OrderDetailsComponent implements OnInit {
         })
       }
     })
-
+    console.log(this.orderAddress)
   //   this.imageObject= [
   //     {
   //       image: "http://localhost:3000/images/Front_View.jpg",

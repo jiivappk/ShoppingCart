@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const productsRoutes = require("./routes/products");
+const productReviewRoutes = require("./routes/product-review.js");
 const orderRoutes = require("./routes/orders")
 const cartRoutes = require("./routes/cart");
 const userRoutes = require("./routes/user");
@@ -72,5 +73,6 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/wishlist",wishlistRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/product-review/", productReviewRoutes);
 
 module.exports = app;

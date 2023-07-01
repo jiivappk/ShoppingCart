@@ -1,0 +1,15 @@
+const mongoose = require("mongoose");
+
+const productQASchema = mongoose.Schema({
+  productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
+  productTitle: { type: String, required: true },
+  question: { type: String, required: true},
+  questionUserId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  questionUserName: { type: String, required: true },
+  questionProfilePic: { type: String },
+  answer: {type: String, required: true },
+  answerUserId: {type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  answerUserName: { type: String, required: true },
+  answerUserProfilePic: { type: String }
+});
+module.exports = mongoose.model("ProductQA", productQASchema);

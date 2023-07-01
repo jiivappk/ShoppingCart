@@ -1,0 +1,31 @@
+.imagePreviewContainer{
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.image-preview {
+    height: 10rem;
+    margin: 1rem 0;
+    position: relative;
+}
+
+.image-preview img {
+    height: 100%;
+}
+
+.single-image-container{
+    display:flex;
+}
+
+.rating{
+    display: inline-flex;
+    border: 2px solid green;
+    align-items: center;
+    background-color: green;
+    border-radius: 2px;
+  }
+
+.image-carousal-container{
+    margin-top: 20px;
+}

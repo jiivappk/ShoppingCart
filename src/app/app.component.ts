@@ -17,6 +17,7 @@ export class AppComponent implements OnInit{
     // private errorService: ErrorService
   ) {}
 
+  public initiateToogleEvent = false;
   path: string = '';
    
   ngOnInit() {
@@ -32,5 +33,13 @@ export class AppComponent implements OnInit{
   changeRoute(routePath){
     this.router.navigate([routePath]);
   }
+
+  sideNavButtonClicked(){
+    this.initiateToogleEvent = !this.initiateToogleEvent;
+  }
    
+  closeToogleButton(){
+    this.sideNavButtonClicked();
+    return true;
+  }
 }

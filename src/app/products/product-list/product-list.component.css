@@ -66,11 +66,11 @@ mat-card-content{
       width: 200px;
       overflow: hidden;
       text-overflow: ellipsis;
-      height: 130px; 
+      height: 10rem; 
 }
 
 p{
-  height: 35px;
+  height: 40px;
   overflow: hidden;
 }
 
@@ -115,4 +115,11 @@ p{
 .stocks{
   margin-top: 5px;
   color: red;
+}
+
+.card-content{
+  margin-top: 1.5rem !important;
+  width: 11.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

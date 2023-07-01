@@ -90,11 +90,15 @@
 
  
 <mat-accordion #accordianList multi="true" *ngIf="pageItems.length > 0 && !isLoading">
-  <mat-expansion-panel [expanded]="true" #firstExpansionPanel>
+  <mat-expansion-panel [expanded]="true" #firstExpansionPanel hideToggle style="margin-bottom: 20px;">
     <mat-expansion-panel-header>
-      Delivery Address
+        <div style="display: flex; width:100%">
+            <span>Delivery Address</span>
+            <span style="flex-grow:1"></span>
+            <span *ngIf="isAddressSelected"><button (click)="changeAddress()">Change Address</button></span>
+        </div>
     </mat-expansion-panel-header>
-      <form [formGroup]="form" *ngIf="!isLoading" (submit)="onSaveAddress(firstExpansionPanel, secondExpansionPanel, thirdExpansionPanel)">
+      <!-- <form [formGroup]="form" *ngIf="!isLoading" (submit)="onSaveAddress(firstExpansionPanel, secondExpansionPanel, thirdExpansionPanel)">
           <label>Full Name</label>
           <mat-form-field>
             <input matInput type="text" formControlName="fullName" placeholder="Enter your full name">
@@ -155,11 +159,162 @@
               </div>
           </div>
 
-          <button mat-raised-button color="accent" type="submit">Use this address</button>
-        </form>
+          <button mat-raised-button color="accent" type="submit">Save and Deliver Here</button>
+        </form> -->
+        <ng-container>
+            <mat-card *ngFor="let address of existingAddress;index as i" style="margin-bottom: 20px;">
+                <mat-card-header>
+                    <mat-card-title *ngIf="address.addressType === 'home' "><mat-radio-button value="home"  name="addressType" (change)="onSelectAddress(i)" [checked] = "selectedAddressIndex === i"></mat-radio-button> Home Address</mat-card-title>
+                    <mat-card-title *ngIf="address.addressType === 'work' "><mat-radio-button value="work"  name="addressType" (change)="onSelectAddress(i)" [checked] = "selectedAddressIndex === i"></mat-radio-button> Work Address</mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <div style="display:flex">
+                        <p *ngIf="address.name" style="margin-right:20px">{{address.name}}</p>
+                        <p *ngIf="address.mobile">{{address.mobile}}</p>
+                    </div>
+                    <div style="display:flex">
+                        <span *ngIf="address.area" style="margin-right:5px">{{address.area}},</span>
+                        <span *ngIf="address.landMark" style="margin-right:5px">{{address.landMark}},</span>
+                        <span *ngIf="address.town" style="margin-right:5px">{{address.town}},</span>
+                        <span *ngIf="address.state" style="margin-right:5px">{{address.state}},</span>
+                        <p *ngIf="address.pinCode" style="margin-right:5px">{{address.pinCode}}.</p>
+                        <span *ngIf="address.alternateMobileNumber" style="margin-right:5px">{{address.alternateMobileNumber}},</span>
+                    </div>
+                  </mat-card-content>
+                  <mat-card-actions>
+                    <!-- <button mat-button (click)="openEdit(i)">Edit</button>
+                    <button mat-button (click)="deleteAddress(i)">Delete</button> -->
+                    <span *ngIf="selectedAddressIndex === i">
+                        <button (click)="onSaveAddress(firstExpansionPanel, secondExpansionPanel, thirdExpansionPanel, 'onlyDeliver')">Deliver Here</button>
+                    </span>
+                  </mat-card-actions>
+            </mat-card>
+        </ng-container>
+        <ng-container>
+          <mat-card style="margin-bottom: 20px;">
+              <!-- <mat-card-header>
+                  <mat-card-title *ngIf="address.addressType === 'home' ">Home Address</mat-card-title>
+                  <mat-card-title *ngIf="address.addressType === 'work' ">Work Address</mat-card-title>
+                </mat-card-header> -->
+                <mat-card-content>
+                  <ng-containner *ngIf="isaddAddress">
+                    <form [formGroup]="form" (submit)="onSaveAddress(firstExpansionPanel, secondExpansionPanel, thirdExpansionPanel, 'saveAndDeliver')">
+                      <div class="address-container">
+                          <div class="row">
+                              <div  class="item" style="margin-right: 50px">
+                                  <!-- <label class="address-label">Full Name</label><br> -->
+                                  <mat-form-field>
+                                    <input matInput type="text" formControlName="name" placeholder="Enter your name">
+                                    <mat-error *ngIf="form.get('name').invalid">Please enter your name.</mat-error>
+                                  </mat-form-field>
+                              </div>
+                      
+                              <div class="item" style="margin-right: 50px">
+                                  <!-- <label class="address-label">Mobile Number</label><br> -->
+                                  <mat-form-field>
+                                      <input matInput type="text" formControlName="mobile" placeholder="Enter your mobile number">
+                                      <mat-error *ngIf="form.get('mobile').invalid">Please enter your mobile number.</mat-error>
+                                  </mat-form-field>
+                              </div>
+                          </div>
+              
+                          <div class="row">
+                              <div class="item">
+                                  <!-- <label class="address-label">Pin Code</label><br> -->
+                                  <mat-form-field>
+                                      <input matInput type="text" formControlName="pinCode" placeholder="Enter your pinCode">
+                                      <mat-error *ngIf="form.get('pinCode').invalid">Please enter your pin code.</mat-error>
+                                  </mat-form-field>
+                              </div>
+                              <div class="item">
+                                  <!-- <label class="address-label">Locality</label><br> -->
+                                  <mat-form-field>
+                                      <input matInput type="text" formControlName="locality" placeholder="Enter your locality">
+                                      <mat-error *ngIf="form.get('locality').invalid">Please enter a locality.</mat-error>
+                                  </mat-form-field>
+                              </div>
+                          </div>
+              
+                          <div class="row">
+                              <div class="item" style="margin-right: 50px">
+                                  <!-- <label class="address-label">Town/City</label><br> -->
+                                  <mat-form-field>
+                                      <input matInput type="text" formControlName="town" placeholder="Enter your town">
+                                      <mat-error *ngIf="form.get('town').invalid">Please enter your town.</mat-error>
+                                  </mat-form-field>
+                              </div>
+                              <div  class="item" style="margin-right: 50px">
+                                  <!-- <label class="address-label">State</label><br> -->
+                                  <mat-form-field>
+                                      <mat-select formControlName="state" placeholder="Select your State">
+                                        <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option>
+                                      </mat-select>
+                                      <mat-error *ngIf="form.get('state').invalid">Please enter your state.</mat-error>
+                                  </mat-form-field>
+                              </div>
+                          </div>
+              
+                          <div class="full-row">
+                              <!-- <label class="address-label">Area, Street, Sector, Village, Flat, House no., Building, Company, Appartment</label><br> -->
+                              <mat-form-field>
+                                  <textarea matInput class="area-box" formControlName="area" placeholder="Area, Street, Sector, Village, Flat, House no., Building, Company, Appartment"></textarea>
+                                  <mat-error *ngIf="form.get('area').invalid">Please enter your area.</mat-error>
+                              </mat-form-field>
+                          </div>
+              
+                          <div class="row">
+                              <div class="item" style="margin-right: 50px">
+                                  <!-- <label class="address-label">Landmark</label><br> -->
+                                  <mat-form-field>
+                                      <input matInput type="text" formControlName="landMark" placeholder="Please enter a Landmark.">
+                                      <mat-error *ngIf="form.get('landMark').invalid">Please enter a Landmark.</mat-error>
+                                  </mat-form-field>
+                              </div>
+                              <div class="item" style="margin-right: 50px">
+                                  <!-- <label class="address-label">Alternate Phone Number</label><br> -->
+                                  <mat-form-field>
+                                      <input matInput type="text" formControlName="alternateMobileNumber" placeholder="Enter your flat number">
+                                      <mat-error *ngIf="form.get('alternateMobileNumber').invalid">Please enter your Alternate Phone nummber.</mat-error>
+                                  </mat-form-field>
+                              </div>
+                          </div>
+              
+                          <div class="full-row">
+                              <div class="item" style="margin-right: 50px;margin-top: 20px;">
+                                  <mat-radio-group aria-label="Select an option" formControlName="addressType" name="addressType">
+                                      <mat-radio-button value="home"  name="addressType">HOME</mat-radio-button>
+                                      <mat-radio-button value="work"  name="addressType" style="margin-left: 10px;">WORK</mat-radio-button><br>
+                                  </mat-radio-group><br>
+                                  <small>Work address will have order delivered between 10 a.m to 5 p.m</small>
+                              </div>
+                          </div>
+              
+                      </div>
+                      <button mat-raised-button color="accent" type="submit" style="margin-right: 15px; margin-top:15px">Save and Deliver Here</button>
+                      <button mat-raised-button color="accent" (click)="closeEdit()" >Cancel</button>
+                    </form>
+                  </ng-containner>
+                  <ng-container *ngIf="!isaddAddress">
+                    <button (click)="openAndClose()">Add New Address</button>
+                  </ng-container>
+                </mat-card-content>
+          </mat-card>
+      </ng-container>
   </mat-expansion-panel>
 
-  <mat-expansion-panel #secondExpansionPanel>
+  <mat-expansion-panel #secondExpansionPanel hideToggle isDisabled style="margin-bottom: 20px;">
+    <mat-expansion-panel-header>
+      Oredred Details
+    </mat-expansion-panel-header>
+      <p>Order Completed</p>
+      <img [src]="orderItem['imagePath']" [alt]="productTitle"><br>
+      <span>
+        <span>Your confirmation email will be sent to this mail.</span>
+        <button (click)="onConfirmOrderDetails()">Continue</button>
+      </span>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel #thirdExpansionPanel hideToggle isDisabled>
     <mat-expansion-panel-header>
       Make Payment
     </mat-expansion-panel-header>
@@ -168,14 +323,7 @@
         <button mat-raised-button color="accent" type="submit">Use this address</button>
       </form>
   </mat-expansion-panel>
-
-  <mat-expansion-panel #thirdExpansionPanel>
-    <mat-expansion-panel-header>
-      Oredred Details
-    </mat-expansion-panel-header>
-      <p>Order Completed</p>
-      <img [src]="orderItem['imagePath']" [alt]="productTitle">
-  </mat-expansion-panel>
+  <small *ngIf="orderFailed" style="color: red;">Order failed</small>
 
 </mat-accordion>
 

@@ -11,9 +11,10 @@ const orderSchema = mongoose.Schema({
   actualPrice: { type: Number, required: true },
   noOfStocks: { type: Number, required: true },
   discountPercentage: { type: Number, required: true },
-  address: { type: Object, required: true },
+  deliveryAddress: { type: Object, required: true },
   additionalImages: { type: Array, required: true },
-  orderStatus: { type: Array, required: true },
+  orderInfo: { type: Array, required: true },
+  orderStatus: { type: String, required: true},
   refundStatus: {type: String,  required: true }
 });
 

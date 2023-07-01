@@ -10,8 +10,9 @@ export interface Order {
     actualPrice: number;
     noOfStocks: number;
     discountPercentage: number;
-    address: string;
+    deliveryAddress: string;
     additionalImages: Array<string>;
-    orderStatus: Array<string>;
+    orderInfo: Array<string>;
+    orderStatus: string;
     refundStatus: string;
   }

@@ -18,6 +18,9 @@ export class PersonalInformationComponent implements OnInit {
   gender = '';
   dob = '';
   email = '';
+  phoneNumber = '';
+  profilePic = '';
+  address:any;
   newEmail  = '';
   password = '';
   invalidNewMail = false;
@@ -43,7 +46,10 @@ export class PersonalInformationComponent implements OnInit {
     this.lastName = userDetail.lastName,
     this.gender = userDetail.gender,
     this.dob = userDetail.dob,
-    this.email = userDetail.email
+    this.email = userDetail.email,
+    this.phoneNumber = userDetail.phoneNumber,
+    this.profilePic = userDetail.profilePic,
+    this.address = userDetail.address
 
     this.myForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.maxLength(50)]],
@@ -54,7 +60,17 @@ export class PersonalInformationComponent implements OnInit {
 
   savePersonalInfo(){
     console.log("Save Method is called", this.firstName, this.lastName, this.gender, this.dob);
-    this.authService.editUser(this.firstName, this.lastName, this.gender, this.dob).subscribe(
+    const userDetail = {
+      firstName: this.firstName,
+      lastName: this.lastName,
+      gender: this.gender,
+      dob: this.dob,
+      email: this.email,
+      phoneNumber: this.phoneNumber,
+      profilePic: this.profilePic,
+      address: this.address
+    }
+    this.authService.editUser(userDetail).subscribe(
       (result)=>{
       console.log("User Updated Successfully",result);
       this.authService.setUserDetail(result['user'].userId, result['user'].email, result['user'].firstName, result['user'].lastName, result['user'].gender, result['user'].phoneNumber, result['user'].profilePic, result['user'].dob);

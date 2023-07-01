@@ -34,15 +34,15 @@
               </div>
         
               <div class="col-2-12 order-price-container" >${{orderItem.price}}</div>
-              <div class="col-4-12 order-status-container" >
+              <div class="col-4-12 order-info-container" >
                 <div>
                   <div style="display: flex; align-items:center">
-                    <div class="order-status-icon order-status-icon-color"></div>
-                    <span  class="order-status">{{ orderItem.orderStatus[orderItem.orderStatus.length-1]['content'] }} On {{orderItem.orderStatus[orderItem.orderStatus.length-1]['date']}}</span>
+                    <div class="order-info-icon order-info-icon-color"></div>
+                    <span  class="order-info">{{ orderItem.orderInfo[orderItem.orderInfo.length-1]['content'] }} On {{orderItem.orderInfo[orderItem.orderInfo.length-1]['date']}}</span>
                   </div>
                   <div class="delivery-message"> Your order has been placed</div>
                 </div>
-                <div class="review-text-container">
+                <div class="review-text-container" *ngIf="orderItem.orderStatus === 'Delivered' " (click)="redirectToReviewPage()">
                   <div class="review-text-container-flex row">
                     <a style="cursor: pointer;">
                       <img class="order-review-image" src="https://static8.depositphotos.com/1338574/831/i/600/depositphotos_8318731-stock-photo-gold-star.jpg">
@@ -91,11 +91,11 @@
       </div>
 
       <div class="col-2-12 order-price-container" >${{orderItem.price}}</div>
-      <div class="col-4-12 order-status-container" >
+      <div class="col-4-12 order-info-container" >
         <div>
           <div style="display: flex; align-items:center">
-            <div class="order-status-icon order-status-icon-color"></div>
-            <span  class="order-status">{{ orderItem.orderStatus[orderItem.orderStatus.length-1]['content'] }} On {{orderItem.orderStatus[orderItem.orderStatus.length-1]['date']}}</span>
+            <div class="order-info-icon order-info-icon-color"></div>
+            <span  class="order-info">{{ orderItem.orderInfo[orderItem.orderInfo.length-1]['content'] }} On {{orderItem.orderInfo[orderItem.orderInfo.length-1]['date']}}</span>
           </div>
           <div class="delivery-message"> Your order has been placed</div>
         </div>

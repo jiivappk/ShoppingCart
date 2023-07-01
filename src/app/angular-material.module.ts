@@ -11,6 +11,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatRadioModule}from '@angular/material/radio';
 
 @NgModule({
   exports: [
@@ -26,6 +28,8 @@ import {MatSidenavModule} from '@angular/material/sidenav';
     MatBadgeModule,
     MatSelectModule,
     MatSidenavModule,
+    MatCheckboxModule,
+    MatRadioModule
 
   ]
 })

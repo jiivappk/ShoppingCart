@@ -21,9 +21,11 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
   form: FormGroup;
   imagePreview: string;
   additionalImages = [];
+  additionalImageFiles = []
   categoryList = ['other-category','mobile', 'laptop', 'car', 'headphone', 'bike', 'furniture'];
   private mode = "create";
   private productId: string;
+  public imageCountExceedsError = false;
   private authStatusSub: Subscription;
 
   constructor(
@@ -61,7 +63,7 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
         validators: [Validators.required],
         asyncValidators: [mimeType]
       }), 
-      additionalImages: new FormControl(null)
+      additionalImages: new FormControl([])
     });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has("productId")) {
@@ -117,15 +119,35 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
     }
     else if(targetImage === 'additionalImages'){
       const {files} = (event.target as HTMLInputElement);
-      this.form.patchValue({ additionalImages: files });
-      this.form.get("additionalImages").updateValueAndValidity();
       for(let i = 0;i<files.length;i++){
+        this.additionalImageFiles.push(files[i]);
         const reader = new FileReader();
         reader.onload = () => {
           this.additionalImages.push(reader.result as string);
         }; 
         reader.readAsDataURL(files[i]);
       }
+      this.form.patchValue({ additionalImages: [...this.additionalImageFiles] });
+      this.form.get("additionalImages").updateValueAndValidity();
+      if(this.additionalImageFiles.length > 6){
+        this.imageCountExceedsError = true;
+      }
+      else{
+        this.imageCountExceedsError = false;
+      }
+    }
+  }
+
+  onImageRemoval(index){
+    console.log("Image Removal selected");
+    this.additionalImageFiles.splice(index, 1);
+    this.form.patchValue({ images: [...this.additionalImageFiles] });
+    this.additionalImages.splice(index, 1);
+    if(this.additionalImageFiles.length > 6){
+      this.imageCountExceedsError = true;
+    }
+    else{
+      this.imageCountExceedsError = false;
     }
   }
 
@@ -138,6 +160,9 @@ export class ProductCreateComponent implements OnInit, OnDestroy {
       //   })
         // this.categoryService.addCategoryItems({categoryList: this.categoryList});
     // }
+    if(this.imageCountExceedsError){
+      return;
+    } 
     let price = this.form.value.price;
     let actualPrice = this.form.value.actualPrice;
     let discount = 100-((price/actualPrice)*100);

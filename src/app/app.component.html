@@ -1,5 +1,9 @@
-<mat-drawer-container class="example-container" hasBackdrop=true>
-  <mat-drawer #drawer mode=over>
+<mat-drawer-container class="example-container" hasBackdrop="false">
+  <mat-drawer #drawer mode=side>
+    <div  class="header-div">
+        <mat-icon (click)="sideNavButtonClicked();drawer.toggle()" style="margin-left:10px">reorder</mat-icon>
+        <a routerLink="/" class="logo">MyMessages</a>
+    </div>
     <ul>
       <li style="cursor: pointer" (click)="changeRoute('')">Home</li>
       <li style="cursor: pointer" (click)="changeRoute('account')">Profile</li>
@@ -8,7 +12,7 @@
     </ul>
   </mat-drawer>
   <mat-drawer-content>
-    <app-header (sideNavEvent)="drawer.toggle()"></app-header>
+    <app-header [initiateToogleEvent] = "initiateToogleEvent" (sideNavEvent)="drawer.toggle()"></app-header>
     <main [ngClass]="{login: (path ==='/auth/login' || path === '/auth/signup' || path === '/auth/forgotPassword')}">
       <router-outlet></router-outlet>
     </main>

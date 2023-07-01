@@ -48,12 +48,13 @@ export class OrdersListComponent implements OnInit {
             actualPrice: orderItem.actualPrice,
             noOfStocks: orderItem.noOfStocks,
             discountPercentage: orderItem.discountPercentage,
-            address: orderItem.address ,
+            deliveryAddress: orderItem.deliveryAddress,
             additionalImages: orderItem.additionalImages,
             content: orderItem.content,
             creator: orderItem.creator,
             imagePath: orderItem.imagePath,
             orderId: orderItem.orderId,
+            orderInfo: orderItem.orderInfo,
             orderStatus: orderItem.orderStatus,
             refundStatus: orderItem.refundStatus,
             productId: orderItem.productId,
@@ -75,9 +76,9 @@ export class OrdersListComponent implements OnInit {
   }
 
   orderClicked(orderItem){
-    orderItem['address'] = JSON.stringify(orderItem.address);
-    orderItem['orderStatus'] = orderItem.orderStatus.map(object=>JSON.stringify(object));
-    this.router.navigate(['order-list/order-detail'],{queryParams:{orderId:orderItem.orderId, content:orderItem.content, creator:orderItem.creator, imagePath:orderItem.imagePath, title:orderItem.title, address:orderItem.address, price:orderItem.price, actualPrice: orderItem.actualPrice, noOfStocks: orderItem.noOfStocks, discountPercentage: orderItem.discountPercentage, additionalImages:orderItem.additionalImages, orderStatus:orderItem.orderStatus, productId:orderItem.productId, userId:orderItem.userId, refundStatus:orderItem.refundStatus} })
+    orderItem['deliveryAddress'] = JSON.stringify(orderItem.deliveryAddress);
+    orderItem['orderInfo'] = orderItem.orderInfo.map(object=>JSON.stringify(object));
+    this.router.navigate(['order-list/order-detail'],{queryParams:{orderId:orderItem.orderId, content:orderItem.content, creator:orderItem.creator, imagePath:orderItem.imagePath, title:orderItem.title, deliveryAddress:orderItem.deliveryAddress, price:orderItem.price, actualPrice: orderItem.actualPrice, noOfStocks: orderItem.noOfStocks, discountPercentage: orderItem.discountPercentage, additionalImages:orderItem.additionalImages, orderInfo:orderItem.orderInfo, orderStatus:orderItem.orderStatus, productId:orderItem.productId, userId:orderItem.userId, refundStatus:orderItem.refundStatus} })
   }
 
   onChangedPage(pageData: PageEvent) {
@@ -94,6 +95,10 @@ export class OrdersListComponent implements OnInit {
     }, () => {
       this.isLoading = false;
     });
+  }
+
+  redirectToReviewPage(){
+    this.router.navigate(['product-review'],{ queryParams: {productId: this.orderItems[0].productId, title: this.orderItems[0].title} } );
   }
 
   ngOnDestroy() {

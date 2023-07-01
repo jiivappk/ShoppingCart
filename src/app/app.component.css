@@ -2,6 +2,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    border:0;
 }
 
 main {
@@ -55,4 +56,20 @@ mat-drawer-content {
     height: 100%;
     overflow: auto;
     height: 100vh;
+}
+
+.header-div{
+  display: flex;
+  align-items: center;
+  height: 64px;
+  background: #3f51b5;
+  color: #fff;
+}
+
+.logo{
+  font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
+  letter-spacing: normal;
+  margin-left:20px; 
+  text-decoration: none; 
+  color: white
 }
